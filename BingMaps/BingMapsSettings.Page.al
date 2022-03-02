@@ -1,4 +1,4 @@
-page 70074125 "BingMaps Settings"
+page 74125 "BingMaps Settings"
 {
     PageType = API;
     Caption = 'BingMaps Settings';

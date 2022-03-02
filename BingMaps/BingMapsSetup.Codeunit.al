@@ -1,4 +1,4 @@
-codeunit 70074123 "BingMaps Setup"
+codeunit 74123 "BingMaps Setup"
 {
     [EventSubscriber(ObjectType::Table, Database::"Service Connection", 'OnRegisterServiceConnection', '', true, true)]
     local procedure RegisterServiceConnection(Var ServiceConnection: Record "Service Connection")

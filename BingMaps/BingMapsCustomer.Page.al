@@ -1,4 +1,4 @@
-page 70074124 "BingMaps Customer"
+page 74124 "BingMaps Customer"
 {
     PageType = API;
     Caption = 'BingMaps Customer Location';

@@ -2,7 +2,7 @@
     <PermissionSet RoleID="BingMaps" RoleName="BingMaps">
         <Permission>
             <ObjectType>TableData</ObjectType>
-            <ObjectID>70074120</ObjectID>
+            <ObjectID>74120</ObjectID>
             <ReadPermission>1</ReadPermission>
             <InsertPermission>1</InsertPermission>
             <ModifyPermission>1</ModifyPermission>
@@ -12,7 +12,7 @@
         </Permission>
         <Permission>
             <ObjectType>TableData</ObjectType>
-            <ObjectID>70074122</ObjectID>
+            <ObjectID>74122</ObjectID>
             <ReadPermission>1</ReadPermission>
             <InsertPermission>1</InsertPermission>
             <ModifyPermission>1</ModifyPermission>

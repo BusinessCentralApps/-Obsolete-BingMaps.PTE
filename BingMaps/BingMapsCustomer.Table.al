@@ -1,35 +1,35 @@
-table 70074120 "BingMaps Customer"
+table 74120 "BingMaps Customer"
 {
     fields
     {
-        field(70074120; "No."; Code[20])
+        field(74120; "No."; Code[20])
         {
             DataClassification = CustomerContent;
         }
 
-        field(70074121; "Geocoded"; Integer)
+        field(74121; "Geocoded"; Integer)
         {
             DataClassification = CustomerContent;
         }
 
-        field(70074122; "Latitude"; Decimal)
+        field(74122; "Latitude"; Decimal)
         {
             DecimalPlaces = 3 : 5;
             DataClassification = EndUserIdentifiableInformation;
         }
 
-        field(70074123; "Longitude"; Decimal)
+        field(74123; "Longitude"; Decimal)
         {
             DecimalPlaces = 3 : 5;
             DataClassification = EndUserIdentifiableInformation;
         }
 
-        field(70074124; "Zoom"; Integer)
+        field(74124; "Zoom"; Integer)
         {
             DataClassification = CustomerContent;
         }
 
-        field(70074125; "Address"; Text[200])
+        field(74125; "Address"; Text[200])
         {
             DataClassification = CustomerContent;
         }

@@ -1,13 +1,13 @@
-﻿{
+{
     "folders":  [
                     {
                         "path":  ".AL-Go"
                     },
                     {
-                        "path":  "BingMaps.AppSource"
+                        "path":  "BingMaps"
                     },
                     {
-                        "path":  "BingMaps.AppSource_Test"
+                        "path":  "BingMaps_Test"
                     }
                 ],
     "settings":  {

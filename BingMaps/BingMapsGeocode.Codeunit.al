@@ -1,4 +1,4 @@
-codeunit 70074120 "BingMaps Geocode"
+codeunit 74120 "BingMaps Geocode"
 {
 
     [EventSubscriber(ObjectType::Table, Database::Customer, 'OnAfterModifyEvent', '', true, true)]

@@ -1,4 +1,4 @@
-page 70074122 "BingMaps Setup"
+page 74122 "BingMaps Setup"
 {
     // version BingMaps
 

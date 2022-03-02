@@ -1,4 +1,4 @@
-pageextension 70074120 "BingMaps Cust Card" extends "Customer Card"
+pageextension 74123 "BingMaps Cust List" extends "Customer List"
 {
     layout
     {
@@ -27,7 +27,7 @@ pageextension 70074120 "BingMaps Cust Card" extends "Customer Card"
                 ToolTip = 'Open a web page, showing all customers on a map';
                 Promoted = true;
                 PromotedIsBig = true;
-                PromotedCategory = Category9;
+                PromotedCategory = Process;
                 RunObject = codeunit "BingMaps Show All";
             }
         }

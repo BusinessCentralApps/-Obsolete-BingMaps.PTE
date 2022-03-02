@@ -1,4 +1,4 @@
-codeunit 70074122 "BingMaps Show All"
+codeunit 74122 "BingMaps Show All"
 {
     trigger OnRun()
     var

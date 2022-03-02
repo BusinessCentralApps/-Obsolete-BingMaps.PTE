@@ -1,4 +1,4 @@
-page 70074121 "BingMaps CustomerMap"
+page 74121 "BingMaps CustomerMap"
 {
     PageType = CardPart;
     SourceTable = "BingMaps Customer";
