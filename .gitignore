@@ -1,0 +1,8 @@
+*.app
+*.flf
+TestResults.xml
+rad.json
+.output
+.alcache/
+.altemplates/
+cache_*
