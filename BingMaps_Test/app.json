@@ -1,6 +1,6 @@
 {
-    "id":  "81eb0a83-7ca0-42e3-9dac-0b530a7c326b",
-    "name":  "BingMaps.AppSource_Test",
+    "id":  "b1c6b0de-e874-44f6-99b3-24cb2e400f9f",
+    "name":  "BingMaps.PTE_Test",
     "publisher":  "Freddy Kristiansen",
     "brief":  "",
     "description":  "",
@@ -30,9 +30,9 @@
                              "version":  "18.0.0.0"
                          },
                          {
-                             "id":  "4270bff7-c860-434f-b09a-0f3e37d243fd",
+                             "id":  "165d73c1-39a4-4fb6-85a5-925edc1684fb",
                              "publisher":  "Freddy Kristiansen",
-                             "name":  "BingMaps.AppSource",
+                             "name":  "BingMaps.PTE",
                              "version":  "1.0.0.0"
                          }
                      ],

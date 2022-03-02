@@ -1,15 +1,15 @@
 {
-    "id":  "4270bff7-c860-434f-b09a-0f3e37d243fd",
-    "name":  "BingMaps.AppSource",
+    "id":  "165d73c1-39a4-4fb6-85a5-925edc1684fb",
+    "name":  "BingMaps.PTE",
     "publisher":  "Freddy Kristiansen",
     "brief":  "BingMaps Integration",
     "description":  "BingMaps Integration App with geocode functionality and map control",
     "version":  "2.0.0.0",
-    "privacyStatement":  "https://dev.azure.com/businesscentralapps/BingMaps.AppSource",
-    "EULA":  "https://dev.azure.com/businesscentralapps/BingMaps.AppSource",
-    "help":  "https://dev.azure.com/businesscentralapps/BingMaps.AppSource",
-    "url":  "https://dev.azure.com/businesscentralapps/BingMaps.AppSource",
-    "contextSensitiveHelpUrl":  "https://dev.azure.com/businesscentralapps/BingMaps.AppSource",
+    "privacyStatement":  "https://dev.azure.com/businesscentralapps/BingMaps.PTE",
+    "EULA":  "https://dev.azure.com/businesscentralapps/BingMaps.PTE",
+    "help":  "https://dev.azure.com/businesscentralapps/BingMaps.PTE",
+    "url":  "https://dev.azure.com/businesscentralapps/BingMaps.PTE",
+    "contextSensitiveHelpUrl":  "https://dev.azure.com/businesscentralapps/BingMaps.PTE",
     "logo":  "bingmaps256x240.png",
     "dependencies":  [
 
