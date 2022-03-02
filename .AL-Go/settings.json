@@ -1,7 +1,9 @@
-{
-    "country": "us",
-    "appFolders": [
-    ],
-    "testFolders": [
-    ]
+﻿{
+    "country":  "us",
+    "appFolders":  [
+                       "BingMaps.AppSource"
+                   ],
+    "testFolders":  [
+                        "BingMaps.AppSource_Test"
+                    ]
 }
