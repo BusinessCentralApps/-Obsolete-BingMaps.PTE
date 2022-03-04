@@ -1,5 +1,15 @@
 codeunit 74120 "BingMaps Geocode"
 {
+    trigger OnRun();
+    var
+        Cust: Record Customer;
+    begin
+        if Cust.FindSet() then
+            repeat
+                GeocodeCustomer(Cust);
+                Commit();
+            until Cust.Next() = 0;
+    end;
 
     [EventSubscriber(ObjectType::Table, Database::Customer, 'OnAfterModifyEvent', '', true, true)]
     local procedure ModifyCustomer(VAR Rec: Record Customer)
@@ -23,17 +33,6 @@ codeunit 74120 "BingMaps Geocode"
     begin
         if BingMapsCustomer.Get(xRec."No.") then
             BingMapsCustomer.Rename(Rec."No.");
-    end;
-
-    trigger OnRun();
-    var
-        Cust: Record Customer;
-    begin
-        if Cust.FindSet() then
-            repeat
-                GeocodeCustomer(Cust);
-                Commit();
-            until Cust.Next() = 0;
     end;
 
     procedure GeocodeCustomer(Customer: Record Customer)
