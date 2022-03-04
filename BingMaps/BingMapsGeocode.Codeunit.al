@@ -1,16 +1,5 @@
 codeunit 74120 "BingMaps Geocode"
 {
-    trigger OnRun();
-    var
-        Cust: Record Customer;
-    begin
-        if Cust.FindSet() then
-            repeat
-                GeocodeCustomer(Cust);
-                Commit();
-            until Cust.Next() = 0;
-    end;
-
     [EventSubscriber(ObjectType::Table, Database::Customer, 'OnAfterModifyEvent', '', true, true)]
     local procedure ModifyCustomer(VAR Rec: Record Customer)
     begin
