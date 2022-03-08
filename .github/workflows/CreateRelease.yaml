@@ -125,7 +125,6 @@ jobs:
         uses: freddydk/AL-Go-Actions/ReadSettings@main
         with:
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
-          get: StorageContext
 
       - name: Read secrets
         uses: freddydk/AL-Go-Actions/ReadSecrets@main
