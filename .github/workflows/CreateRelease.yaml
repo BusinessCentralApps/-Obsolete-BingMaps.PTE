@@ -178,9 +178,9 @@ jobs:
 
                   Write-Host $storageContext.GetType()
 
-                  $storageAccount = $StorageContext | ConvertFrom-Json | ConvertTo-HashTable
+                  $storageAccount = $StorageContext | ConvertFrom-Json
                   Write-Host "Storage Context OK"
-                  if ($storageAccount.ContainsKey('sastoken')) {
+                  if ($storageAccount.PSObject.Properties.Name -eq "sastoken") {
                       $storageContext = New-AzureStorageContext -StorageAccountName $storageAccount.StorageAccountName -SasToken $storageAccount.sastoken -Force
                   }
                   else {
@@ -193,7 +193,7 @@ jobs:
               catch {
                 Write-Host $_.Exception.Message
                   Write-Host "::Error::StorageContext secret is malformed. Needs to be formatted as Json, containing StorageAccountName, ContainerName and sastoken or storageAccountKey, which points to an existing container in a storage account."
-                  exit
+                  exit 1
               }
           }
 
