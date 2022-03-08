@@ -181,10 +181,10 @@ jobs:
                   $storageAccount = $StorageContext | ConvertFrom-Json
                   Write-Host "Storage Context OK"
                   if ($storageAccount.PSObject.Properties.Name -eq "sastoken") {
-                      $storageContext = New-AzureStorageContext -StorageAccountName $storageAccount.StorageAccountName -SasToken $storageAccount.sastoken -Force
+                      $storageContext = New-AzureStorageContext -StorageAccountName $storageAccount.StorageAccountName -SasToken $storageAccount.sastoken
                   }
                   else {
-                      $storageContext = New-AzureStorageContext -StorageAccountName $storageAccount.StorageAccountName -StorageAccountKey $storageAccount.StorageAccountKey -Force
+                      $storageContext = New-AzureStorageContext -StorageAccountName $storageAccount.StorageAccountName -StorageAccountKey $storageAccount.StorageAccountKey
                   }
                   Write-Host "Storage Credentials OK"
                   $storageContainer = Get-AzureStorageContainer -Context $storageContext -name $storageAccount.ContainerName
