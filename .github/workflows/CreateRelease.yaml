@@ -174,9 +174,9 @@ jobs:
                   }
 
                   $storageContext = $ENV:StorageContext
-                  $storageContext.ToCharArray() | % { Write-Host "$_ " }
+                  $storageContext.ToCharArray() | % { Write-Host -nonewline "$_ " }
 
-                  $storageAccount = "$ENV:StorageContext" | ConvertFrom-Json | ConvertTo-HashTable
+                  $storageAccount = $StorageContext | ConvertFrom-Json | ConvertTo-HashTable
                   Write-Host "Storage Context OK"
                   if ($storageAccount.ContainsKey('sastoken')) {
                       $storageContext = New-AzureStorageContext -StorageAccountName $storageAccount.StorageAccountName -SasToken $storageAccount.sastoken -Force
