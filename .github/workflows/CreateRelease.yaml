@@ -161,6 +161,7 @@ jobs:
               try {
                   if (get-command New-AzureStorageContext -ErrorAction SilentlyContinue) {
                       Write-Host "Using Azure.Storage PowerShell module"
+                      Disable-AzureDataCollection
                   }
                   else {
                       if (!(get-command New-AzStorageContext -ErrorAction SilentlyContinue)) {
@@ -174,9 +175,6 @@ jobs:
                   }
 
                   $storageContext = $ENV:StorageContext
-                  $storageContext.ToCharArray() | % { Write-Host -nonewline "$_ " }
-
-                  Write-Host $storageContext.GetType()
 
                   $storageAccount = $StorageContext | ConvertFrom-Json
                   Write-Host "Storage Context OK"
@@ -189,6 +187,19 @@ jobs:
                   Write-Host "Storage Credentials OK"
                   $storageContainer = Get-AzureStorageContainer -Context $storageContext -name $storageAccount.ContainerName
                   Write-Host "Storage Container OK"
+
+                  $name = '${{ matrix.name }}'
+                  if ($name -like '*Apps-*') {
+                    $idx = $name.indexOf('Apps-')
+                    $version = $name.SubString($idx+5)
+                    $name = "$($name.SubString(0,$idx+4)).zip"
+                
+                    Write-Host "Publishing $version/$name"
+                    Set-AzureStorageBlobContent -Context $storageContext -CloudBlobContainer $storageContainer.CloudBlobContainer -File '${{ matrix.name }}.zip' -blob "$version/$name"
+                    Write-Host "Publishing latest/$name"
+                    Set-AzureStorageBlobContent -Context $storageContext -CloudBlobContainer $storageContainer.CloudBlobContainer -File '${{ matrix.name }}.zip' -blob "latest/$name"
+                  }
+                }
               }
               catch {
                 Write-Host $_.Exception.Message
