@@ -190,16 +190,15 @@ jobs:
 
                   $name = '${{ matrix.name }}'
                   if ($name -like '*Apps-*') {
-                    $idx = $name.indexOf('Apps-')
-                    $version = $name.SubString($idx+5)
-                    $name = "$($name.SubString(0,$idx+4)).zip"
+                      $idx = $name.indexOf('Apps-')
+                      $version = $name.SubString($idx+5)
+                      $name = "$($name.SubString(0,$idx+4)).zip"
                 
-                    Write-Host "Publishing $version/$name"
-                    Set-AzureStorageBlobContent -Context $storageContext -CloudBlobContainer $storageContainer.CloudBlobContainer -File '${{ matrix.name }}.zip' -blob "$version/$name"
-                    Write-Host "Publishing latest/$name"
-                    Set-AzureStorageBlobContent -Context $storageContext -CloudBlobContainer $storageContainer.CloudBlobContainer -File '${{ matrix.name }}.zip' -blob "latest/$name"
+                      Write-Host "Publishing $version/$name"
+                      Set-AzureStorageBlobContent -Context $storageContext -CloudBlobContainer $storageContainer.CloudBlobContainer -File '${{ matrix.name }}.zip' -blob "$version/$name"
+                      Write-Host "Publishing latest/$name"
+                      Set-AzureStorageBlobContent -Context $storageContext -CloudBlobContainer $storageContainer.CloudBlobContainer -File '${{ matrix.name }}.zip' -blob "latest/$name"
                   }
-                }
               }
               catch {
                 Write-Host $_.Exception.Message
