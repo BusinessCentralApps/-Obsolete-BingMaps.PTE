@@ -59,7 +59,7 @@ jobs:
         uses: freddydk/AL-Go-Actions/ReadSettings@main
         with:
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
-          get: TemplateUrl,StorageContext
+          get: TemplateUrl
 
       - name: Check for updates to AL-Go system files
         uses: freddydk/AL-Go-Actions/CheckForUpdates@main
