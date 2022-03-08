@@ -173,6 +173,9 @@ jobs:
                       Set-Alias -Name Set-AzureStorageBlobContent -Value Set-AzStorageBlobContent
                   }
 
+                  $storageContext = $ENV:StorageContext
+                  $storageContext.ToCharArray() | % { Write-Host "$_ " }
+
                   $storageAccount = "$ENV:StorageContext" | ConvertFrom-Json | ConvertTo-HashTable
                   Write-Host "Storage Context OK"
                   if ($storageAccount.ContainsKey('sastoken')) {
