@@ -173,7 +173,7 @@ jobs:
                       Set-Alias -Name Set-AzureStorageBlobContent -Value Set-AzStorageBlobContent
                   }
 
-                  $storageAccount = $ENV:storageContext | ConvertFrom-Json | ConvertTo-HashTable
+                  $storageAccount = "$ENV:StorageContext" | ConvertFrom-Json | ConvertTo-HashTable
                   Write-Host "Storage Context OK"
                   if ($storageAccount.ContainsKey('sastoken')) {
                       $storageContext = New-AzureStorageContext -StorageAccountName $storageAccount.StorageAccountName -SasToken $storageAccount.sastoken -Force
@@ -186,7 +186,7 @@ jobs:
                   Write-Host "Storage Container OK"
               }
               catch {
-                  OutputError -message "StorageContext secret is malformed. Needs to be formatted as Json, containing StorageAccountName, ContainerName and sastoken or storageAccountKey, which points to an existing container in a storage account."
+                  Write-Host "::Error::StorageContext secret is malformed. Needs to be formatted as Json, containing StorageAccountName, ContainerName and sastoken or storageAccountKey, which points to an existing container in a storage account."
                   exit
               }
           }
