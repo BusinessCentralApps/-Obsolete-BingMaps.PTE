@@ -6,5 +6,6 @@
                    ],
     "testFolders":  [
                         "BingMaps.Test"
-                    ]
+                    ],
+    "RepoVersion":  "3.0"
 }
