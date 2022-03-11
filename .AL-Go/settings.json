@@ -1,6 +1,7 @@
 ﻿{
     "country":  "us",
     "VersioningStrategy":  16,
+    "applicationDependency":  "18.0.0.0",
     "appFolders":  [
                        "BingMaps"
                    ],

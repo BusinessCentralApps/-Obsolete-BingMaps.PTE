@@ -18,7 +18,7 @@
 
                     ],
     "platform":  "18.0.0.0",
-    "application":  "18.3.0.0",
+    "application":  "18.0.0.0",
     "idRanges":  [
                      {
                          "from":  74119,
@@ -37,7 +37,7 @@
     "supportedLocales":  [
                              "en-US"
                          ],
-    "runtime":  "8.0",
+    "runtime":  "7.0",
     "keyVaultUrls":  [
 
                      ],

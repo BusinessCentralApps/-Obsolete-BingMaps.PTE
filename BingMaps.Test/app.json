@@ -39,7 +39,7 @@
     "screenshots":  [
 
                     ],
-    "application":  "18.3.0.0",
+    "application":  "18.0.0.0",
     "platform":  "18.0.0.0",
     "idRanges":  [
                      {
@@ -47,7 +47,7 @@
                          "to":  70149
                      }
                  ],
-    "runtime":  "8.0",
+    "runtime":  "7.0",
     "resourceExposurePolicy":  {
                                    "allowDebugging":  true,
                                    "allowDownloadingSource":  true,
