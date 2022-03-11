@@ -1,5 +1,6 @@
 ﻿{
     "country":  "us",
+    "VersioningStrategy":  16,
     "appFolders":  [
                        "BingMaps"
                    ],
