@@ -1,4 +1,4 @@
-name: Create release
+﻿name: Create release
 
 on:
   workflow_dispatch:
@@ -177,32 +177,44 @@ jobs:
                   $storageContext = $ENV:StorageContext
 
                   $storageAccount = $StorageContext | ConvertFrom-Json
-                  Write-Host "Storage Context OK"
                   if ($storageAccount.PSObject.Properties.Name -eq "sastoken") {
                       $storageContext = New-AzureStorageContext -StorageAccountName $storageAccount.StorageAccountName -SasToken $storageAccount.sastoken
                   }
                   else {
                       $storageContext = New-AzureStorageContext -StorageAccountName $storageAccount.StorageAccountName -StorageAccountKey $storageAccount.StorageAccountKey
                   }
-                  Write-Host "Storage Credentials OK"
-                  $storageContainer = Get-AzureStorageContainer -Context $storageContext -name $storageAccount.ContainerName
-                  Write-Host "Storage Container OK"
 
                   $name = '${{ matrix.name }}'
-                  if ($name -like '*Apps-*') {
-                      $idx = $name.indexOf('Apps-')
-                      $version = $name.SubString($idx+5)
-                      $name = "$($name.SubString(0,$idx+4)).zip"
-                
-                      Write-Host "Publishing $version/$name"
-                      Set-AzureStorageBlobContent -Context $storageContext -CloudBlobContainer $storageContainer.CloudBlobContainer -File '${{ matrix.name }}.zip' -blob "$version/$name"
-                      Write-Host "Publishing latest/$name"
-                      Set-AzureStorageBlobContent -Context $storageContext -CloudBlobContainer $storageContainer.CloudBlobContainer -File '${{ matrix.name }}.zip' -blob "latest/$name"
+                  $type = ""
+                  if ($name -like '*-Apps-*') {
+                      $idx = $name.indexOf('-Apps-')
+                      $version = $name.SubString($idx+6)
+                      $projectName = $name.SubString(0,$idx) -replace "[^a-z0-9]", "-"
+                      $type = 'Apps'
+                  }
+                  elseif ($name -like '*-TestApps-*') {
+                      $idx = $name.indexOf('-TestApps-')
+                      $version = $name.SubString($idx+10)
+                      $projectName = $name.SubString(0,$idx) -replace "[^a-z0-9]", "-"
+                      $type = 'TestApps'
+                  }
+
+                  $storageContainerName = $storageAccount.ContainerName.ToLowerInvariant().replace('{project}',$projectName).ToLowerInvariant()
+                  Get-AzureStorageContainer -Context $storageContext -name $storageContainerName | Out-Null
+                  $storageBlobName = $storageAccount.BlobName.ToLowerInvariant()
+                  Write-Host "Storage Context OK"
+
+                  if ($type) {
+                      $version, "latest" | ForEach-Object {
+                          $blob = $storageBlobName.replace('{project}',$projectName).replace('{version}',$_).replace('{type}',$type).ToLowerInvariant()
+                          Write-Host "Publishing $blob to $storageContainerName"
+                          Set-AzureStorageBlobContent -Context $storageContext -Container $storageContainerName -File '${{ matrix.name }}.zip' -blob $blob -Force
+                      }
                   }
               }
               catch {
                 Write-Host $_.Exception.Message
-                  Write-Host "::Error::StorageContext secret is malformed. Needs to be formatted as Json, containing StorageAccountName, ContainerName and sastoken or storageAccountKey, which points to an existing container in a storage account."
+                  Write-Host "::Error::StorageContext secret is malformed. Needs to be formatted as Json, containing StorageAccountName, ContainerName, BlobName and sastoken or storageAccountKey, which points to an existing container in a storage account."
                   exit 1
               }
           }
