@@ -2,5 +2,6 @@
     "templateUrl":  "https://github.com/microsoft/AL-Go-PTE@main",
     "NextMajorSchedule":  "0 1 * * 1,3,5",
     "type":  "PTE",
-    "bcContainerHelperVersion":  "dev"
+    "bcContainerHelperVersion":  "dev",
+    "updateDependencies":  true
 }
