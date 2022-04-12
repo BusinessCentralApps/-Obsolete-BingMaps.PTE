@@ -1,7 +1,7 @@
 ﻿{
-    "templateUrl":  "https://github.com/freddydk/AL-Go-PTE@main",
     "NextMajorSchedule":  "0 1 * * 1,3,5",
     "type":  "PTE",
-    "bcContainerHelperVersion":  "dev",
-    "updateDependencies":  true
+    "templateUrl":  "https://github.com/freddydk/AL-Go-PTE@main",
+    "updateDependencies":  true,
+    "bcContainerHelperVersion":  "dev"
 }
