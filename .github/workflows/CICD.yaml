@@ -86,7 +86,7 @@ jobs:
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           project: ${{ matrix.project }}
 
-      - name: Read secrets (Pull Request)
+      - name: Read secrets (PR)
         uses: freddydk/AL-Go-Actions/ReadSecrets@main
         if: github.event_name == 'pull_request'
         env:
