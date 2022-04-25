@@ -8,5 +8,6 @@
     "testFolders":  [
                         "BingMaps.Test"
                     ],
-    "RepoVersion":  "3.1"
+    "RepoVersion":  "3.1",
+    "Environments":  "QA"
 }
