@@ -9,5 +9,5 @@
                         "BingMaps.Test"
                     ],
     "RepoVersion":  "3.1",
-    "Environments":  "QA"
+    "Environments":  [ "QA" ]
 }
