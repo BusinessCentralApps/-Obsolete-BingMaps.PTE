@@ -243,7 +243,7 @@ jobs:
             }            
           }
           if (!($environmentName)) {
-            $envName = '${{ steps.envName.outputs.envName }}'
+            $environmentName = '${{ steps.envName.outputs.envName }}'
           }
           $environmentName = $environmentName + '${{ matrix.environment }}'.SubString($envName.Length)
           Write-Host "::set-output name=authContext::$authContext"
