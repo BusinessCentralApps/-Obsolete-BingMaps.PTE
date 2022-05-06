@@ -21,7 +21,7 @@ defaults:
 
 jobs:
   Initialization:
-    runs-on: [ windows-latest ]
+    runs-on: [ self-hosted ]
     outputs:
       telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
     steps:
@@ -35,7 +35,7 @@ jobs:
           eventId: "DO0098"
 
   Update:
-    runs-on: [ windows-latest ]
+    runs-on: [ self-hosted ]
     needs: [ Initialization ]
 
     steps:
@@ -76,7 +76,7 @@ jobs:
 
   PostProcess:
     if: always()
-    runs-on: [ windows-latest ]
+    runs-on: [ self-hosted ]
     needs: [ Initialization, Update ]
     steps:
       - name: Checkout
