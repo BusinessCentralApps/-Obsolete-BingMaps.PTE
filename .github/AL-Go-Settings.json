@@ -6,6 +6,7 @@
     "CurrentSchedule":  "0 2 * * 1,2,3,4,5",
     "updateDependencies":  true,
     "bcContainerHelperVersion":  "dev",
-    "gitHubRunner":  "self-hosted",
-    "runs-on":  "self-hosted"
+    "doNotPublishApps":  true,
+    "xgitHubRunner":  "self-hosted",
+    "xruns-on":  "self-hosted"
 }
