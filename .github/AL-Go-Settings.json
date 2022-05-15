@@ -7,6 +7,6 @@
     "updateDependencies":  true,
     "bcContainerHelperVersion":  "dev",
     "doNotPublishApps":  true,
-    "xgitHubRunner":  "self-hosted",
-    "xruns-on":  "self-hosted"
+    "gitHubRunner":  "self-hosted",
+    "runs-on":  "self-hosted"
 }
