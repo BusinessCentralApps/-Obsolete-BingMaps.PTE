@@ -7,5 +7,15 @@
     "updateDependencies":  true,
     "bcContainerHelperVersion":  "dev",
     "gitHubRunner":  "self-hosted",
-    "runs-on":  "self-hosted"
+    "runs-on":  "self-hosted",
+    "ConditionalSettings": [
+        {
+            "branches": [ 
+                "*"
+            ],
+            "settings": {
+                "doNotPublishApps":  true
+            }
+        }
+    ]
 }
