@@ -40,7 +40,7 @@ jobs:
 
   Build:
     needs: [ Initialization ]
-    runs-on: [ self-hosted ]
+    runs-on: ${{ fromJson(needs.Initialization.outputs.githubRunner) }}
     strategy:
       matrix:
         project: ${{ fromJson(needs.Initialization.outputs.projects) }}
