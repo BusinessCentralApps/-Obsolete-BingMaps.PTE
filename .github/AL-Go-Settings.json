@@ -11,7 +11,7 @@
     "ConditionalSettings": [
         {
             "branches": [ 
-                "*"
+                "feature/*"
             ],
             "settings": {
                 "doNotPublishApps":  true
