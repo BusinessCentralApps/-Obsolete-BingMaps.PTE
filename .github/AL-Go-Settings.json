@@ -17,15 +17,6 @@
                 "doNotPublishApps":  true,
                 "doNotSignApps":  true
             }
-        },
-        {
-            "branches": [ 
-                "main"
-            ],
-            "settings": {
-                "doNotPublishApps":  true,
-                "doNotSignApps":  true
-            }
         }
     ]
 }
