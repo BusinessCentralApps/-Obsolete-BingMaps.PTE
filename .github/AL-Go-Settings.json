@@ -8,15 +8,15 @@
     "bcContainerHelperVersion":  "dev",
     "gitHubRunner":  "self-hosted",
     "runs-on":  "self-hosted",
-    "ConditionalSettings": [
-        {
-            "branches": [ 
-                "feature/*"
-            ],
-            "settings": {
-                "doNotPublishApps":  true,
-                "doNotSignApps":  true
-            }
-        }
-    ]
+    "ConditionalSettings":  [
+                                {
+                                    "branches":  [
+                                                     "feature/*"
+                                                 ],
+                                    "settings":  {
+                                                     "doNotPublishApps":  true,
+                                                     "doNotSignApps":  true
+                                                 }
+                                }
+                            ]
 }
