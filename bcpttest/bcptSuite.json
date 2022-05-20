@@ -7,9 +7,9 @@
   "tag": "10UserTest",
   "bcptSuiteLines": [
     {
-      "codeunitID": 149107,
-      "numberOfSessions": 1,
-      "description": "BCPT Detail Trial Bal. Report",
+      "codeunitID": 67380,
+      "numberOfSessions": 2,
+      "description": "Open Customer List",
       "minimumUserDelay": 100,
       "maximumUserDelay": 1000,
       "delayBetweenIterations": 10,
@@ -17,37 +17,44 @@
       "runInForeground": false
     },
     {
-      "codeunitID": 149103,
-      "numberOfSessions": 1,
-      "description": "BCPT Create PO with N Lines",
+      "codeunitID": 67381,
+      "numberOfSessions": 2,
+      "description": "Open Item List",
       "minimumUserDelay": 100,
       "maximumUserDelay": 1000,
       "delayBetweenIterations": 5,
       "delayType": "Fixed",
-      "runInForeground": false,
-      "parameters": "Lines=10"
+      "runInForeground": false
     },
     {
-      "codeunitID": 149105,
-      "numberOfSessions": 1,
-      "description": "BCPT Create SQ with N Lines",
+      "codeunitID": 67382,
+      "numberOfSessions": 2,
+      "description": "Open Purch. Invoice List",
       "minimumUserDelay": 100,
       "maximumUserDelay": 1000,
       "delayBetweenIterations": 5,
       "delayType": "Fixed",
-      "runInForeground": false,
-      "parameters": "Lines=10"
+      "runInForeground": false
     },
     {
-      "codeunitID": 149104,
-      "numberOfSessions": 1,
-      "description": "BCPT Create SO with N Lines",
+      "codeunitID": 67383,
+      "numberOfSessions": 2,
+      "description": "Open Sales Invoice List",
       "minimumUserDelay": 100,
       "maximumUserDelay": 1000,
       "delayBetweenIterations": 5,
       "delayType": "Fixed",
-      "runInForeground": false,
-      "parameters": "Lines=10"
+      "runInForeground": false
+    },
+    {
+      "codeunitID": 67384,
+      "numberOfSessions": 2,
+      "description": "Open Vendor List",
+      "minimumUserDelay": 100,
+      "maximumUserDelay": 1000,
+      "delayBetweenIterations": 5,
+      "delayType": "Fixed",
+      "runInForeground": false
     }
   ]
 }
