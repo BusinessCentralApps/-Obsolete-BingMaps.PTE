@@ -1,0 +1,60 @@
+{
+  "code": "10UserTest",
+  "description": "10 User Test",
+  "durationInMinutes": 5,
+  "defaultMinimumUserDelayInMilliSeconds": 120,
+  "oneDayCorrespondsToInMinutes": 10,
+  "tag": "10UserTest",
+  "bcptSuiteLines": [
+    {
+      "codeunitID": 67380,
+      "numberOfSessions": 2,
+      "description": "Open Customer List",
+      "minimumUserDelay": 100,
+      "maximumUserDelay": 1000,
+      "delayBetweenIterations": 10,
+      "delayType": "Fixed",
+      "runInForeground": false
+    },
+    {
+      "codeunitID": 67381,
+      "numberOfSessions": 2,
+      "description": "Open Item List",
+      "minimumUserDelay": 100,
+      "maximumUserDelay": 1000,
+      "delayBetweenIterations": 5,
+      "delayType": "Fixed",
+      "runInForeground": false
+    },
+    {
+      "codeunitID": 67382,
+      "numberOfSessions": 2,
+      "description": "Open Purch. Invoice List",
+      "minimumUserDelay": 100,
+      "maximumUserDelay": 1000,
+      "delayBetweenIterations": 5,
+      "delayType": "Fixed",
+      "runInForeground": false
+    },
+    {
+      "codeunitID": 67383,
+      "numberOfSessions": 2,
+      "description": "Open Sales Invoice List",
+      "minimumUserDelay": 100,
+      "maximumUserDelay": 1000,
+      "delayBetweenIterations": 5,
+      "delayType": "Fixed",
+      "runInForeground": false
+    },
+    {
+      "codeunitID": 67384,
+      "numberOfSessions": 2,
+      "description": "Open Vendor List",
+      "minimumUserDelay": 100,
+      "maximumUserDelay": 1000,
+      "delayBetweenIterations": 5,
+      "delayType": "Fixed",
+      "runInForeground": false
+    }
+  ]
+}

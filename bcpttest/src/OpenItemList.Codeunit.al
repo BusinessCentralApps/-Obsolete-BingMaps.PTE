@@ -1,0 +1,18 @@
+codeunit 67381 "Open Item List"
+{
+    // Test codeunits can only run in foreground (UI)
+    Subtype = Test;
+
+    trigger OnRun();
+    begin
+    end;
+
+    [Test]
+    procedure OpenItemList()
+    var
+        ItemList: testpage "Item List";
+    begin
+        ItemList.OpenView();
+        ItemList.Close();
+    end;
+}
