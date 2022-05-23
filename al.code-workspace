@@ -1,4 +1,4 @@
-{
+﻿{
     "folders":  [
                     {
                         "path":  ".AL-Go"
@@ -11,6 +11,9 @@
                     },
                     {
                         "path":  "BingMaps.PerformanceTest"
+                    },
+                    {
+                        "path":  "My.PerformanceTest"
                     }
                 ],
     "settings":  {
