@@ -8,6 +8,9 @@
                     },
                     {
                         "path":  "BingMaps.Test"
+                    },
+                    {
+                        "path":  "BingMaps.PerformanceTest"
                     }
                 ],
     "settings":  {
