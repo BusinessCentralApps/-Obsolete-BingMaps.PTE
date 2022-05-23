@@ -9,8 +9,7 @@
                         "BingMaps.Test"
                     ],
     "bcptTestFolders":  [
-                            "BingMaps.PerformanceTest",
-                            "My.PerformanceTest"
+                            "BingMaps.PerformanceTest"
                         ],
     "RepoVersion":  "4.1"
 }
