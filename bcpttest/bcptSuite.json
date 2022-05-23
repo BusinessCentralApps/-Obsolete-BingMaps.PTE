@@ -14,7 +14,7 @@
       "maximumUserDelay": 1000,
       "delayBetweenIterations": 10,
       "delayType": "Fixed",
-      "runInForeground": false
+      "runInForeground": true
     },
     {
       "codeunitID": 67381,
@@ -24,7 +24,7 @@
       "maximumUserDelay": 1000,
       "delayBetweenIterations": 5,
       "delayType": "Fixed",
-      "runInForeground": false
+      "runInForeground": true
     },
     {
       "codeunitID": 67382,
@@ -34,7 +34,7 @@
       "maximumUserDelay": 1000,
       "delayBetweenIterations": 5,
       "delayType": "Fixed",
-      "runInForeground": false
+      "runInForeground": true
     },
     {
       "codeunitID": 67383,
@@ -44,7 +44,7 @@
       "maximumUserDelay": 1000,
       "delayBetweenIterations": 5,
       "delayType": "Fixed",
-      "runInForeground": false
+      "runInForeground": true
     },
     {
       "codeunitID": 67384,
@@ -54,7 +54,7 @@
       "maximumUserDelay": 1000,
       "delayBetweenIterations": 5,
       "delayType": "Fixed",
-      "runInForeground": false
+      "runInForeground": true
     }
   ]
 }
