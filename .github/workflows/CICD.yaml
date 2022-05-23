@@ -133,7 +133,7 @@ jobs:
             Add-Content -Path $env:GITHUB_ENV -Value "$name=$value"
           }
 
-      - name: Publish artifacts - Apps
+      - name: Publish artifacts - apps
         uses: actions/upload-artifact@v2
         if: github.event_name != 'pull_request' && (github.ref_name == 'main' || startswith(github.ref_name, 'release/'))
         with:
@@ -141,7 +141,7 @@ jobs:
           path: '${{ matrix.project }}/output/Apps/'
           if-no-files-found: ignore
 
-      - name: Publish artifacts - Dependencies
+      - name: Publish artifacts - dependencies
         uses: actions/upload-artifact@v2
         if: github.event_name != 'pull_request' && (github.ref_name == 'main' || startswith(github.ref_name, 'release/'))
         with:
@@ -149,7 +149,7 @@ jobs:
           path: '${{ matrix.project }}/output/Dependencies/'
           if-no-files-found: ignore
 
-      - name: Publish artifacts - Test apps
+      - name: Publish artifacts - test apps
         uses: actions/upload-artifact@v2
         if: github.event_name != 'pull_request' && (github.ref_name == 'main' || startswith(github.ref_name, 'release/'))
         with:
@@ -157,25 +157,25 @@ jobs:
           path: '${{ matrix.project }}/output/TestApps/'
           if-no-files-found: ignore
 
-      - name: Publish artifacts - Build output
+      - name: Publish artifacts - build output
         uses: actions/upload-artifact@v2
-        if: success() || failure()
+        if: (success() || failure()) && (hashFiles(format('{0}/BuildOutput.txt',matrix.project)) != '')
         with:
           name: ${{ env.buildOutputArtifactsName }}
           path: '${{ matrix.project }}/BuildOutput.txt'
           if-no-files-found: ignore
 
-      - name: Publish artifacts - Test results
+      - name: Publish artifacts - test results
         uses: actions/upload-artifact@v2
-        if: success() || failure()
+        if: (success() || failure()) && (hashFiles(format('{0}/TestResults.json',matrix.project)) != '')
         with:
           name: ${{ env.testResultsArtifactsName }}
           path: '${{ matrix.project }}/TestResults.xml'
           if-no-files-found: ignore
 
-      - name: Publish artifacts - BCPT Test results
+      - name: Publish artifacts - bcpt test results
         uses: actions/upload-artifact@v2
-        if: success() || failure()
+        if: (success() || failure()) && (hashFiles(format('{0}/bcptTestResults.json',matrix.project)) != '')
         with:
           name: ${{ env.bcptTestResultsArtifactsName }}
           path: '${{ matrix.project }}/bcptTestResults.json'
