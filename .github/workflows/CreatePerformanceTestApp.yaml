@@ -1,4 +1,4 @@
-﻿name: Create a new test app
+﻿name: Create a new performance test app
 
 on:
   workflow_dispatch:
@@ -10,7 +10,7 @@ on:
       name:
         description: Name
         required: true
-        default: '<YourAppName>.Test'         
+        default: '<YourAppName>.PerformanceTest'         
       publisher:
         description: Publisher
         required: true
@@ -20,6 +20,10 @@ on:
         default: '50000..99999'  
       sampleCode:
         description: Include Sample code (Y/N)
+        required: false
+        default: 'Y'
+      sampleSuite:
+        description: Include Sample BCPT Suite (Y/N)
         required: false
         default: 'Y'
       directCommit:
@@ -48,7 +52,7 @@ jobs:
         id: init
         uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
         with:
-          eventId: "DO0095"
+          eventId: "DO0102"
 
   Update:
     runs-on: [ windows-latest ]
@@ -60,11 +64,12 @@ jobs:
         with:
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           project: ${{ github.event.inputs.project }}
-          type: 'Test App'
+          type: 'Performance Test App'
           publisher: ${{ github.event.inputs.publisher }}
           name: ${{ github.event.inputs.name }}
           idrange: ${{ github.event.inputs.idrange }}
           sampleCode: ${{ github.event.inputs.sampleCode }}
+          sampleSuite: ${{ github.event.inputs.sampleSuite }}
           directCommit: ${{ github.event.inputs.directCommit }}
 
   PostProcess:
@@ -79,5 +84,5 @@ jobs:
         id: PostProcess
         uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
         with:
-          eventId: "DO0095"
+          eventId: "DO0102"
           telemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
