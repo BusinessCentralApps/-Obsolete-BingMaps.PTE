@@ -12,8 +12,6 @@ on:
       - 'README.md'
       - '.github/**'
 
-
-
 permissions:
   contents: read
 
@@ -23,7 +21,7 @@ defaults:
 
 jobs:
   Initialization:
-    runs-on: [ windows-latest ]
+    runs-on: [ self-hosted ]
     outputs:
       telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
       settings: ${{ steps.ReadSettings.outputs.SettingsJson }}
@@ -51,7 +49,7 @@ jobs:
           getEnvironments: '*'
 
   CheckForUpdates:
-    runs-on: [ windows-latest ]
+    runs-on: [ self-hosted ]
     needs: [ Initialization ]
     steps:
       - name: Checkout
@@ -274,7 +272,7 @@ jobs:
 
   PostProcess:
     if: always()
-    runs-on: [ windows-latest ]
+    runs-on: [ self-hosted ]
     needs: [ Initialization,  Build, Deploy ]
     steps:
       - name: Checkout
