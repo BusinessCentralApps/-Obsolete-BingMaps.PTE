@@ -1,9 +1,57 @@
-﻿## v1.4
+﻿## Preview
+
+### Issues
+- Issue #100 - Add more resilience to localDevEnv.ps1 and cloudDevEnv.ps1
+
+### All workflows
+- During initialize, all AL-Go settings files are now checked for validity and reported correctly
+- During initialize, the version number of AL-Go for GitHub is printed in large letters (incl. preview or dev.)
+
+### New workflow: Create new Performance Test App
+- Create BCPT Test app and add to bcptTestFolders to run bcpt Tests in workflows (set doNotRunBcptTests in workflow settings for workflows where you do NOT want this)
+
+### Update AL-Go System Files Workflow
+- Include release notes of new version in the description of the PR (and in the workflow output)
+
+### CI/CD workflow
+- Apps are not signed when the workflow is running as a Pull Request validation
+
+### Increment Version Number Workflow
+- Bugfix: increment all apps using f.ex. +0.1 would fail.
+
+### Environments
+- Add suport for EnvironmentName redirection by adding an Environment Secret under the environment or a repo secret called \<environmentName\>_EnvironmentName with the actual environment name.
+- No default environment name on Publish To Environment
+
+### Settings
+- New setting: **runs-on** to allow modifying runs-on for all jobs (requires Update AL-Go System files after changing the setting)
+- New setting: **DoNotSignApps** - setting this to true causes signing of the app to be skipped
+- New setting: **DoNotPublishApps** - setting this to true causes the workflow to skip publishing, upgrading and testing the app to improve performance.
+- New setting: **ConditionalSettings** to allow to use different settings for specific branches. Example:
+```
+    "ConditionalSettings": [
+        {
+            "branches": [ 
+                "feature/*"
+            ],
+            "settings": {
+                "doNotPublishApps":  true,
+                "doNotSignApps":  true
+            }
+        }
+    ]
+```
+- Default **BcContainerHelperVersion** is now based on AL-Go version. Preview AL-Go selects preview bcContainerHelper, normal selects latest.
+- New Setting: **bcptTestFolders** contains folders with BCPT tests, which will run in all build workflows
+- New Setting: set **doNotRunBcptTest** to true (in workflow specific settings file?) to avoid running BCPT tests
+- New Setting: set **obsoleteTagMinAllowedMajorMinor** to enable appsource cop to validate your app against future changes (AS0105). This setting will become auto-calculated in Test Current, Test Next Minor and Test Next Major later.
+
+## v1.4
 
 ### All workflows
 - Add requested permissions to avoid dependency on user/org defaults being too permissive
 
-### Check For Updates Workflow
+### Update AL-Go System Files Workflow
 - Default host to https://github.com/ (you can enter **myaccount/AL-Go-PTE@main** to change template)
 - Support for "just" changing branch (ex. **\@Preview**) to shift to the preview version
 
