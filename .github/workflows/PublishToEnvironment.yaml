@@ -30,7 +30,7 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: microsoft/AL-Go-Actions/WorkflowInitialize@preview
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
         with:
           eventId: "DO0097"
 
@@ -47,7 +47,7 @@ jobs:
 
       - name: Read settings
         id: ReadSettings
-        uses: microsoft/AL-Go-Actions/ReadSettings@preview
+        uses: freddydk/AL-Go-Actions/ReadSettings@main
         with:
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           getEnvironments: '${{ github.event.inputs.environmentName }}'
@@ -75,10 +75,10 @@ jobs:
           Write-Host "::set-output name=envName::$envName"
 
       - name: Read settings
-        uses: microsoft/AL-Go-Actions/ReadSettings@preview
+        uses: freddydk/AL-Go-Actions/ReadSettings@main
 
       - name: Read secrets
-        uses: microsoft/AL-Go-Actions/ReadSecrets@preview
+        uses: freddydk/AL-Go-Actions/ReadSecrets@main
         env:
           secrets: ${{ toJson(secrets) }}
         with:
@@ -121,7 +121,7 @@ jobs:
           Write-Host "set-output name=environmentName::$environmentName"
 
       - name: Deploy
-        uses: microsoft/AL-Go-Actions/Deploy@preview
+        uses: freddydk/AL-Go-Actions/Deploy@main
         env:
           authContext: '${{ steps.authContext.outputs.authContext }}'
         with:
@@ -141,7 +141,7 @@ jobs:
 
       - name: Finalize the workflow
         id: PostProcess
-        uses: microsoft/AL-Go-Actions/WorkflowPostProcess@preview
+        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
         with:
           eventId: "DO0097"
           telemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
