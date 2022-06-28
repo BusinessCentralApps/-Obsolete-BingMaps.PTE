@@ -70,7 +70,7 @@ jobs:
       - name: Calculate DirectCommit
         run: |
           $directCommit = '${{ github.event.inputs.directCommit }}'
-          Write-Host '${{ github.event_name }}''
+          Write-Host '${{ github.event_name }}'
           if ('${{ github.event_name }}' -eq 'schedule') {
             Write-Host "Running Update AL-Go System Files on a schedule. Setting DirectCommit = Y"
           }
