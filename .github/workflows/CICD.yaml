@@ -1,9 +1,17 @@
 ﻿name: CI/CD
 
 on:
-  schedule:
-  - cron: '30 * * * *'
   workflow_dispatch:
+  push:
+    paths-ignore:
+      - 'README.md'
+      - '.github/**'
+    branches: [ 'main', 'release/*', 'feature/*' ]
+  pull_request:
+    paths-ignore:
+      - 'README.md'
+      - '.github/**'
+    branches: [ 'main' ]
 
 permissions:
   contents: read
