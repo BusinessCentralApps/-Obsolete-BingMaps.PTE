@@ -1,9 +1,6 @@
 ﻿name: Update AL-Go System Files
 
 on:
-  schedule:
-  - cron: '00 * * * *'
-  - cron: '30 * * * *'
   workflow_dispatch:
     inputs:
       templateUrl:
