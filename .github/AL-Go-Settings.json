@@ -4,6 +4,7 @@
     "type":  "PTE",
     "NextMinorSchedule":  "0 2 * * 6",
     "CurrentSchedule":  "0 2 * * 1,2,3,4,5",
+    "UpdateGitHubGoSystemFilesSchedule":  "0 0 * * *",
     "xCICDSchedule":  "30 * * * *",
     "updateDependencies":  true,
     "runs-on":  "bc-build",
