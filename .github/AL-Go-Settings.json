@@ -1,4 +1,4 @@
-{
+﻿{
     "NextMajorSchedule":  "0 2 * * 0",
     "templateUrl":  "https://github.com/freddydk/AL-Go-PTE@main",
     "type":  "PTE",
