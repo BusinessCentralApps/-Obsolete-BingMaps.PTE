@@ -1,8 +1,6 @@
 ﻿name: Update AL-Go System Files
 
 on:
-  schedule:
-  - cron: '30 * * * *'
   workflow_dispatch:
     inputs:
       templateUrl:
@@ -67,15 +65,6 @@ jobs:
             Add-Content -Path $env:GITHUB_ENV -Value "TemplateUrl=$templateUrl"
           }
 
-      - name: Calculate DirectCommit
-        run: |
-          $directCommit = '${{ github.event.inputs.directCommit }}'
-          Write-Host '${{ github.event_name }}'
-          if ('${{ github.event_name }}' -eq 'schedule') {
-            Write-Host "Running Update AL-Go System Files on a schedule. Setting DirectCommit = Y"
-          }
-          Add-Content -Path $env:GITHUB_ENV -Value "DirectCommit=$directCommit"
-
       - name: Update AL-Go system files
         uses: freddydk/AL-Go-Actions/CheckForUpdates@main
         with:
@@ -83,7 +72,7 @@ jobs:
           token: ${{ env.ghTokenWorkflow }}
           Update: Y
           templateUrl: ${{ env.TemplateUrl }}
-          directCommit: ${{ env.directCommit }}
+          directCommit: ${{ github.event.inputs.directCommit }}
 
   PostProcess:
     if: always()
