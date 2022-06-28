@@ -73,6 +73,7 @@ jobs:
           Write-Host '${{ github.event_name }}'
           if ('${{ github.event_name }}' -eq 'schedule') {
             Write-Host "Running Update AL-Go System Files on a schedule. Setting DirectCommit = Y"
+            $directCommit = 'Y'
           }
           Add-Content -Path $env:GITHUB_ENV -Value "DirectCommit=$directCommit"
 
