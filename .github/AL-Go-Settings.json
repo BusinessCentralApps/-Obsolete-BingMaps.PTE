@@ -4,7 +4,7 @@
     "type":  "PTE",
     "NextMinorSchedule":  "0 2 * * 6",
     "CurrentSchedule":  "0 2 * * 1,2,3,4,5",
-    "defaultCICDPushBranches:  [ "main" ],
+    "defaultCICDPushBranches":  [ "main" ],
     "updateDependencies":  true,
     "runs-on":  "bc-build",
     "bcContainerHelperVersion":  "preview",
