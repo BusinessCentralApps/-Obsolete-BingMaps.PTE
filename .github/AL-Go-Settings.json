@@ -6,7 +6,7 @@
     "CurrentSchedule":  "0 2 * * 1,2,3,4,5",
     "UpdateGitHubGoSystemFilesSchedule":  "0 0 * * *",
     "updateDependencies":  true,
-    "runs-on":  "bc-build",
+    "runs-on":  "self-hosted, 1ES.Pool=businesscentral",
     "bcContainerHelperVersion":  "preview",
     "ConditionalSettings":  [
                                 {
