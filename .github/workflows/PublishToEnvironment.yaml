@@ -21,7 +21,7 @@ defaults:
 
 jobs:
   Initialization:
-    runs-on: [ bc-build ]
+    runs-on: [ self-hosted, 1ES.Pool=businesscentral ]
     outputs:
       telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
     steps:
@@ -35,7 +35,7 @@ jobs:
           eventId: "DO0097"
 
   Analyze:
-    runs-on: [ bc-build ]
+    runs-on: [ self-hosted, 1ES.Pool=businesscentral ]
     needs: [ Initialization ]
     outputs:
       settings: ${{ steps.ReadSettings.outputs.SettingsJson }}
@@ -130,7 +130,7 @@ jobs:
 
   PostProcess:
     if: always()
-    runs-on: [ bc-build ]
+    runs-on: [ self-hosted, 1ES.Pool=businesscentral ]
     needs: [ Initialization, Analyze, Deploy ]
     steps:
       - name: Checkout
