@@ -100,7 +100,7 @@ jobs:
 
   Build:
     needs: [ Initialization ]
-    runs-on: ${{ fromJson(needs.Initialization.outputs.githubRunner) }}
+    runs-on: ${{ needs.Initialization.outputs.githubRunner }}
     strategy:
       matrix:
         project: ${{ fromJson(needs.Initialization.outputs.projects) }}
