@@ -37,7 +37,7 @@ defaults:
 
 jobs:
   Initialization:
-    runs-on: [ self-hosted, 1ES.Pool=businesscentral ]
+    runs-on: [ windows-latest ]
     outputs:
       telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
     steps:
@@ -51,7 +51,7 @@ jobs:
           eventId: "DO0095"
 
   Update:
-    runs-on: [ self-hosted, 1ES.Pool=businesscentral ]
+    runs-on: [ windows-latest ]
     needs: [ Initialization ]
 
     steps:
@@ -69,7 +69,7 @@ jobs:
 
   PostProcess:
     if: always()
-    runs-on: [ self-hosted, 1ES.Pool=businesscentral ]
+    runs-on: [ windows-latest ]
     needs: [ Initialization, Update ]
     steps:
       - name: Checkout
