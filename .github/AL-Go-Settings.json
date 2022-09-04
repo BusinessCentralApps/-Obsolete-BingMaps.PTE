@@ -7,6 +7,7 @@
     "UpdateGitHubGoSystemFilesSchedule":  "0 0 * * *",
     "updateDependencies":  true,
     "githubrunner":  "self-hosted, 1ES.Pool=businesscentral",
+    "cacheImageName":  "",
     "bcContainerHelperVersion":  "preview",
     "ConditionalSettings":  [
                                 {
