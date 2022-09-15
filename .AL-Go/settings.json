@@ -12,5 +12,5 @@
                             "BingMaps.PerformanceTest"
                         ],
     "RepoVersion":  "4.1",
-    "DoNotRunBCPTTests":  false 
+    "DoNotRunBCPTTests":  true 
 }
