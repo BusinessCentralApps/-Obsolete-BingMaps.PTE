@@ -11,6 +11,9 @@
                     },
                     {
                         "path":  "BingMaps.PerformanceTest"
+                    },
+                    {
+                        "path":  "xxx.Test"
                     }
                 ],
     "settings":  {
