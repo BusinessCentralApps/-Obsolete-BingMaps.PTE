@@ -36,8 +36,6 @@ defaults:
 jobs:
   CreateApp:
     runs-on: [ windows-latest ]
-    outputs:
-      telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -47,17 +45,6 @@ jobs:
         uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
         with:
           eventId: "DO0092"
-
-      - name: Encode parameters
-        id: encode
-        env:
-          name: ${{ github.event.inputs.name }}
-          publisher: ${{ github.event.inputs.publisher }}
-        run: |
-          Write-Host "::set-output name=name::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($ENV:name)))"
-          Write-Host "set-output name=name::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($ENV:name)))"
-          Write-Host "::set-output name=publisher::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($ENV:publisher)))"
-          Write-Host "set-output name=publisher::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($ENV:publisher)))"
 
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
@@ -71,14 +58,13 @@ jobs:
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           project: ${{ github.event.inputs.project }}
           type: ${{ env.type }}
-          name: ${{ steps.encode.outputs.name }}
-          publisher: ${{ steps.encode.outputs.publisher }}
+          name: ${{ github.event.inputs.name }}
+          publisher: ${{ github.event.inputs.publisher }}
           idrange: ${{ github.event.inputs.idrange }}
           sampleCode: ${{ github.event.inputs.sampleCode }}
           directCommit: ${{ github.event.inputs.directCommit }}
 
       - name: Finalize the workflow
-        id: PostProcess
         if: always()
         uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
         with:
