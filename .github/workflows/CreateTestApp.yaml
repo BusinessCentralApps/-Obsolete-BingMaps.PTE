@@ -36,13 +36,17 @@ defaults:
     shell: PowerShell
 
 jobs:
-  Initialization:
+  CreateTestApp:
     runs-on: [ windows-latest ]
-    outputs:
-      telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Initialize the workflow
+        id: init
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
+        with:
+          eventId: "DO0095"
 
       - name: Encode parameters
         id: encode
@@ -54,23 +58,11 @@ jobs:
           Write-Host "set-output name=name::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($name)))"
           Write-Host "::set-output name=publisher::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($publisher)))"
           Write-Host "set-output name=publisher::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($publisher)))"
-          
 
-      - name: Initialize the workflow
-        id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
-        with:
-          eventId: "DO0095"
-
-  Update:
-    runs-on: [ windows-latest ]
-    needs: [ Initialization ]
-
-    steps:
       - name: Creating a new test app
         uses: freddydk/AL-Go-Actions/CreateApp@main
         with:
-          parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
+          parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           project: ${{ github.event.inputs.project }}
           type: 'Test App'
           publisher: ${{ steps.encode.outputs.publisher }}
@@ -79,17 +71,9 @@ jobs:
           sampleCode: ${{ github.event.inputs.sampleCode }}
           directCommit: ${{ github.event.inputs.directCommit }}
 
-  PostProcess:
-    if: always()
-    runs-on: [ windows-latest ]
-    needs: [ Initialization, Update ]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
       - name: Finalize the workflow
-        id: PostProcess
+        if: always()
         uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
         with:
           eventId: "DO0095"
-          telemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
+          telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
