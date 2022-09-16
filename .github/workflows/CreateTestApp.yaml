@@ -42,6 +42,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Encode parameters
+        id: encode
+        env:
+          name: ${{ github.event.inputs.name }}
+          publisher: ${{ github.event.inputs.publisher }}
+        run: |
+          Write-Host "::set-output name=name::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($name)))"
+          Write-Host "set-output name=name::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($name)))"
+          Write-Host "::set-output name=publisher::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($publisher)))"
+          Write-Host "set-output name=publisher::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($publisher)))"
+          
+
       - name: Initialize the workflow
         id: init
         uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
@@ -54,8 +66,8 @@ jobs:
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           project: ${{ github.event.inputs.project }}
           type: 'Test App'
-          publisher: ${{ github.event.inputs.publisher }}
-          name: ${{ github.event.inputs.name }}
+          publisher: ${{ steps.encode.outputs.publisher }}
+          name: ${{ steps.encode.outputs.name }}
           idrange: ${{ github.event.inputs.idrange }}
           sampleCode: ${{ github.event.inputs.sampleCode }}
           directCommit: ${{ github.event.inputs.directCommit }}
