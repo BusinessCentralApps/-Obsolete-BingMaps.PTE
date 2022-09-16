@@ -56,8 +56,8 @@ jobs:
         run: |
           Write-Host "::set-output name=name::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($ENV:name)))"
           Write-Host "set-output name=name::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($ENV:name)))"
-          Write-Host "::set-output name=publisher::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($publisher)))"
-          Write-Host "set-output name=publisher::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($publisher)))"
+          Write-Host "::set-output name=publisher::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($ENV:publisher)))"
+          Write-Host "set-output name=publisher::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($ENV:publisher)))"
 
       - name: Creating a new test app
         uses: freddydk/AL-Go-Actions/CreateApp@main
