@@ -54,8 +54,8 @@ jobs:
           name: ${{ github.event.inputs.name }}
           publisher: ${{ github.event.inputs.publisher }}
         run: |
-          Write-Host "::set-output name=name::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($name)))"
-          Write-Host "set-output name=name::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($name)))"
+          Write-Host "::set-output name=name::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($ENV:name)))"
+          Write-Host "set-output name=name::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($ENV:name)))"
           Write-Host "::set-output name=publisher::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($publisher)))"
           Write-Host "set-output name=publisher::$([Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($publisher)))"
 
