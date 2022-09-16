@@ -55,7 +55,7 @@ jobs:
           project: ${{ github.event.inputs.project }}
           type: 'Test App'
           name: ${{ github.event.inputs.name }}
-          publisher: '${{ github.event.inputs.publisher }}'
+          publisher: ${{ github.event.inputs.publisher }}
           idrange: ${{ github.event.inputs.idrange }}
           sampleCode: ${{ github.event.inputs.sampleCode }}
           directCommit: ${{ github.event.inputs.directCommit }}
