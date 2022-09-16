@@ -3,7 +3,8 @@
     "VersioningStrategy":  16,
     "applicationDependency":  "19.0.0.0",
     "appFolders":  [
-                       "BingMaps"
+                       "BingMaps",
+                       "my"
                    ],
     "testFolders":  [
                         "BingMaps.Test"
@@ -12,5 +13,5 @@
                             "BingMaps.PerformanceTest"
                         ],
     "RepoVersion":  "4.1",
-    "DoNotRunBCPTTests":  true 
+    "DoNotRunBCPTTests":  true
 }
