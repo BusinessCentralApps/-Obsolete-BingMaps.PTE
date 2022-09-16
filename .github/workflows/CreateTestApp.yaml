@@ -65,8 +65,8 @@ jobs:
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           project: ${{ github.event.inputs.project }}
           type: 'Test App'
-          publisher: ${{ steps.encode.outputs.publisher }}
           name: ${{ steps.encode.outputs.name }}
+          publisher: ${{ steps.encode.outputs.publisher }}
           idrange: ${{ github.event.inputs.idrange }}
           sampleCode: ${{ github.event.inputs.sampleCode }}
           directCommit: ${{ github.event.inputs.directCommit }}
