@@ -6,11 +6,12 @@
                        "BingMaps"
                    ],
     "testFolders":  [
-                        "BingMaps.Test"
+                        "BingMaps.Test",
+                        "bXkuVGVzdA=="
                     ],
     "bcptTestFolders":  [
                             "BingMaps.PerformanceTest"
                         ],
     "RepoVersion":  "4.1",
-    "DoNotRunBCPTTests":  true 
+    "DoNotRunBCPTTests":  true
 }
