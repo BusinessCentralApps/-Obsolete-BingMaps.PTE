@@ -14,6 +14,6 @@
     "RepoVersion":  "4.2",
     "DoNotRunBCPTTests":  true,
     "configPackages.us":  [
-        "US.ENU.STANDARD"
+        "{COUNTRY}.ENU.STANDARD"
     ]
 }
