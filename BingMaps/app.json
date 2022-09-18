@@ -1,10 +1,10 @@
-{
+﻿{
     "id":  "165d73c1-39a4-4fb6-85a5-925edc1684fb",
     "name":  "BingMaps.PTE",
     "publisher":  "Freddy Kristiansen",
     "brief":  "BingMaps Integration",
     "description":  "BingMaps Integration App with geocode functionality and map control",
-    "version":  "4.1.0.0",
+    "version":  "4.2.0.0",
     "privacyStatement":  "https://dev.azure.com/businesscentralapps/BingMaps.PTE",
     "EULA":  "https://dev.azure.com/businesscentralapps/BingMaps.PTE",
     "help":  "https://dev.azure.com/businesscentralapps/BingMaps.PTE",
