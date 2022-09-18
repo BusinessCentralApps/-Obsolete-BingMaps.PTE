@@ -13,7 +13,7 @@
                         ],
     "RepoVersion":  "4.2",
     "DoNotRunBCPTTests":  true,
-    "configPackages":  [
+    "configPackages.us":  [
         "NAV19.0.US.ENU.EXTENDED"
     ]
 }
