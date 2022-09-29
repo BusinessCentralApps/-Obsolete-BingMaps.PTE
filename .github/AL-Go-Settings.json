@@ -9,6 +9,7 @@
     "githubrunner":  "self-hosted, 1ES.Pool=businesscentral",
     "cacheImageName":  "",
     "bcContainerHelperVersion":  "preview",
+    "DoNotRunBCPTTests":  true,
     "ConditionalSettings":  [
                                 {
                                     "branches":  [
