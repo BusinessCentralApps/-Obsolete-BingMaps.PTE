@@ -16,6 +16,7 @@ on:
 permissions:
   contents: read
   actions: read
+  packages: write
 
 defaults:
   run:
@@ -58,7 +59,7 @@ jobs:
           secrets: ${{ toJson(secrets) }}
         with:
           settingsJson: ${{ env.Settings }}
-          secrets: 'StorageContext,AppSourceContext'
+          secrets: 'NuGetContext,StorageContext,AppSourceContext'
 
       - name: Determine Delivery Targets
         id: DetermineDeliveryTargets
@@ -66,6 +67,9 @@ jobs:
           $deliveryTargets = @()
           if ($env:StorageContext) {
             $deliveryTargets += @("Storage")
+          }
+          if ($env:NuGetContext) {
+            $deliveryTargets += @("NuGet")
           }
           if ($env:type -eq "AppSource App" -and $env:AppSourceContinuousDelivery -eq "true") {
             if ($env:AppSourceContext) {
