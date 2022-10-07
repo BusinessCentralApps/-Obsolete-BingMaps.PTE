@@ -16,7 +16,6 @@ on:
 permissions:
   contents: read
   actions: read
-  packages: write
 
 defaults:
   run:
@@ -59,7 +58,7 @@ jobs:
           secrets: ${{ toJson(secrets) }}
         with:
           settingsJson: ${{ env.Settings }}
-          secrets: 'NuGetContext,StorageContext,AppSourceContext'
+          secrets: 'GitHubPackagesContext,NuGetContext,StorageContext,AppSourceContext'
 
       - name: Determine Delivery Targets
         id: DetermineDeliveryTargets
@@ -71,8 +70,8 @@ jobs:
           if ($env:NuGetContext) {
             $deliveryTargets += @("NuGet")
           }
-          if ($env:useGitHubPackagesForDependencies -eq "true") {
-            $deliveryTargets += @("GitHub Packages")
+          if ($env:GitHubPackagesContext) {
+            $deliveryTargets += @("GitHubPackages")
           }
           if ($env:type -eq "AppSource App" -and $env:AppSourceContinuousDelivery -eq "true") {
             if ($env:AppSourceContext) {
@@ -155,7 +154,7 @@ jobs:
         with:
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           settingsJson: ${{ env.Settings }}
-          secrets: 'licenseFileUrl,insiderSasToken,CodeSignCertificateUrl,CodeSignCertificatePassword,KeyVaultCertificateUrl,KeyVaultCertificatePassword,KeyVaultClientId,StorageContext'
+          secrets: 'licenseFileUrl,insiderSasToken,CodeSignCertificateUrl,CodeSignCertificatePassword,KeyVaultCertificateUrl,KeyVaultCertificatePassword,KeyVaultClientId,StorageContext,GitHubPackagesContext'
 
       - name: Run pipeline
         uses: freddydk/AL-Go-Actions/RunPipeline@main
