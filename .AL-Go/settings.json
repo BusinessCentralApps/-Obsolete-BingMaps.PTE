@@ -6,7 +6,7 @@
                        "BingMaps"
                    ],
     "testFolders":  [
-                        "BingMaps.Test"
+                        "BingMaps.Test","BingMaps.Test2"
                     ],
     "bcptTestFolders":  [
                             "BingMaps.PerformanceTest"
