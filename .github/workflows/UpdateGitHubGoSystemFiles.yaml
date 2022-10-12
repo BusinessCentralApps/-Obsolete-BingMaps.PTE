@@ -53,6 +53,7 @@ jobs:
         env:
           templateUrl: ${{ github.event.inputs.templateUrl }}
         run: |
+          $ErrorActionPreference = "STOP"
           $templateUrl = $ENV:templateUrl
           if ($templateUrl) {
             Write-Host "Using Template Url: $templateUrl"
@@ -64,6 +65,7 @@ jobs:
           directCommit: ${{ github.event.inputs.directCommit }}
           eventName: ${{ github.event_name }}
         run: |
+          $ErrorActionPreference = "STOP"
           $directCommit = $ENV:directCommit
           Write-Host $ENV:eventName
           if ($ENV:eventName -eq 'schedule') {
