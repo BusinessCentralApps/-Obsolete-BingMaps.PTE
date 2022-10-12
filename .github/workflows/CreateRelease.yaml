@@ -54,7 +54,7 @@ jobs:
       telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3.1.0
 
       - name: Initialize the workflow
         id: init
@@ -70,7 +70,7 @@ jobs:
       upload_url: ${{ steps.createrelease.outputs.upload_url }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3.1.0
 
       - name: Read settings
         id: ReadSettings
@@ -155,7 +155,7 @@ jobs:
       fail-fast: true
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3.1.0
 
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
@@ -245,7 +245,7 @@ jobs:
     needs: [ Initialization, CreateRelease, UploadArtifacts ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3.1.0
 
       - name: Create Release Branch
         run: |
@@ -274,7 +274,7 @@ jobs:
     needs: [ Initialization, CreateRelease, UploadArtifacts, CreateReleaseBranch, UpdateVersionNumber ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3.1.0
 
       - name: Finalize the workflow
         id: PostProcess
