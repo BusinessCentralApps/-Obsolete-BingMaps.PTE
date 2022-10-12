@@ -89,6 +89,7 @@ jobs:
       - name: Analyze Artifacts
         id: analyzeartifacts
         run: |
+          $ErrorActionPreference = "STOP"
           $projects = '${{ steps.ReadSettings.outputs.ProjectsJson }}' | ConvertFrom-Json
           $projects | out-host
           $include = @()
@@ -172,6 +173,7 @@ jobs:
 
       - name: Download artifact
         run: |
+          $ErrorActionPreference = "STOP"
           Write-Host "Downloading artifact ${{ matrix.name}}"
           $headers = @{ 
               "Authorization" = "token ${{ github.token }}"
@@ -193,6 +195,7 @@ jobs:
         id: nuGetContext
         if: ${{ env.NuGetContext }}
         run: |
+          $ErrorActionPreference = "STOP"
           $nuGetContext = ''
           if ('${{ matrix.atype }}' -eq 'Apps') {
             $nuGetContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable('NuGetContext')))
@@ -216,6 +219,7 @@ jobs:
         id: storageContext
         if: ${{ env.StorageContext }}
         run: |
+          $ErrorActionPreference = "STOP"
           $storageContext = ''
           if ('${{ matrix.atype }}' -eq 'Apps') {
             $storageContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable('StorageContext')))
@@ -245,6 +249,7 @@ jobs:
 
       - name: Create Release Branch
         run: |
+          $ErrorActionPreference = "STOP"
           git checkout -b release/${{ github.event.inputs.tag }}
           git config user.name ${{ github.actor}}
           git config user.email ${{ github.actor}}@users.noreply.github.com
