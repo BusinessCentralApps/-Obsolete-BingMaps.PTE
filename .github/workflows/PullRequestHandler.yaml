@@ -34,7 +34,10 @@ jobs:
           $baseSHA = '${{ github.event.pull_request.base.sha }}'
           $headSHA = '${{ github.event.pull_request.head.sha }}'
           $url = "$($ENV:GITHUB_API_URL)/repos/$($ENV:GITHUB_REPOSITORY)/compare/$baseSHA...$headSHA"
-          $response = Invoke-WebRequest -UseBasicParsing -Headers $headers -Uri $url | ConvertFrom-Json
+          Write-Host $url
+          $responseJson = Invoke-WebRequest -UseBasicParsing -Headers $headers -Uri $url
+          Write-Host $responseJson
+          $response = $responseJson | ConvertFrom-Json
           $filesChanged = @($response.files | ForEach-Object { $_.filename })
           $location = (Get-Location).path
           $prfolder = [GUID]::NewGuid().ToString()
@@ -56,7 +59,6 @@ jobs:
             }
             if (-not (Test-Path $newfolder)) {
               New-Item $newfolder -ItemType Directory | Out-Null
-              Write-Host " deleted"
             }
             if (Test-Path $path) {
               Copy-Item -Path $path -Destination $newfolder -Force
@@ -64,6 +66,7 @@ jobs:
             }
             else {
               New-Item -Path $newfolder -name "$filename.REMOVE" -itemType File | Out-Null
+              Write-Host " deleted"
             }
           }
           Set-Content -path (Join-Path $prPath "comment_id") -value '${{ steps.CreateComment.outputs.comment_id }}' -NoNewLine -Force
