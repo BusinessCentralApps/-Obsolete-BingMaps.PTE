@@ -47,7 +47,7 @@ jobs:
           $response.files | ForEach-Object {
             $filename = $_.filename
             $status = $_.status
-            Write-Host -noNewLine "- $filename $status"
+            Write-Host "- $filename $status"
             $path = Join-Path $location $filename
             $newPath = Join-Path $prPath $filename
             $newfolder = [System.IO.Path]::GetDirectoryName($newpath)
