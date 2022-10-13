@@ -60,7 +60,7 @@ jobs:
             core.setOutput('checkRunId', response.data.id);
 
       - name: Checkout
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v3
 
       - name: Initialize the workflow
         id: init
@@ -109,10 +109,10 @@ jobs:
           $deliveryTargets = $deliveryTargets | Select-Object -unique
           $deliveryTargetsJson = $deliveryTargets | ConvertTo-Json -Depth 99 -compress
           if ($deliveryTargets.Count -lt 2) { $deliveryTargetsJson = "[$($deliveryTargetsJson)]" }
-          Write-Host "::set-output name=DeliveryTargetsJson::$deliveryTargetsJson"
-          Write-Host "set-output name=DeliveryTargetsJson::$deliveryTargetsJson"
-          Write-Host "::set-output name=DeliveryTargetCount::$($deliveryTargets.Count)"
-          Write-Host "set-output name=DeliveryTargetCount::$($deliveryTargets.Count)"
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "DeliveryTargetsJson=$deliveryTargetsJson"
+          Write-Host "DeliveryTargetsJson=$deliveryTargetsJson"
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "DeliveryTargetCount=$($deliveryTargets.Count)"
+          Write-Host "DeliveryTargetCount=$($deliveryTargets.Count)"
           Add-Content -Path $env:GITHUB_ENV -Value "DeliveryTargets=$deliveryTargetsJson"
 
   CheckForUpdates:
@@ -121,7 +121,7 @@ jobs:
     if: github.event_name != 'workflow_run'
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v3
 
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
@@ -200,7 +200,7 @@ jobs:
             });
 
       - name: Checkout
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v3
         with:
           lfs: true
 
@@ -303,7 +303,7 @@ jobs:
           'Apps','Dependencies','TestApps','TestResults','BcptTestResults','BuildOutput' | ForEach-Object {
             $name = "$($_)ArtifactsName"
             $value = "$($project.Replace('\','_'))-$("$ENV:GITHUB_REF_NAME".Replace('/','_'))-$_-$($settings.repoVersion).$($settings.appBuild).$($settings.appRevision)"
-            Write-Host "::set-output name=$name::$value"
+            Add-Content -Path $env:GITHUB_OUTPUT -Value "$name=$value"
             Add-Content -Path $env:GITHUB_ENV -Value "$name=$value"
           }
 
@@ -401,7 +401,7 @@ jobs:
       name: ${{ matrix.environment }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v3
 
       - name: Download artifacts
         uses: actions/download-artifact@v2
@@ -413,7 +413,7 @@ jobs:
         run: |
           $ErrorActionPreference = "STOP"
           $envName = '${{ matrix.environment }}'.split(' ')[0]
-          Write-Host "::set-output name=envName::$envName"
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "envName=$envName"
 
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
@@ -473,12 +473,12 @@ jobs:
             $projects = ($projects.Split(',') | Where-Object { $buildProjects -contains $_ }) -join ','
           }
 
-          Write-Host "::set-output name=authContext::$authContext"
-          Write-Host "set-output name=authContext::$authContext"
-          Write-Host "::set-output name=environmentName::$environmentName"
-          Write-Host "set-output name=environmentName::$environmentName"
-          Write-Host "::set-output name=projects::$projects"
-          Write-Host "set-output name=projects::$projects"
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "authContext=$authContext"
+          Write-Host "authContext=$authContext"
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "environmentName=$environmentName"
+          Write-Host "environmentName=$environmentName"
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "projects=$projects"
+          Write-Host "projects=$projects"
 
       - name: Deploy
         uses: freddydk/AL-Go-Actions/Deploy@main
@@ -501,7 +501,7 @@ jobs:
     name: Deliver to ${{ matrix.deliveryTarget }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v3
 
       - name: Download artifacts
         uses: actions/download-artifact@v2
@@ -525,8 +525,8 @@ jobs:
           $ErrorActionPreference = "STOP"
           $contextName = '${{ matrix.deliveryTarget }}Context'
           $deliveryContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable($contextName)))
-          Write-Host "::set-output name=deliveryContext::$deliveryContext"
-          Write-Host "set-output name=deliveryContext::$deliveryContext"
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "deliveryContext=$deliveryContext"
+          Write-Host "deliveryContext=$deliveryContext"
 
       - name: Deliver
         uses: freddydk/AL-Go-Actions/Deliver@main
@@ -557,7 +557,7 @@ jobs:
             });
 
       - name: Checkout
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v3
 
       - name: Finalize the workflow
         id: PostProcess
