@@ -61,13 +61,20 @@ jobs:
             if (-not (Test-Path $newfolder)) {
               New-Item $newfolder -ItemType Directory | Out-Null
             }
-            if (Test-Path $path) {
+            if ($status -eq "renamed") {
               Copy-Item -Path $path -Destination $newfolder -Force
-              Write-Host " changed"
+              $oldPath = Join-Path $prPath $_.previous_filename
+              $oldFolder = [System.IO.Path]::GetDirectoryName($oldpath)
+              if (-not (Test-Path $oldFolder)) {
+                New-Item $oldFolder -ItemType Directory | Out-Null
+              }
+              New-Item -Path "$oldPath.REMOVE" -itemType File | Out-Null
+            }
+            elseif ($status -eq "removed") {
+              New-Item -Path $newfolder -name "$name.REMOVE" -itemType File | Out-Null
             }
             else {
-              New-Item -Path $newfolder -name "$name.REMOVE" -itemType File | Out-Null
-              Write-Host " deleted"
+              Copy-Item -Path $path -Destination $newfolder -Force
             }
           }
           Set-Content -path (Join-Path $prPath "comment_id") -value '${{ steps.CreateComment.outputs.comment_id }}' -NoNewLine -Force
