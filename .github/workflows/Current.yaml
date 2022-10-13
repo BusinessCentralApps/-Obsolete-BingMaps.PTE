@@ -94,7 +94,7 @@ jobs:
           }
 
       - name: Publish artifacts - build output
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: (success() || failure()) && (hashFiles(format('{0}/BuildOutput.txt',matrix.project)) != '')
         with:
           name: ${{ env.buildOutputArtifactsName }}
@@ -102,7 +102,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Publish artifacts - test results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: (success() || failure()) && (hashFiles(format('{0}/TestResults.xml',matrix.project)) != '')
         with:
           name: ${{ env.testResultsArtifactsName }}
@@ -110,7 +110,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Publish artifacts - bcpt test results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: (success() || failure()) && (hashFiles(format('{0}/bcptTestResults.json',matrix.project)) != '')
         with:
           name: ${{ env.bcptTestResultsArtifactsName }}
