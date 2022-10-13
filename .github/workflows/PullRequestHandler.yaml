@@ -38,22 +38,23 @@ jobs:
           $responseJson = Invoke-WebRequest -UseBasicParsing -Headers $headers -Uri $url
           Write-Host $responseJson
           $response = $responseJson | ConvertFrom-Json
-          $filesChanged = @($response.files | ForEach-Object { $_.filename })
           $location = (Get-Location).path
           $prfolder = [GUID]::NewGuid().ToString()
           Add-Content -Path $env:GITHUB_OUTPUT -Value "prfolder=$prfolder"
           $prPath = Join-Path $location $prFolder
           New-Item -Path $prPath -ItemType Directory | Out-Null
           Write-Host "Files Changed:"
-          $filesChanged | ForEach-Object {
-            Write-Host -noNewLine "- $_"
-            $path = Join-Path $location $_
-            $newPath = Join-Path $prPath $_
+          $response.files | ForEach-Object {
+            $filename = $_.filename
+            $status = $_.status
+            Write-Host -noNewLine "- $filename $status"
+            $path = Join-Path $location $filename
+            $newPath = Join-Path $prPath $filename
             $newfolder = [System.IO.Path]::GetDirectoryName($newpath)
             $extension = [System.IO.Path]::GetExtension($path)
-            $filename = [System.IO.Path]::GetFileName($path)
+            $name = [System.IO.Path]::GetFileName($path)
             if ('${{ github.event.pull_request.head.repo.full_name }}' -ne $ENV:GITHUB_REPOSITORY) {
-              if ($extension -eq '.ps1' -or $extension -eq '.yaml' -or $extension -eq '.yml' -or $filename -eq "CODEOWNERS") {
+              if ($extension -eq '.ps1' -or $extension -eq '.yaml' -or $extension -eq '.yml' -or $name -eq "CODEOWNERS") {
                 throw "Pull Request containing changes to scripts, workflows or CODEOWNERS are not allowed from forks."
               }
             }
@@ -65,7 +66,7 @@ jobs:
               Write-Host " changed"
             }
             else {
-              New-Item -Path $newfolder -name "$filename.REMOVE" -itemType File | Out-Null
+              New-Item -Path $newfolder -name "$name.REMOVE" -itemType File | Out-Null
               Write-Host " deleted"
             }
           }
