@@ -3,8 +3,9 @@
 on:
   pull_request:
     paths-ignore:
-      - 'README.md'
-      - '.github/**'
+      - '*.md'
+      - '*.ps1'
+      - '*.yaml'
     branches: [ 'main' ]
 
 defaults:
@@ -34,10 +35,7 @@ jobs:
           $baseSHA = '${{ github.event.pull_request.base.sha }}'
           $headSHA = '${{ github.event.pull_request.head.sha }}'
           $url = "$($ENV:GITHUB_API_URL)/repos/$($ENV:GITHUB_REPOSITORY)/compare/$baseSHA...$headSHA"
-          Write-Host $url
-          $responseJson = Invoke-WebRequest -UseBasicParsing -Headers $headers -Uri $url
-          Write-Host $responseJson
-          $response = $responseJson | ConvertFrom-Json
+          $response = Invoke-WebRequest -UseBasicParsing -Headers $headers -Uri $url | ConvertFrom-Json
           $location = (Get-Location).path
           $prfolder = [GUID]::NewGuid().ToString()
           Add-Content -Path $env:GITHUB_OUTPUT -Value "prfolder=$prfolder"
