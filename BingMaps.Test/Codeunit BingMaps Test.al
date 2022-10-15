@@ -39,7 +39,7 @@ codeunit 70131 "BingMaps Test"
                 if (ServiceConnections.Name.Value = 'BingMaps Integration Setup') then ServiceConnectionOK := true;
             until not ServiceConnections.Next();
         end;
-        Assert.IsTrue(ServiceConnectionOK, 'Service Connection hasn''t been registered correctly');
+        Assert.IsFalse(ServiceConnectionOK, 'Service Connection hasn''t been registered correctly');
         ServiceConnections.Close();
     end;
 
