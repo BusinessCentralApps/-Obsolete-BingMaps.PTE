@@ -12,7 +12,5 @@
                             "BingMaps.PerformanceTest"
                         ],
     "RepoVersion":  "4.2",
-    "configPackages":  [
-        "STANDARD"
-    ]
+    "failOn":  "warning"
 }
