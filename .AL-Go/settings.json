@@ -11,6 +11,5 @@
     "bcptTestFolders":  [
                             "BingMaps.PerformanceTest"
                         ],
-    "RepoVersion":  "4.2",
-    "failOn":  "warning"
+    "RepoVersion":  "4.2"
 }
