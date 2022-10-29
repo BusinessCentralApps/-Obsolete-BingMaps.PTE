@@ -11,17 +11,23 @@ on:
     paths-ignore:
       - 'README.md'
       - '.github/**'
-    branches: [ 'main', 'release/*', 'feature/*' ]
+    branches:
+      [ 'main', 'release/*', 'feature/*' ]
 
 permissions:
-  contents: read
-  actions: read
-  pull-requests: write
-  checks: write
+  contents:
+    read
+  actions:
+    read
+  pull-requests:
+    write
+  checks:
+    write
 
 defaults:
   run:
-    shell: PowerShell
+    shell:
+      PowerShell
 
 jobs:
   Initialization:
