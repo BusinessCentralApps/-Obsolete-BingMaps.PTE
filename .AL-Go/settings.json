@@ -11,8 +11,5 @@
     "bcptTestFolders":  [
                             "BingMaps.PerformanceTest"
                         ],
-    "RepoVersion":  "4.2",
-    "configPackages":  [
-        "STANDARD"
-    ]
+    "RepoVersion":  "4.2"
 }
