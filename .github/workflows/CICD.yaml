@@ -1,12 +1,10 @@
-﻿name:
-  CI/CD
+﻿name: CI/CD
 
 on:
   workflow_dispatch:
   workflow_run:
     workflows: ["Pull Request Handler"]
-    types:
-      - completed
+    types: - completed
   push:
     paths-ignore:
       - 'README.md'
