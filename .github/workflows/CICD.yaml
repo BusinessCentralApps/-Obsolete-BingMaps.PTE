@@ -40,9 +40,6 @@ jobs:
       projectDependenciesJson: ${{ steps.ReadSettings.outputs.ProjectDependenciesJson }}
       buildOrderJson: ${{ steps.ReadSettings.outputs.BuildOrderJson }}
       buildOrderDepth: ${{ steps.ReadSettings.outputs.BuildOrderDepth }}
-      WorkflowDepth: 1
-      projects1: ${{ steps.BuildOrder.outputs.Projects1Json }}
-      projects1Count: ${{ steps.BuildOrder.outputs.Projects1Count }}
     steps:
       - name: Create CI/CD Workflow Check Run
         id: CreateCheckRun
@@ -245,7 +242,7 @@ jobs:
 
   Build:
     needs: [ Initialization ]
-    if: needs.Initialization.outputs.projectCount > 0
+    if: ${{ needs.Initialization.outputs.projectCount > 0 }}
     runs-on: ${{ fromJson(needs.Initialization.outputs.githubRunner) }}
     strategy:
       matrix:
