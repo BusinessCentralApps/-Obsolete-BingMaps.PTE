@@ -4,28 +4,23 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows: ["Pull Request Handler"]
-    types: - completed
+    types:
+      - completed
   push:
     paths-ignore:
       - 'README.md'
       - '.github/**'
-    branches:
-      [ 'main', 'release/*', 'feature/*' ]
+    branches: [ 'main', 'release/*', 'feature/*' ]
 
 permissions:
-  contents:
-    read
-  actions:
-    read
-  pull-requests:
-    write
-  checks:
-    write
+  contents: read
+  actions: read
+  pull-requests: write
+  checks: write
 
 defaults:
   run:
-    shell:
-      PowerShell
+    shell: PowerShell
 
 jobs:
   Initialization:
