@@ -184,6 +184,7 @@ jobs:
           Add-Content -Path $env:GITHUB_ENV -Value "DeliveryTargets=$deliveryTargetsJson"
 
       - name: Determine Build Order
+        if: ${{ 'steps.ReadSettings.outputs.WorkflowDepth' != '' }}
         id: BuildOrder
         run: |
           $ErrorActionPreference = "STOP"

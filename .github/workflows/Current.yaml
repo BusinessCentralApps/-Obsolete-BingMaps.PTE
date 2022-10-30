@@ -42,6 +42,7 @@ jobs:
           getProjects: 'Y'
 
       - name: Determine Build Order
+        if: ${{ 'steps.ReadSettings.outputs.WorkflowDepth' != '' }}
         id: BuildOrder
         run: |
           $ErrorActionPreference = "STOP"
