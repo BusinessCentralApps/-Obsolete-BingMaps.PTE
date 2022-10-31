@@ -10,6 +10,7 @@
     "cacheImageName":  "",
     "bcContainerHelperVersion":  "preview",
     "DoNotRunBCPTTests":  true,
+    "useProjectDependencies":  true,
     "ConditionalSettings":  [
                                 {
                                     "branches":  [
