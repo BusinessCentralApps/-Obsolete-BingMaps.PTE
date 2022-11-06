@@ -403,6 +403,20 @@ jobs:
           settingsJson: ${{ env.Settings }}
           secrets: 'licenseFileUrl,insiderSasToken,CodeSignCertificateUrl,CodeSignCertificatePassword,KeyVaultCertificateUrl,KeyVaultCertificatePassword,KeyVaultClientId,StorageContext,GitHubPackagesContext'
 
+      - name: Login to GitHub Package Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker pull
+        run: |
+          $imageName = "my:sandbox-19.0.29894.30693-us"
+          $ghImageName = "ghcr.io/$ENV:GITHUB_REPOSITORY_OWNER/$imageName".ToLowerInvariant()
+          docker pull $ghImageName
+          docker tag $ghImageName $imageName
+
       - name: Run pipeline
         id: RunPipeline
         uses: freddydk/AL-Go-Actions/RunPipeline@main
@@ -412,13 +426,6 @@ jobs:
           ProjectDependenciesJson: ${{ needs.Initialization.outputs.projectDependenciesJson }}
           settingsJson: ${{ env.Settings }}
           SecretsJson: ${{ env.RepoSecrets }}
-
-      - name: Login to GitHub Package Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Docker push
         run: |
