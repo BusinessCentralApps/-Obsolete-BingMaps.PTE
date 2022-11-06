@@ -416,7 +416,7 @@ jobs:
       - name: Docker push
         run: |
           $imageName = "my:sandbox-19.0.29894.30693-us"
-          $ghImageName = "ghcr.io/$ENV:GITHUB_REPOSITORY_OWNER/$imageName"
+          $ghImageName = "ghcr.io/$ENV:GITHUB_REPOSITORY_OWNER/$imageName".ToLowerInvariant()
           docker tag $imageName $ghImageName
           docker push $ghImageName
 
