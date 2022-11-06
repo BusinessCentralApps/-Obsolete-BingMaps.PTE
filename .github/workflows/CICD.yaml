@@ -307,6 +307,12 @@ jobs:
               status: 'in_progress'
             });
 
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          key: artifactsCache
+          path: c:\bcartifacts.cache
+
       - name: Checkout
         uses: actions/checkout@v3
         with:
