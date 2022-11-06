@@ -11,6 +11,7 @@
     "cacheImageName":  "",
     "bcContainerHelperVersion":  "preview",
     "DoNotRunBCPTTests":  true,
+    "imageName":  "my",
     "useProjectDependencies":  true,
     "ConditionalSettings":  [
                                 {
