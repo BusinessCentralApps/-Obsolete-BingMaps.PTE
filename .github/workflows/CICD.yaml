@@ -17,6 +17,7 @@ permissions:
   actions: read
   pull-requests: write
   checks: write
+  packages: write
 
 defaults:
   run:
@@ -411,6 +412,13 @@ jobs:
           ProjectDependenciesJson: ${{ needs.Initialization.outputs.projectDependenciesJson }}
           settingsJson: ${{ env.Settings }}
           SecretsJson: ${{ env.RepoSecrets }}
+
+      - name: Docker push
+        run: |
+          $imageName = "my:sandbox-19.0.29894.30693-us"
+          $ghImageName = "ghcr.io/$ENV:GITHUB_REPOSITORY_OWNER/$imageName"
+          docker tag $imageName $ghImageName
+          docker push $ghImageName
 
       - name: Calculate Artifact names
         id: calculateArtifactNames
