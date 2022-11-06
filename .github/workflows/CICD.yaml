@@ -413,6 +413,13 @@ jobs:
           settingsJson: ${{ env.Settings }}
           SecretsJson: ${{ env.RepoSecrets }}
 
+      - name: Login to GitHub Package Registry
+        uses: docker/login-action@v2.1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Docker push
         run: |
           $imageName = "my:sandbox-19.0.29894.30693-us"
