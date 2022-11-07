@@ -1,9 +1,9 @@
-﻿{
-    "NextMajorSchedule":  "0 2 * * 0",
-    "templateUrl":  "https://github.com/freddydk/AL-Go-PTE@main",
+{
     "type":  "PTE",
-    "NextMinorSchedule":  "0 2 * * 6",
+    "templateUrl":  "https://github.com/freddydk/AL-Go-PTE@main",
     "CurrentSchedule":  "0 2 * * 1,2,3,4,5",
+    "NextMinorSchedule":  "0 2 * * 6",
+    "NextMajorSchedule":  "0 2 * * 0",
     "UpdateGitHubGoSystemFilesSchedule":  "0 0 * * *",
     "updateDependencies":  true,
     "sandboxContainersAreMultitenantByDefault":  false,
