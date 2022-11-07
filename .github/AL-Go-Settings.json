@@ -7,7 +7,7 @@
     "UpdateGitHubGoSystemFilesSchedule":  "0 0 * * *",
     "updateDependencies":  true,
     "sandboxContainersAreMultitenantByDefault":  false,
-    "githubrunner.old":  "self-hosted, 1ES.Pool=businesscentral",
+    "GitHubRunner":  "self-hosted, 1ES.Pool=businesscentral",
     "cacheImageName":  "",
     "bcContainerHelperVersion":  "preview",
     "DoNotRunBCPTTests":  true,
