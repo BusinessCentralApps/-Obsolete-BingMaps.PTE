@@ -17,7 +17,6 @@ permissions:
   actions: read
   pull-requests: write
   checks: write
-  packages: write
 
 defaults:
   run:
@@ -308,12 +307,6 @@ jobs:
               status: 'in_progress'
             });
 
-      - name: Cache Artifacts
-        uses: actions/cache@v3
-        with:
-          key: artifactsCache
-          path: c:\bcartifacts.cache
-
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -403,20 +396,6 @@ jobs:
           settingsJson: ${{ env.Settings }}
           secrets: 'licenseFileUrl,insiderSasToken,CodeSignCertificateUrl,CodeSignCertificatePassword,KeyVaultCertificateUrl,KeyVaultCertificatePassword,KeyVaultClientId,StorageContext,GitHubPackagesContext'
 
-      - name: Login to GitHub Package Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Docker pull
-        run: |
-          $imageName = "my:sandbox-19.0.29894.30693-us"
-          $ghImageName = "ghcr.io/$ENV:GITHUB_REPOSITORY_OWNER/$imageName".ToLowerInvariant()
-          docker pull $ghImageName
-          docker tag $ghImageName $imageName
-
       - name: Run pipeline
         id: RunPipeline
         uses: freddydk/AL-Go-Actions/RunPipeline@main
@@ -426,13 +405,6 @@ jobs:
           ProjectDependenciesJson: ${{ needs.Initialization.outputs.projectDependenciesJson }}
           settingsJson: ${{ env.Settings }}
           SecretsJson: ${{ env.RepoSecrets }}
-
-      - name: Docker push
-        run: |
-          $imageName = "my:sandbox-19.0.29894.30693-us"
-          $ghImageName = "ghcr.io/$ENV:GITHUB_REPOSITORY_OWNER/$imageName".ToLowerInvariant()
-          docker tag $imageName $ghImageName
-          docker push $ghImageName
 
       - name: Calculate Artifact names
         id: calculateArtifactNames
