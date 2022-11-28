@@ -13,6 +13,7 @@
     "DoNotRunBCPTTests":  true,
     "imageName":  "my",
     "useProjectDependencies":  true,
+    "defaultNewContainerParameters" = { "dns" = "hostDNS" },
     "ConditionalSettings":  [
                                 {
                                     "branches":  [
