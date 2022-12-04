@@ -13,6 +13,7 @@
     "DoNotRunBCPTTests":  true,
     "imageName":  "my",
     "useProjectDependencies":  true,
+    "QA-Branches": [ "main", "UAT" ],
     "defaultNewContainerParameters":  {
                                           "dns":  "hostDNS"
                                       },
