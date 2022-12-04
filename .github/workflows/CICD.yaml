@@ -580,7 +580,7 @@ jobs:
 
   Deploy:
     needs: [ Initialization, Build ]
-    if: always() && needs.Build.result == 'Success' && github.event_name != 'workflow_run' && github.ref_name == 'main' && needs.Initialization.outputs.environmentCount > 0
+    if: always() && needs.Build.result == 'Success' && github.event_name != 'workflow_run' && needs.Initialization.outputs.environmentCount > 0
     strategy: ${{ fromJson(needs.Initialization.outputs.environments) }}
     runs-on: ${{ fromJson(matrix.os) }}
     name: Deploy to ${{ matrix.environment }}
@@ -611,14 +611,11 @@ jobs:
           secrets: ${{ toJson(secrets) }}
         with:
           settingsJson: ${{ env.Settings }}
-          secrets: '${{ steps.envName.outputs.envName }}-AuthContext,${{ steps.envName.outputs.envName }}_AuthContext,AuthContext,${{ steps.envName.outputs.envName }}-EnvironmentName,${{ steps.envName.outputs.envName }}_EnvironmentName,EnvironmentName,Projects,${{ steps.envName.outputs.envName }}-Branches,${{ steps.envName.outputs.envName }}_Branches'
+          secrets: '${{ steps.envName.outputs.envName }}-AuthContext,${{ steps.envName.outputs.envName }}_AuthContext,AuthContext,${{ steps.envName.outputs.envName }}-EnvironmentName,${{ steps.envName.outputs.envName }}_EnvironmentName,EnvironmentName,Projects'
 
       - name: AuthContext
         id: authContext
         run: |
-
-          Dir env: | out-host
-
           $ErrorActionPreference = "STOP"
           $envName = '${{ steps.envName.outputs.envName }}'
           $authContext = $null
