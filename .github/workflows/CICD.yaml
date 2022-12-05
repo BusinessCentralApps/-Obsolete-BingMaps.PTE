@@ -194,7 +194,8 @@ jobs:
             $contextName = "$($_)Context"
             $settingName = "DeliverTo$_"
             $settings = $env:Settings | ConvertFrom-Json
-            if (($settings.PSObject.Properties.Name -eq $settingName) -and ($setting."$settingName".PSObject.Properties.Name -eq "Branches")) {
+            Write-Host $settingName
+            if (($settings.PSObject.Properties.Name -eq $settingName) -and ($settings."$settingName".PSObject.Properties.Name -eq "Branches")) {
               Write-Host "Branches:"
               $settings."$settingName".Branches | ForEach-Object {
                 Write-Host "- $_"
