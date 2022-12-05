@@ -209,6 +209,9 @@ jobs:
                 $include = ($ENV:GITHUB_REF_NAME -eq 'main')
               }
             }
+            if ($include) {
+              Write-Host "DeliveryTarget $_ included"
+            }
             $include
           }
           $deliveryTargetsJson = $deliveryTargets | ConvertTo-Json -Depth 99 -compress
@@ -622,7 +625,7 @@ jobs:
             if (!($authContext)) {
               $authContext = [System.Environment]::GetEnvironmentVariable($_)
               if ($authContext) {
-                Write-Host "Using $_ secret"
+                Write-Host "Using $_ secret as AuthContext"
               }
             }            
           }
@@ -635,7 +638,7 @@ jobs:
             if (!($EnvironmentName)) {
               $EnvironmentName = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable($_)))
               if ($EnvironmentName) {
-                Write-Host "Using $_ secret"
+                Write-Host "Using $_ secret as EnvironmentName"
               }
             }            
           }

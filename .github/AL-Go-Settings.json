@@ -13,6 +13,7 @@
     "DoNotRunBCPTTests":  true,
     "imageName":  "my",
     "useProjectDependencies":  true,
+    "QA-EnvironmentName":  "QAx",
     "DeplotToQA":  {
         "Branches": [ "UAT", "main" ]
     },
