@@ -16,7 +16,8 @@
     "DeployToQA":  {
         "Branches": [ "UAT", "main" ],
         "EnvironmentName":  "QA",
-        "Projects": "*"
+        "Projects": "*",
+        "Runs-on":  "Windows-2019"
     },
     "DeliverToTeams": {
         "Branches": [ "UAT", "main" ]
