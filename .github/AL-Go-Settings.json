@@ -14,7 +14,7 @@
     "imageName":  "my",
     "useProjectDependencies":  true,
     "QA-EnvironmentName":  "QAx",
-    "DeplotToQA":  {
+    "DeployToQA":  {
         "Branches": [ "UAT", "main" ]
     },
     "DeliverToTeams": {
