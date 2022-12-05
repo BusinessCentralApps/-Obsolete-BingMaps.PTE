@@ -16,6 +16,9 @@
     "QA-Branches":  [
                         "UAT"
                     ],
+    "DeliverToTeams": {
+        "Branches": [ "UAT", "main" ]
+    },
     "defaultNewContainerParameters":  {
                                           "dns":  "hostDNS"
                                       },

@@ -192,23 +192,19 @@ jobs:
             $include = $false
             Write-Host "Check DeliveryTarget $_"
             $contextName = "$($_)Context"
-            $deliveryContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable($contextName)))
-            if ($deliveryContext) {
-              Write-Host "Context secret exists"
-              $obj = $deliveryContext | ConvertFrom-Json
-              Write-Host "Context secret is correct json"
-              if ($obj.PSObject.Properties.Name -eq 'branches') {
-                Write-Host "Context secret includes branches: "
-                $obj.branches | ForEach-Object {
-                  Write-Host "- $_"
-                  if ($ENV:GITHUB_REF_NAME -like $_) {
-                    $include = $true
-                  }
+            $settingName = "DeliverTo$_"
+            $settings = $env:Settings | ConvertFrom-Json
+            if (($settings.PSObject.Properties.Name -eq $settingName) -and ($setting."$settingName".PSObject.Properties.Name -eq "Branches")) {
+              Write-Host "Branches:"
+              $settings."$settingName".Branches | ForEach-Object {
+                Write-Host "- $_"
+                if ($ENV:GITHUB_REF_NAME -like $_) {
+                  $include = $true
                 }
               }
-              else {
-                $include = ($ENV:GITHUB_REF_NAME -eq 'main')
-              }
+            }
+            else {
+              $include = ($ENV:GITHUB_REF_NAME -eq 'main')
             }
             $include
           }
