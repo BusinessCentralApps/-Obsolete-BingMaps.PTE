@@ -14,7 +14,7 @@
     "imageName":  "my",
     "useProjectDependencies":  true,
     "DeplotToQA":  {
-        "Branches": [ "UAT" ]
+        "Branches": [ "UAT", "main" ]
     },
     "DeliverToTeams": {
         "Branches": [ "UAT", "main" ]
