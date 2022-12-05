@@ -13,9 +13,9 @@
     "DoNotRunBCPTTests":  true,
     "imageName":  "my",
     "useProjectDependencies":  true,
-    "QA-Branches":  [
-                        "UAT"
-                    ],
+    "DeplotToQA":  {
+        "Branches": [ "UAT" ]
+    },
     "DeliverToTeams": {
         "Branches": [ "UAT", "main" ]
     },
