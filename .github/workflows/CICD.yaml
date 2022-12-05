@@ -672,7 +672,7 @@ jobs:
               }
             }
           }
-          if ($projects -eq '') {
+          if ($projects -eq '' -or $projects -eq '*') {
             $projects = '*'
           }
           else {
