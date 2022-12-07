@@ -14,14 +14,20 @@
     "imageName":  "my",
     "useProjectDependencies":  true,
     "DeployToQA":  {
-        "Branches": [ "UAT", "main" ],
-        "EnvironmentName":  "QA",
-        "Projects": "*",
-        "Runs-on":  "Windows-2019"
-    },
-    "DeliverToTeams": {
-        "Branches": [ "UAT", "main" ]
-    },
+                       "Branches":  [
+                                        "UAT",
+                                        "main"
+                                    ],
+                       "EnvironmentName":  "QA",
+                       "Projects":  "*",
+                       "Runs-on":  "Windows-2019"
+                   },
+    "DeliverToTeams":  {
+                           "Branches":  [
+                                            "UAT",
+                                            "main"
+                                        ]
+                       },
     "defaultNewContainerParameters":  {
                                           "dns":  "hostDNS"
                                       },
