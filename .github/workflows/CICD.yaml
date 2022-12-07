@@ -15,6 +15,7 @@ on:
 
 run-name: ${{ fromJson(format('["","Check pull request from {1}/{2}{0} {3}"]',':',github.event.workflow_run.head_repository.owner.login,github.event.workflow_run.head_branch,github.event.workflow_run.display_title))[github.event_name == 'workflow_run'] }}
 
+
 permissions:
   contents: read
   actions: read
