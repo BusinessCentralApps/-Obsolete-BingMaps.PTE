@@ -357,7 +357,7 @@ jobs:
         if: env.WorkflowDepth > 1
         uses: actions/download-artifact@v3
         with:
-          path: '${{ github.workspace }}\.dependencies'
+          path: '.dependencies'
 
       - name: Download Pull Request Changes
         if: github.event_name == 'workflow_run'
@@ -601,7 +601,7 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
-          path: '${{ github.workspace }}\.artifacts'
+          path: '.artifacts'
 
       - name: EnvName
         id: envName
@@ -704,7 +704,7 @@ jobs:
           type: 'CD'
           projects: ${{ steps.authContext.outputs.projects }}
           environmentName: ${{ steps.authContext.outputs.environmentName }}
-          artifacts: '${{ github.workspace }}\.artifacts'
+          artifacts: '.artifacts'
 
   Deliver:
     needs: [ Initialization, Build ]
@@ -722,7 +722,7 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
-          path: '${{ github.workspace }}\.artifacts'
+          path: '.artifacts'
 
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
@@ -753,7 +753,7 @@ jobs:
           type: 'CD'
           projects: ${{ needs.Initialization.outputs.projects }}
           deliveryTarget: ${{ matrix.deliveryTarget }}
-          artifacts: '${{ github.workspace }}\.artifacts'
+          artifacts: '.artifacts'
 
   UpdatePRcheck:
     if: always() && github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
