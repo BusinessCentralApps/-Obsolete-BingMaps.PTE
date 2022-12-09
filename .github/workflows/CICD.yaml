@@ -47,6 +47,15 @@ jobs:
       buildOrderJson: ${{ steps.ReadSettings.outputs.BuildOrderJson }}
       buildOrderDepth: ${{ steps.ReadSettings.outputs.BuildOrderDepth }}
     steps:
+      - name: Use AZ PS Module
+        run: |
+          $azModulesPath = Get-ChildItem 'C:\Modules\az_*' -Directory
+          if ($azModulesPath) {
+            Write-Host $azModulesPath.FullName
+            $PSModulePath = "$($azModulesPath.FullName);$(("$ENV:PSModulePath".Split(';') | Where-Object { $_ -notlike 'C:\\Modules\Azure*' }) -join ';')"
+            Add-Content -Path $env:GITHUB_ENV -Value "PSModulePath=$PSModulePath"
+          }
+ 
       - name: Create CI/CD Workflow Check Run
         id: CreateCheckRun
         if: github.event_name == 'workflow_run'
@@ -300,6 +309,15 @@ jobs:
       BcptTestResultsArtifactsName: ${{ steps.calculateArtifactNames.outputs.BcptTestResultsArtifactsName }}
       BuildOutputArtifactsName: ${{ steps.calculateArtifactNames.outputs.BuildOutputArtifactsName }}
     steps:
+      - name: Use AZ PS Module
+        run: |
+          $azModulesPath = Get-ChildItem 'C:\Modules\az_*' -Directory
+          if ($azModulesPath) {
+            Write-Host $azModulesPath.FullName
+            $PSModulePath = "$($azModulesPath.FullName);$(("$ENV:PSModulePath".Split(';') | Where-Object { $_ -notlike 'C:\\Modules\Azure*' }) -join ';')"
+            Add-Content -Path $env:GITHUB_ENV -Value "PSModulePath=$PSModulePath"
+          }
+
       - name: Create Build Job Check Run
         id: CreateCheckRun
         if: github.event_name == 'workflow_run'
@@ -595,6 +613,15 @@ jobs:
     environment:
       name: ${{ matrix.environment }}
     steps:
+      - name: Use AZ PS Module
+        run: |
+          $azModulesPath = Get-ChildItem 'C:\Modules\az_*' -Directory
+          if ($azModulesPath) {
+            Write-Host $azModulesPath.FullName
+            $PSModulePath = "$($azModulesPath.FullName);$(("$ENV:PSModulePath".Split(';') | Where-Object { $_ -notlike 'C:\\Modules\Azure*' }) -join ';')"
+            Add-Content -Path $env:GITHUB_ENV -Value "PSModulePath=$PSModulePath"
+          }
+
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -716,6 +743,15 @@ jobs:
     runs-on: [ windows-latest ]
     name: Deliver to ${{ matrix.deliveryTarget }}
     steps:
+      - name: Use AZ PS Module
+        run: |
+          $azModulesPath = Get-ChildItem 'C:\Modules\az_*' -Directory
+          if ($azModulesPath) {
+            Write-Host $azModulesPath.FullName
+            $PSModulePath = "$($azModulesPath.FullName);$(("$ENV:PSModulePath".Split(';') | Where-Object { $_ -notlike 'C:\\Modules\Azure*' }) -join ';')"
+            Add-Content -Path $env:GITHUB_ENV -Value "PSModulePath=$PSModulePath"
+          }
+
       - name: Checkout
         uses: actions/checkout@v3
 
