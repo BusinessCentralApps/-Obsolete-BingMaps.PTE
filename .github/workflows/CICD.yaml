@@ -1,4 +1,4 @@
-name: ' CI/CD'
+﻿name: ' CI/CD'
 
 on:
   workflow_dispatch:
@@ -48,6 +48,7 @@ jobs:
       buildOrderDepth: ${{ steps.ReadSettings.outputs.BuildOrderDepth }}
     steps:
       - name: Use AZ PS Module
+        if: false
         run: |
           $azModulesPath = Get-ChildItem 'C:\Modules\az_*' -Directory
           if ($azModulesPath) {
@@ -310,6 +311,7 @@ jobs:
       BuildOutputArtifactsName: ${{ steps.calculateArtifactNames.outputs.BuildOutputArtifactsName }}
     steps:
       - name: Use AZ PS Module
+        if: false
         run: |
           $azModulesPath = Get-ChildItem 'C:\Modules\az_*' -Directory
           if ($azModulesPath) {
@@ -614,6 +616,7 @@ jobs:
       name: ${{ matrix.environment }}
     steps:
       - name: Use AZ PS Module
+        if: false
         run: |
           $azModulesPath = Get-ChildItem 'C:\Modules\az_*' -Directory
           if ($azModulesPath) {
@@ -744,6 +747,7 @@ jobs:
     name: Deliver to ${{ matrix.deliveryTarget }}
     steps:
       - name: Use AZ PS Module
+        if: false
         run: |
           $azModulesPath = Get-ChildItem 'C:\Modules\az_*' -Directory
           if ($azModulesPath) {
