@@ -23,11 +23,11 @@ permissions:
 
 defaults:
   run:
-    shell: pwsh
+    shell: powershell
 
 env:
   workflowDepth: 0
-  shell: pwsh
+  shell: powershell
 
 jobs:
   Initialization:
