@@ -27,7 +27,7 @@ env:
 
 defaults:
   run:
-    shell: ${{ env.shell }}
+    shell: pwsh
 
 jobs:
   Initialization:
