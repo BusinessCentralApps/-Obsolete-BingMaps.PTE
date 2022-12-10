@@ -23,16 +23,16 @@ permissions:
 
 env:
   workflowDepth: 0
-  shell: powershell
+  shell: pwsh
 
 defaults:
   run:
-    shell: powershell
+    shell: pwsh
 
 jobs:
   Initialization:
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
-    runs-on: [ windows-latest ]
+    runs-on: [ ubuntu-latest ]
     outputs:
       telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
       settings: ${{ steps.ReadSettings.outputs.SettingsJson }}
@@ -269,7 +269,7 @@ jobs:
           }
 
   CheckForUpdates:
-    runs-on: [ windows-latest ]
+    runs-on: [ ubuntu-latest ]
     needs: [ Initialization ]
     if: github.event_name != 'workflow_run'
     steps:
@@ -728,7 +728,7 @@ jobs:
       matrix:
         deliveryTarget: ${{ fromJson(needs.Initialization.outputs.deliveryTargets) }}
       fail-fast: false
-    runs-on: [ windows-latest ]
+    runs-on: [ ubuntu-latest ]
     name: Deliver to ${{ matrix.deliveryTarget }}
     steps:
       - name: Checkout
@@ -776,7 +776,7 @@ jobs:
 
   UpdatePRcheck:
     if: always() && github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
-    runs-on: [ windows-latest ]
+    runs-on: [ ubuntu-latest ]
     needs: [ Initialization, Build ]
     steps:
       - name: Update CI/CD Workflow Check Run
@@ -793,7 +793,7 @@ jobs:
 
   PostProcess:
     if: (!cancelled()) && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
-    runs-on: [ windows-latest ]
+    runs-on: [ ubuntu-latest ]
     needs: [ Initialization, Build, Deploy, Deliver ]
     steps:
       - name: Checkout
