@@ -21,12 +21,13 @@ permissions:
   pull-requests: write
   checks: write
 
-defaults:
-  run:
-    shell: pwsh
-
 env:
   workflowDepth: 0
+  shell: pwsh
+
+defaults:
+  run:
+    shell: ${{ env.shell }}
 
 jobs:
   Initialization:
@@ -146,12 +147,14 @@ jobs:
         id: init
         uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
         with:
+          shell: ${{ env.shell }}
           eventId: "DO0091"
 
       - name: Read settings
         id: ReadSettings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
         with:
+          shell: ${{ env.shell }}
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           getProjects: 'Y'
           getEnvironments: '*'
@@ -174,6 +177,7 @@ jobs:
         env:
           secrets: ${{ toJson(secrets) }}
         with:
+          shell: ${{ env.shell }}
           settingsJson: ${{ env.Settings }}
           secrets: ${{ steps.DetermineDeliveryTargetSecrets.outputs.Secrets }}
 
@@ -275,12 +279,14 @@ jobs:
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
         with:
+          shell: ${{ env.shell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           get: TemplateUrl
 
       - name: Check for updates to AL-Go system files
         uses: freddydk/AL-Go-Actions/CheckForUpdates@main
         with:
+          shell: ${{ env.shell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           templateUrl: ${{ env.TemplateUrl }}
 
@@ -430,6 +436,7 @@ jobs:
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
         with:
+          shell: ${{ env.shell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           project: ${{ matrix.project }}
 
@@ -438,6 +445,7 @@ jobs:
         env:
           secrets: ${{ toJson(secrets) }}
         with:
+          shell: ${{ env.shell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           settingsJson: ${{ env.Settings }}
           secrets: 'licenseFileUrl,insiderSasToken,CodeSignCertificateUrl,CodeSignCertificatePassword,KeyVaultCertificateUrl,KeyVaultCertificatePassword,KeyVaultClientId,StorageContext,GitHubPackagesContext'
@@ -446,6 +454,7 @@ jobs:
         id: RunPipeline
         uses: freddydk/AL-Go-Actions/RunPipeline@main
         with:
+          shell: ${{ env.shell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           Project: ${{ matrix.project }}
           ProjectDependenciesJson: ${{ needs.Initialization.outputs.projectDependenciesJson }}
@@ -554,6 +563,7 @@ jobs:
         if: success() || failure()
         uses: freddydk/AL-Go-Actions/AnalyzeTests@main
         with:
+          shell: ${{ env.shell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           Project: ${{ matrix.project }}
 
@@ -583,6 +593,7 @@ jobs:
         if: always()
         uses: freddydk/AL-Go-Actions/PipelineCleanup@main
         with:
+          shell: ${{ env.shell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           Project: ${{ matrix.project }}
 
@@ -613,12 +624,15 @@ jobs:
 
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
+        with:
+          shell: ${{ env.shell }}
 
       - name: Read secrets
         uses: freddydk/AL-Go-Actions/ReadSecrets@main
         env:
           secrets: ${{ toJson(secrets) }}
         with:
+          shell: ${{ env.shell }}
           settingsJson: ${{ env.Settings }}
           secrets: '${{ steps.envName.outputs.envName }}-AuthContext,${{ steps.envName.outputs.envName }}_AuthContext,AuthContext,${{ steps.envName.outputs.envName }}-EnvironmentName,${{ steps.envName.outputs.envName }}_EnvironmentName,EnvironmentName,Projects'
 
@@ -701,6 +715,7 @@ jobs:
         env:
           authContext: ${{ steps.authContext.outputs.authContext }}
         with:
+          shell: ${{ env.shell }}
           type: 'CD'
           projects: ${{ steps.authContext.outputs.projects }}
           environmentName: ${{ steps.authContext.outputs.environmentName }}
@@ -726,12 +741,15 @@ jobs:
 
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
+        with:
+          shell: ${{ env.shell }}
 
       - name: Read secrets
         uses: freddydk/AL-Go-Actions/ReadSecrets@main
         env:
           secrets: ${{ toJson(secrets) }}
         with:
+          shell: ${{ env.shell }}
           settingsJson: ${{ env.Settings }}
           secrets: '${{ matrix.deliveryTarget }}Context'
 
@@ -750,6 +768,7 @@ jobs:
         env:
           deliveryContext: ${{ steps.deliveryContext.outputs.deliveryContext }}
         with:
+          shell: ${{ env.shell }}
           type: 'CD'
           projects: ${{ needs.Initialization.outputs.projects }}
           deliveryTarget: ${{ matrix.deliveryTarget }}
@@ -784,5 +803,6 @@ jobs:
         id: PostProcess
         uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
         with:
+          shell: ${{ env.shell }}
           eventId: "DO0091"
           telemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
