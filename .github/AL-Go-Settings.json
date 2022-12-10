@@ -7,7 +7,6 @@
   "UpdateGitHubGoSystemFilesSchedule": "0 0 * * *",
   "updateDependencies": true,
   "sandboxContainersAreMultitenantByDefault": false,
-  "GitHubRunner": "self-hosted, 1ES.Pool=businesscentral",
   "cacheImageName": "",
   "bcContainerHelperVersion": "preview",
   "DoNotRunBCPTTests": true,
@@ -20,7 +19,7 @@
     ],
     "EnvironmentName": "QA",
     "Projects": "*",
-    "Runs-on": "Windows-2019"
+    "runs-on": "ubuntu-latest"
   },
   "DeliverToTeams": {
     "Branches": [
