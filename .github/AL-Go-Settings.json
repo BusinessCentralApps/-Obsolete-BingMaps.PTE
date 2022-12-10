@@ -12,14 +12,14 @@
   "DoNotRunBCPTTests": true,
   "imageName": "my",
   "useProjectDependencies": true,
+  "runs-on": "ubuntu-latest",
   "DeployToQA": {
     "Branches": [
       "UAT",
       "main"
     ],
     "EnvironmentName": "QA",
-    "Projects": "*",
-    "runs-on": "ubuntu-latest"
+    "Projects": "*"
   },
   "DeliverToTeams": {
     "Branches": [
