@@ -21,7 +21,7 @@ defaults:
 
 jobs:
   Initialization:
-    runs-on: [ windows-latest ]
+    runs-on: [ ubuntu-latest ]
     outputs:
       telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
       settings: ${{ steps.ReadSettings.outputs.SettingsJson }}
@@ -146,7 +146,7 @@ jobs:
 
   PostProcess:
     if: always()
-    runs-on: [ windows-latest ]
+    runs-on: [ ubuntu-latest ]
     needs: [ Initialization, Deploy ]
     steps:
       - name: Checkout
