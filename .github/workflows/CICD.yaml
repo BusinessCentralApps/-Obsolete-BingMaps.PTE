@@ -32,7 +32,7 @@ defaults:
 jobs:
   Initialization:
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
-    runs-on: [ ubuntu-latest ]
+    runs-on: [ windows-latest ]
     outputs:
       telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
       settings: ${{ steps.ReadSettings.outputs.SettingsJson }}
@@ -107,15 +107,15 @@ jobs:
           Set-StrictMode -version 2.0
           $location = (Get-Location).path
           $prfolder = '.PullRequestChanges'
-          Expand-Archive -Path ".$([System.IO.Path]::DirectorySeparatorChar)$prfolder.zip" -DestinationPath ".$([System.IO.Path]::DirectorySeparatorChar)$prfolder"
-          Remove-Item -Path ".$([System.IO.Path]::DirectorySeparatorChar)$prfolder.zip" -force
+          Expand-Archive -Path ".\$prfolder.zip" -DestinationPath ".\$prfolder"
+          Remove-Item -Path ".\$prfolder.zip" -force
           Get-ChildItem -Path $prfolder -Recurse -File | ForEach-Object {
             $path = $_.FullName
             $deleteFile = $path.EndsWith('.REMOVE')
             if ($deleteFile) {
               $path = $path.SubString(0,$path.Length-7)
             }
-            $newPath = $path.Replace("$prfolder$([System.IO.Path]::DirectorySeparatorChar)","")
+            $newPath = $path.Replace("$prfolder\","")
             $newFolder = [System.IO.Path]::GetDirectoryName($newPath)
             $extension = [System.IO.Path]::GetExtension($path)
             $filename = [System.IO.Path]::GetFileName($path)
@@ -166,7 +166,7 @@ jobs:
           Set-StrictMode -version 2.0
           $deliveryTargetSecrets = @('GitHubPackagesContext','NuGetContext','StorageContext','AppSourceContext')
           $namePrefix = 'DeliverTo'
-          Get-Item -Path (Join-Path $ENV:GITHUB_WORKSPACE ".github$([System.IO.Path]::DirectorySeparatorChar)$($namePrefix)*.ps1") | ForEach-Object {
+          Get-Item -Path (Join-Path $ENV:GITHUB_WORKSPACE ".github\$($namePrefix)*.ps1") | ForEach-Object {
             $deliveryTarget = [System.IO.Path]::GetFileNameWithoutExtension($_.Name.SubString($namePrefix.Length))
             $deliveryTargetSecrets += @("$($deliveryTarget)Context")
           }
@@ -191,7 +191,7 @@ jobs:
             $deliveryTargets += @("AppSource")
           }
           $namePrefix = 'DeliverTo'
-          Get-Item -Path (Join-Path $ENV:GITHUB_WORKSPACE ".github$([System.IO.Path]::DirectorySeparatorChar)$($namePrefix)*.ps1") | ForEach-Object {
+          Get-Item -Path (Join-Path $ENV:GITHUB_WORKSPACE ".github\$($namePrefix)*.ps1") | ForEach-Object {
             $deliveryTarget = [System.IO.Path]::GetFileNameWithoutExtension($_.Name.SubString($namePrefix.Length))
             $deliveryTargets += @($deliveryTarget)
           }
@@ -269,7 +269,7 @@ jobs:
           }
 
   CheckForUpdates:
-    runs-on: [ ubuntu-latest ]
+    runs-on: [ windows-latest ]
     needs: [ Initialization ]
     if: github.event_name != 'workflow_run'
     steps:
@@ -363,7 +363,7 @@ jobs:
         if: env.WorkflowDepth > 1
         uses: actions/download-artifact@v3
         with:
-          path: '.dependencies'
+          path: '${{ github.workspace }}\.dependencies'
 
       - name: Download Pull Request Changes
         if: github.event_name == 'workflow_run'
@@ -397,15 +397,15 @@ jobs:
           Set-StrictMode -version 2.0
           $location = (Get-Location).path
           $prfolder = '.PullRequestChanges'
-          Expand-Archive -Path ".$([System.IO.Path]::DirectorySeparatorChar)$prfolder.zip" -DestinationPath ".$([System.IO.Path]::DirectorySeparatorChar)$prfolder"
-          Remove-Item -Path ".$([System.IO.Path]::DirectorySeparatorChar)$prfolder.zip" -force
+          Expand-Archive -Path ".\$prfolder.zip" -DestinationPath ".\$prfolder"
+          Remove-Item -Path ".\$prfolder.zip" -force
           Get-ChildItem -Path $prfolder -Recurse -File | ForEach-Object {
             $path = $_.FullName
             $deleteFile = $path.EndsWith('.REMOVE')
             if ($deleteFile) {
               $path = $path.SubString(0,$path.Length-7)
             }
-            $newPath = $path.Replace("$prfolder$([System.IO.Path]::DirectorySeparatorChar)","")
+            $newPath = $path.Replace("$prfolder\","")
             $newFolder = [System.IO.Path]::GetDirectoryName($newPath)
             $extension = [System.IO.Path]::GetExtension($path)
             $filename = [System.IO.Path]::GetFileName($path)
@@ -497,7 +497,7 @@ jobs:
           if ($project -eq ".") { $project = $settings.RepoName }
           'Apps','Dependencies','TestApps','TestResults','BcptTestResults','BuildOutput','ContainerEventLog' | ForEach-Object {
             $name = "$($_)ArtifactsName"
-            $value = "$($project.Replace("$([System.IO.Path]::DirectorySeparatorChar)",'_'))-$($ref)-$_-$($settings.repoVersion).$($settings.appBuild).$($settings.appRevision)"
+            $value = "$($project.Replace('\','_'))-$($ref)-$_-$($settings.repoVersion).$($settings.appBuild).$($settings.appRevision)"
             Add-Content -Path $env:GITHUB_OUTPUT -Value "$name=$value"
             Add-Content -Path $env:GITHUB_ENV -Value "$name=$value"
           }
@@ -612,7 +612,7 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
-          path: '.artifacts'
+          path: '${{ github.workspace }}\.artifacts'
 
       - name: EnvName
         id: envName
@@ -719,7 +719,7 @@ jobs:
           type: 'CD'
           projects: ${{ steps.authContext.outputs.projects }}
           environmentName: ${{ steps.authContext.outputs.environmentName }}
-          artifacts: '.artifacts'
+          artifacts: '${{ github.workspace }}\.artifacts'
 
   Deliver:
     needs: [ Initialization, Build ]
@@ -728,7 +728,7 @@ jobs:
       matrix:
         deliveryTarget: ${{ fromJson(needs.Initialization.outputs.deliveryTargets) }}
       fail-fast: false
-    runs-on: [ ubuntu-latest ]
+    runs-on: [ windows-latest ]
     name: Deliver to ${{ matrix.deliveryTarget }}
     steps:
       - name: Checkout
@@ -737,7 +737,7 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
-          path: '.artifacts'
+          path: '${{ github.workspace }}\.artifacts'
 
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
@@ -772,11 +772,11 @@ jobs:
           type: 'CD'
           projects: ${{ needs.Initialization.outputs.projects }}
           deliveryTarget: ${{ matrix.deliveryTarget }}
-          artifacts: '.artifacts'
+          artifacts: '${{ github.workspace }}\.artifacts'
 
   UpdatePRcheck:
     if: always() && github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
-    runs-on: [ ubuntu-latest ]
+    runs-on: [ windows-latest ]
     needs: [ Initialization, Build ]
     steps:
       - name: Update CI/CD Workflow Check Run
@@ -793,7 +793,7 @@ jobs:
 
   PostProcess:
     if: (!cancelled()) && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
-    runs-on: [ ubuntu-latest ]
+    runs-on: [ windows-latest ]
     needs: [ Initialization, Build, Deploy, Deliver ]
     steps:
       - name: Checkout
