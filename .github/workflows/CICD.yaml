@@ -69,6 +69,7 @@ jobs:
               }
             });
             core.setOutput('checkRunId', response.data.id);
+
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -96,6 +97,7 @@ jobs:
             });
             var fs = require('fs');
             fs.writeFileSync('.PullRequestChanges.zip', Buffer.from(download.data));
+
       - name: Apply Pull Request Changes
         if: github.event_name == 'workflow_run'
         env:
@@ -140,6 +142,7 @@ jobs:
             }
           }
           Remove-Item -Path $prfolder -recurse -force
+
       - name: Initialize the workflow
         id: init
         uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
@@ -168,6 +171,7 @@ jobs:
             $deliveryTargetSecrets += @("$($deliveryTarget)Context")
           }
           Add-Content -Path $env:GITHUB_OUTPUT -Value "Secrets=$($deliveryTargetSecrets -join ',')"
+
       - name: Read secrets
         uses: freddydk/AL-Go-Actions/ReadSecrets@main
         env:
@@ -224,6 +228,7 @@ jobs:
           Add-Content -Path $env:GITHUB_OUTPUT -Value "DeliveryTargetCount=$($deliveryTargets.Count)"
           Write-Host "DeliveryTargetCount=$($deliveryTargets.Count)"
           Add-Content -Path $env:GITHUB_ENV -Value "DeliveryTargets=$deliveryTargetsJson"
+
       - name: Determine Build Order
         if: env.WorkflowDepth > 1
         id: BuildOrder
@@ -262,6 +267,7 @@ jobs:
               Write-Host "Projects$($step)Count=0"
               $step--
           }
+
   CheckForUpdates:
     runs-on: [ ubuntu-latest ]
     needs: [ Initialization ]
@@ -334,6 +340,7 @@ jobs:
             });
             core.setOutput('checkRunId', response.data.id);
             core.setOutput('detailsUrl', details_url);
+
       - name: Update CI/CD Workflow Check Run
         if: github.event_name == 'workflow_run'
         uses: actions/github-script@v6
@@ -346,6 +353,7 @@ jobs:
               check_run_id: ${{ needs.Initialization.outputs.checkRunId }},
               status: 'in_progress'
             });
+
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -379,6 +387,7 @@ jobs:
             });
             var fs = require('fs');
             fs.writeFileSync('.PullRequestChanges.zip', Buffer.from(download.data));
+
       - name: Apply Pull Request Changes
         if: github.event_name == 'workflow_run'
         env:
@@ -423,6 +432,7 @@ jobs:
             }
           }
           Remove-Item -Path $prfolder -recurse -force
+
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
         with:
@@ -491,6 +501,7 @@ jobs:
             Add-Content -Path $env:GITHUB_OUTPUT -Value "$name=$value"
             Add-Content -Path $env:GITHUB_ENV -Value "$name=$value"
           }
+
       - name: Publish artifacts - apps
         uses: actions/upload-artifact@v3
         if: github.ref_name == 'main' || startswith(github.ref_name, 'release/') || needs.Initialization.outputs.deliveryTargetCount > 0 || needs.Initialization.outputs.environmentCount > 0
@@ -577,6 +588,7 @@ jobs:
                 text: '[Workflow details]('.concat(details_url,')')
               }
             });
+
       - name: Cleanup
         if: always()
         uses: freddydk/AL-Go-Actions/PipelineCleanup@main
@@ -609,6 +621,7 @@ jobs:
           Set-StrictMode -version 2.0
           $envName = '${{ matrix.environment }}'.split(' ')[0]
           Add-Content -Path $env:GITHUB_OUTPUT -Value "envName=$envName"
+
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
         with:
@@ -694,6 +707,7 @@ jobs:
           Write-Host "environmentName (as Base64)=$environmentName"
           Add-Content -Path $env:GITHUB_OUTPUT -Value "projects=$projects"
           Write-Host "projects=$projects"
+
       - name: Deploy
         uses: freddydk/AL-Go-Actions/Deploy@main
         env:
@@ -746,6 +760,7 @@ jobs:
           $deliveryContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable($contextName)))
           Add-Content -Path $env:GITHUB_OUTPUT -Value "deliveryContext=$deliveryContext"
           Write-Host "deliveryContext=$deliveryContext"
+
       - name: Deliver
         uses: freddydk/AL-Go-Actions/Deliver@main
         env:
@@ -773,6 +788,7 @@ jobs:
               check_run_id: ${{ needs.Initialization.outputs.checkRunId }},
               conclusion: '${{ needs.Build.result }}'
             });
+
   PostProcess:
     if: (!cancelled()) && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
     runs-on: [ ubuntu-latest ]
