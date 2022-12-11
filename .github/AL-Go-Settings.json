@@ -12,7 +12,7 @@
     "DoNotRunBCPTTests":  true,
     "imageName":  "my",
     "useProjectDependencies":  true,
-    "runs-on":  "ubuntu-latest",
+    "runs-on":  "ubuntu-22.04",
     "DeployToQA":  {
                        "Branches":  [
                                         "UAT",
