@@ -49,7 +49,7 @@ defaults:
 
 jobs:
   CreateRelease:
-    runs-on: [ ubuntu-latest ]
+    runs-on: [ ubuntu-22.04 ]
     outputs:
       telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
       artifacts: ${{ steps.analyzeartifacts.outputs.artifacts }}
@@ -192,7 +192,7 @@ jobs:
             core.setOutput('releaseId', releaseId);
 
   UploadArtifacts:
-    runs-on: [ ubuntu-latest ] 
+    runs-on: [ ubuntu-22.04 ] 
     needs: [ CreateRelease ]
     strategy:
       matrix: ${{ fromJson(needs.CreateRelease.outputs.artifacts) }}
@@ -299,7 +299,7 @@ jobs:
 
   CreateReleaseBranch:
     if: ${{ github.event.inputs.createReleaseBranch=='Y' }}
-    runs-on: [ ubuntu-latest ]
+    runs-on: [ ubuntu-22.04 ]
     needs: [ CreateRelease, UploadArtifacts ]
     steps:
       - name: Checkout
@@ -317,7 +317,7 @@ jobs:
 
   UpdateVersionNumber:
     if: ${{ github.event.inputs.updateVersionNumber!='' }}
-    runs-on: [ ubuntu-latest ]
+    runs-on: [ ubuntu-22.04 ]
     needs: [ CreateRelease, UploadArtifacts ]
     steps:
       - name: Update Version Number
@@ -330,7 +330,7 @@ jobs:
 
   PostProcess:
     if: always()
-    runs-on: [ ubuntu-latest ]
+    runs-on: [ ubuntu-22.04 ]
     needs: [ CreateRelease, UploadArtifacts, CreateReleaseBranch, UpdateVersionNumber ]
     steps:
       - name: Checkout
