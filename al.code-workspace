@@ -1,19 +1,20 @@
-﻿{
-    "folders":  [
-                    {
-                        "path":  ".AL-Go"
-                    },
-                    {
-                        "path":  "BingMaps"
-                    },
-                    {
-                        "path":  "BingMaps.Test"
-                    },
-                    {
-                        "path":  "BingMaps.PerformanceTest"
-                    }
-                ],
-    "settings":  {
-
-                 }
+{
+  "folders": [
+    {
+      "path": ".AL-Go"
+    },
+    {
+      "path": "BingMaps"
+    },
+    {
+      "path": "BingMaps.Test"
+    },
+    {
+      "path": "BingMaps.PerformanceTest"
+    },
+    {
+      "path": "MyApp"
+    }
+  ],
+  "settings": {}
 }
