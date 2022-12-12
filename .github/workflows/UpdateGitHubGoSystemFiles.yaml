@@ -40,7 +40,7 @@ jobs:
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
-          get: KeyVaultName,GhTokenWorkflowSecretName,TemplateUrl
+          get: keyVaultName,ghTokenWorkflowSecretName,templateUrl
 
       - name: Read secrets
         uses: freddydk/AL-Go-Actions/ReadSecrets@main
@@ -52,7 +52,7 @@ jobs:
           settingsJson: ${{ env.Settings }}
           secrets: 'ghTokenWorkflow=${{ env.GHTOKENWORKFLOWSECRETNAME }}'
 
-      - name: Override TemplateUrl
+      - name: Override templateUrl
         env:
           templateUrl: ${{ github.event.inputs.templateUrl }}
         run: |
@@ -61,7 +61,7 @@ jobs:
           $templateUrl = $ENV:templateUrl
           if ($templateUrl) {
             Write-Host "Using Template Url: $templateUrl"
-            Add-Content -Path $env:GITHUB_ENV -Value "TemplateUrl=$templateUrl"
+            Add-Content -Path $env:GITHUB_ENV -Value "templateUrl=$templateUrl"
           }
 
       - name: Calculate DirectCommit
@@ -86,7 +86,7 @@ jobs:
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           token: ${{ env.ghTokenWorkflow }}
           Update: Y
-          templateUrl: ${{ env.TemplateUrl }}
+          templateUrl: ${{ env.templateUrl }}
           directCommit: ${{ env.directCommit }}
 
       - name: Finalize the workflow
