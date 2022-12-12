@@ -101,7 +101,7 @@ Note that when using the preview version of AL-Go for GitHub, you need to Update
 ### Environments
 - Add suport for EnvironmentName redirection by adding an Environment Secret under the environment or a repo secret called \<environmentName\>_EnvironmentName with the actual environment name.
 - No default environment name on Publish To Environment
-- For multi-project repositories, you can specify an environment secret called Projects or a repo setting called \<environment\>_Projects, containing the projects you want to deploy to this environment.
+- For multi-project repositories, you can specify an environment secret called projects or a repo setting called \<environment\>_Projects, containing the projects you want to deploy to this environment.
 
 ### Settings
 - New setting: **runs-on** to allow modifying runs-on for all jobs (requires Update AL-Go System files after changing the setting)
