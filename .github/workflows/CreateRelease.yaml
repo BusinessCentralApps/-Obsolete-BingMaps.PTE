@@ -71,7 +71,7 @@ jobs:
         with:
           shell: pwsh
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
-          get: TemplateUrl,RepoName
+          get: templateUrl,repoName
           getProjects: 'Y'
 
       - name: Check for updates to AL-Go system files
@@ -79,7 +79,7 @@ jobs:
         with:
           shell: pwsh
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
-          templateUrl: ${{ env.TemplateUrl }}
+          templateUrl: ${{ env.templateUrl }}
 
       - name: Analyze Artifacts
         id: analyzeartifacts
@@ -87,7 +87,7 @@ jobs:
           $ErrorActionPreference = "STOP"
           Set-StrictMode -version 2.0
           $projects = '${{ steps.ReadSettings.outputs.ProjectsJson }}' | ConvertFrom-Json
-          Write-Host "Projects:"
+          Write-Host "projects:"
           $projects | ForEach-Object { Write-Host "- $_" }
           $include = @()
           $sha = ''
@@ -111,7 +111,7 @@ jobs:
               $project = $thisProject.Replace('\','_')
             }
             else {
-              $project = $env:RepoName
+              $project = $env:repoName
             }
             $refname = "$ENV:GITHUB_REF_NAME".Replace('/','_')
             Write-Host "Analyzing artifacts for project $project"
@@ -215,7 +215,7 @@ jobs:
           shell: pwsh
           parentTelemetryScopeJson: ${{ needs.CreateRelease.outputs.telemetryScopeJson }}
           settingsJson: ${{ env.Settings }}
-          secrets: 'NuGetContext,StorageContext'
+          secrets: 'nuGetContext,storageContext'
 
       - name: Download artifact
         run: |
@@ -247,15 +247,15 @@ jobs:
               data: fs.readFileSync(assetPath)
             });
 
-      - name: NuGetContext
+      - name: nuGetContext
         id: nuGetContext
-        if: ${{ env.NuGetContext }}
+        if: ${{ env.nuGetContext }}
         run: |
           $ErrorActionPreference = "STOP"
           Set-StrictMode -version 2.0
           $nuGetContext = ''
           if ('${{ matrix.atype }}' -eq 'Apps') {
-            $nuGetContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable('NuGetContext')))
+            $nuGetContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable('nuGetContext')))
           }
           Add-Content -Path $env:GITHUB_OUTPUT -Value "nuGetContext=$nuGetContext"
 
@@ -272,15 +272,15 @@ jobs:
           artifacts: ${{ github.event.inputs.appVersion }}
           atypes: 'Apps,TestApps'
 
-      - name: StorageContext
+      - name: storageContext
         id: storageContext
-        if: ${{ env.StorageContext }}
+        if: ${{ env.storageContext }}
         run: |
           $ErrorActionPreference = "STOP"
           Set-StrictMode -version 2.0
           $storageContext = ''
           if ('${{ matrix.atype }}' -eq 'Apps') {
-            $storageContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable('StorageContext')))
+            $storageContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable('storageContext')))
           }
           Add-Content -Path $env:GITHUB_OUTPUT -Value "storageContext=$storageContext"
 
