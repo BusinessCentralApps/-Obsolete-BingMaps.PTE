@@ -163,7 +163,7 @@ jobs:
         run: |
           $ErrorActionPreference = "STOP"
           Set-StrictMode -version 2.0
-          $deliveryTargetSecrets = @('GitHubPackagesContext','NuGetContext','StorageContext','AppSourceContext')
+          $deliveryTargetSecrets = @('gitHubPackagesContext','nuGetContext','storageContext','appSourceContext')
           $namePrefix = 'DeliverTo'
           Get-Item -Path (Join-Path $ENV:GITHUB_WORKSPACE ".github$([System.IO.Path]::DirectorySeparatorChar)$($namePrefix)*.ps1") | ForEach-Object {
             $deliveryTarget = [System.IO.Path]::GetFileNameWithoutExtension($_.Name.SubString($namePrefix.Length))
@@ -194,7 +194,7 @@ jobs:
             $deliveryTarget = [System.IO.Path]::GetFileNameWithoutExtension($_.Name.SubString($namePrefix.Length))
             $deliveryTargets += @($deliveryTarget)
           }
-          $deliveryTargets = $deliveryTargets | Select-Object -unique | Where-Object {
+          $deliveryTargets = @($deliveryTargets | Select-Object -unique | Where-Object {
             $include = $false
             Write-Host "Check DeliveryTarget $_"
             $contextName = "$($_)Context"
@@ -219,7 +219,7 @@ jobs:
               Write-Host "DeliveryTarget $_ included"
             }
             $include
-          }
+          })
           $deliveryTargetsJson = $deliveryTargets | ConvertTo-Json -Depth 99 -compress
           if ($deliveryTargets.Count -lt 2) { $deliveryTargetsJson = "[$($deliveryTargetsJson)]" }
           Add-Content -Path $env:GITHUB_OUTPUT -Value "DeliveryTargetsJson=$deliveryTargetsJson"
@@ -252,18 +252,18 @@ jobs:
               $projectsJSon = $ps | ConvertTo-Json -compress
             }
             if ($ps.Count -gt 0) {
-              Add-Content -Path $env:GITHUB_OUTPUT -Value "Projects$($step)Json=$projectsJson"
-              Add-Content -Path $env:GITHUB_OUTPUT -Value "Projects$($step)Count=$($ps.count)"
-              Write-Host "Projects$($step)Json=$projectsJson"
-              Write-Host "Projects$($step)Count=$($ps.count)"
+              Add-Content -Path $env:GITHUB_OUTPUT -Value "projects$($step)Json=$projectsJson"
+              Add-Content -Path $env:GITHUB_OUTPUT -Value "projects$($step)Count=$($ps.count)"
+              Write-Host "projects$($step)Json=$projectsJson"
+              Write-Host "projects$($step)Count=$($ps.count)"
               $step--
             }
           }
           while ($step -ge 1) {
-              Add-Content -Path $env:GITHUB_OUTPUT -Value "Projects$($step)Json="
-              Add-Content -Path $env:GITHUB_OUTPUT -Value "Projects$($step)Count=0"
-              Write-Host "Projects$($step)Json="
-              Write-Host "Projects$($step)Count=0"
+              Add-Content -Path $env:GITHUB_OUTPUT -Value "projects$($step)Json="
+              Add-Content -Path $env:GITHUB_OUTPUT -Value "projects$($step)Count=0"
+              Write-Host "projects$($step)Json="
+              Write-Host "projects$($step)Count=0"
               $step--
           }
 
@@ -280,14 +280,14 @@ jobs:
         with:
           shell: pwsh
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
-          get: TemplateUrl
+          get: templateUrl
 
       - name: Check for updates to AL-Go system files
         uses: freddydk/AL-Go-Actions/CheckForUpdates@main
         with:
           shell: pwsh
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
-          templateUrl: ${{ env.TemplateUrl }}
+          templateUrl: ${{ env.templateUrl }}
 
   Build:
     needs: [ Initialization ]
@@ -447,7 +447,7 @@ jobs:
           shell: pwsh
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           settingsJson: ${{ env.Settings }}
-          secrets: 'licenseFileUrl,insiderSasToken,CodeSignCertificateUrl,CodeSignCertificatePassword,KeyVaultCertificateUrl,KeyVaultCertificatePassword,KeyVaultClientId,StorageContext,GitHubPackagesContext'
+          secrets: 'licenseFileUrl,insiderSasToken,codeSignCertificateUrl,codeSignCertificatePassword,keyVaultCertificateUrl,keyVaultCertificatePassword,keyVaultClientId,storageContext,gitHubPackagesContext'
 
       - name: Run pipeline
         id: RunPipeline
@@ -493,7 +493,7 @@ jobs:
           else {
             $ref = "$ENV:GITHUB_REF_NAME".Replace('/','_')
           }
-          if ($project -eq ".") { $project = $settings.RepoName }
+          if ($project -eq ".") { $project = $settings.repoName }
           'Apps','Dependencies','TestApps','TestResults','BcptTestResults','BuildOutput','ContainerEventLog' | ForEach-Object {
             $name = "$($_)ArtifactsName"
             $value = "$($project.Replace("$([System.IO.Path]::DirectorySeparatorChar)",'_'))-$($ref)-$_-$($settings.repoVersion).$($settings.appBuild).$($settings.appRevision)"
@@ -633,7 +633,7 @@ jobs:
         with:
           shell: pwsh
           settingsJson: ${{ env.Settings }}
-          secrets: '${{ steps.envName.outputs.envName }}-AuthContext,${{ steps.envName.outputs.envName }}_AuthContext,AuthContext,${{ steps.envName.outputs.envName }}-EnvironmentName,${{ steps.envName.outputs.envName }}_EnvironmentName,EnvironmentName,Projects'
+          secrets: '${{ steps.envName.outputs.envName }}-AuthContext,${{ steps.envName.outputs.envName }}_AuthContext,AuthContext,${{ steps.envName.outputs.envName }}-EnvironmentName,${{ steps.envName.outputs.envName }}_EnvironmentName,EnvironmentName,projects'
 
       - name: AuthContext
         id: authContext
@@ -671,7 +671,7 @@ jobs:
                 $EnvironmentName = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable($_)))
                 if ($EnvironmentName) {
                   Write-Host "Using $_ secret as EnvironmentName"
-                  Write-Host "Please consider using the DeployTo$_ setting instead, where you can specify EnvironmentName, Projects and branches"
+                  Write-Host "Please consider using the DeployTo$_ setting instead, where you can specify EnvironmentName, projects and branches"
                 }
               }            
             }
@@ -681,11 +681,11 @@ jobs:
           }
           $environmentName = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(($environmentName + '${{ matrix.environment }}'.SubString($envName.Length)).ToUpperInvariant()))
 
-          if ($deployToSetting.PSObject.Properties.name -eq "Projects") {
-            $projects = $deployToSetting.Projects
+          if ($deployToSetting.PSObject.Properties.name -eq "projects") {
+            $projects = $deployToSetting.projects
           }
           else {
-            $projects = [System.Environment]::GetEnvironmentVariable("$($envName)-Projects")
+            $projects = [System.Environment]::GetEnvironmentVariable("$($envName)-projects")
             if (-not $projects) {
               $projects = [System.Environment]::GetEnvironmentVariable("$($envName)_Projects")
               if (-not $projects) {
