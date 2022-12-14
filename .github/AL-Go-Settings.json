@@ -7,7 +7,7 @@
     "useProjectDependencies":  true,
     "runs-on":  "windows-latest",
     "shell":  "powershell",
-    "githubRunner":  "windows-latest",
+    "githubRunner":  "bc-build",
     "githubRunnerShell":  "powershell",
     "UpdateGitHubGoSystemFilesSchedule":  "0 0 * * *",
     "updateDependencies":  true,
