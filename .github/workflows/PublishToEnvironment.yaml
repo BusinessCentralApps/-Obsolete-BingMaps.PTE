@@ -17,11 +17,11 @@ permissions:
 
 defaults:
   run:
-    shell: pwsh
+    shell: powershell
 
 jobs:
   Initialization:
-    runs-on: [ ubuntu-22.04 ]
+    runs-on: [ windows-latest ]
     outputs:
       telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
       settings: ${{ steps.ReadSettings.outputs.SettingsJson }}
@@ -35,14 +35,14 @@ jobs:
         id: init
         uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
         with:
-          shell: pwsh
+          shell: powershell
           eventId: "DO0097"
 
       - name: Read settings
         id: ReadSettings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
         with:
-          shell: pwsh
+          shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           getEnvironments: ${{ github.event.inputs.environmentName }}
           includeProduction: 'Y'
@@ -70,14 +70,14 @@ jobs:
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
         with:
-          shell: pwsh
+          shell: powershell
 
       - name: Read secrets
         uses: freddydk/AL-Go-Actions/ReadSecrets@main
         env:
           secrets: ${{ toJson(secrets) }}
         with:
-          shell: pwsh
+          shell: powershell
           settingsJson: ${{ env.Settings }}
           secrets: '${{ steps.envName.outputs.envName }}-AuthContext,${{ steps.envName.outputs.envName }}_AuthContext,AuthContext,${{ steps.envName.outputs.envName }}-EnvironmentName,${{ steps.envName.outputs.envName }}_EnvironmentName,EnvironmentName,projects'
 
@@ -137,7 +137,7 @@ jobs:
         env:
           AuthContext: ${{ steps.authContext.outputs.authContext }}
         with:
-          shell: pwsh
+          shell: powershell
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           type: 'Publish'
           projects: ${{ steps.authContext.outputs.projects }}
@@ -146,7 +146,7 @@ jobs:
 
   PostProcess:
     if: always()
-    runs-on: [ ubuntu-22.04 ]
+    runs-on: [ windows-latest ]
     needs: [ Initialization, Deploy ]
     steps:
       - name: Checkout
@@ -156,6 +156,6 @@ jobs:
         id: PostProcess
         uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
         with:
-          shell: pwsh
+          shell: powershell
           eventId: "DO0097"
           telemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
