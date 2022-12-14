@@ -13,6 +13,8 @@
     "imageName":  "my",
     "useProjectDependencies":  true,
     "runs-on":  "ubuntu-22.04",
+    "githubRunner": "bc-build",
+    "githubRunnerShell":  "powershell",
     "DeployToQA":  {
                        "Branches":  [
                                         "UAT",
