@@ -5,7 +5,7 @@
     "NextMinorSchedule":  "0 2 * * 6",
     "NextMajorSchedule":  "0 2 * * 0",
     "useProjectDependencies":  true,
-    "runs-on":  "windows-latest",
+    "runs-on":  "bc-build",
     "shell":  "powershell",
     "githubRunner":  "bc-build",
     "githubRunnerShell":  "powershell",
