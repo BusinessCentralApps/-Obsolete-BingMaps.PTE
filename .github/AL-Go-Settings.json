@@ -6,6 +6,7 @@
     "NextMajorSchedule":  "0 2 * * 0",
     "useProjectDependencies":  true,
     "runs-on":  "ubuntu-22.04",
+    "shell":  "pwsh",
     "githubRunner":  "bc-build",
     "githubRunnerShell":  "powershell",
     "UpdateGitHubGoSystemFilesSchedule":  "0 0 * * *",
