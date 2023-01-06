@@ -1,4 +1,4 @@
-﻿name: ' CI/CD'
+name: ' CI/CD'
 
 on:
   workflow_dispatch:
@@ -26,7 +26,7 @@ defaults:
     shell: pwsh
 
 env:
-  workflowDepth: 0
+  workflowDepth: 1
 
 jobs:
   Initialization:
