@@ -1,4 +1,4 @@
-﻿name: 'Create a new test app'
+name: 'Create a new test app'
 
 on:
   workflow_dispatch:
@@ -37,20 +37,20 @@ defaults:
 
 jobs:
   CreateTestApp:
-    runs-on: [ ubuntu-22.04 ]
+    runs-on: [ ubuntu-latest ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@ps7
         with:
           shell: pwsh
           eventId: "DO0095"
 
       - name: Creating a new test app
-        uses: freddydk/AL-Go-Actions/CreateApp@main
+        uses: freddydk/AL-Go-Actions/CreateApp@ps7
         with:
           shell: pwsh
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
@@ -64,7 +64,7 @@ jobs:
 
       - name: Finalize the workflow
         if: always()
-        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
+        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@ps7
         with:
           shell: pwsh
           eventId: "DO0095"

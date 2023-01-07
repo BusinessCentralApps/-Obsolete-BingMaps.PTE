@@ -1,4 +1,4 @@
-﻿name: ' CI/CD'
+name: ' CI/CD'
 
 on:
   workflow_dispatch:
@@ -26,12 +26,12 @@ defaults:
     shell: pwsh
 
 env:
-  workflowDepth: 0
+  workflowDepth: 1
 
 jobs:
   Initialization:
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
-    runs-on: [ ubuntu-22.04 ]
+    runs-on: [ ubuntu-latest ]
     outputs:
       telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
       settings: ${{ steps.ReadSettings.outputs.SettingsJson }}
@@ -42,10 +42,12 @@ jobs:
       deliveryTargets: ${{ steps.DetermineDeliveryTargets.outputs.DeliveryTargetsJson }}
       deliveryTargetCount: ${{ steps.DetermineDeliveryTargets.outputs.DeliveryTargetCount }}
       githubRunner: ${{ steps.ReadSettings.outputs.GitHubRunnerJson }}
+      githubRunnerShell: ${{ steps.ReadSettings.outputs.GitHubRunnerShell }}
       checkRunId: ${{ steps.CreateCheckRun.outputs.checkRunId }}
       projectDependenciesJson: ${{ steps.ReadSettings.outputs.ProjectDependenciesJson }}
       buildOrderJson: ${{ steps.ReadSettings.outputs.BuildOrderJson }}
       buildOrderDepth: ${{ steps.ReadSettings.outputs.BuildOrderDepth }}
+      buildModes: ${{ steps.ReadSettings.outputs.BuildModes }}
     steps:
       - name: Create CI/CD Workflow Check Run
         id: CreateCheckRun
@@ -106,8 +108,8 @@ jobs:
           Set-StrictMode -version 2.0
           $location = (Get-Location).path
           $prfolder = '.PullRequestChanges'
-          Expand-Archive -Path ".$([System.IO.Path]::DirectorySeparatorChar)$prfolder.zip" -DestinationPath ".$([System.IO.Path]::DirectorySeparatorChar)$prfolder"
-          Remove-Item -Path ".$([System.IO.Path]::DirectorySeparatorChar)$prfolder.zip" -force
+          Expand-Archive -Path (Join-Path "." "$prfolder.zip") -DestinationPath (Join-Path "." $prfolder)
+          Remove-Item -Path (Join-Path "." "$prfolder.zip") -force
           Get-ChildItem -Path $prfolder -Recurse -File | ForEach-Object {
             $path = $_.FullName
             $deleteFile = $path.EndsWith('.REMOVE')
@@ -144,14 +146,14 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@ps7
         with:
           shell: pwsh
           eventId: "DO0091"
 
       - name: Read settings
         id: ReadSettings
-        uses: freddydk/AL-Go-Actions/ReadSettings@main
+        uses: freddydk/AL-Go-Actions/ReadSettings@ps7
         with:
           shell: pwsh
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
@@ -165,14 +167,14 @@ jobs:
           Set-StrictMode -version 2.0
           $deliveryTargetSecrets = @('GitHubPackagesContext','NuGetContext','StorageContext','AppSourceContext')
           $namePrefix = 'DeliverTo'
-          Get-Item -Path (Join-Path $ENV:GITHUB_WORKSPACE ".github$([System.IO.Path]::DirectorySeparatorChar)$($namePrefix)*.ps1") | ForEach-Object {
+          Get-Item -Path (Join-Path $ENV:GITHUB_WORKSPACE ".github/$($namePrefix)*.ps1") | ForEach-Object {
             $deliveryTarget = [System.IO.Path]::GetFileNameWithoutExtension($_.Name.SubString($namePrefix.Length))
             $deliveryTargetSecrets += @("$($deliveryTarget)Context")
           }
           Add-Content -Path $env:GITHUB_OUTPUT -Value "Secrets=$($deliveryTargetSecrets -join ',')"
 
       - name: Read secrets
-        uses: freddydk/AL-Go-Actions/ReadSecrets@main
+        uses: freddydk/AL-Go-Actions/ReadSecrets@ps7
         env:
           secrets: ${{ toJson(secrets) }}
         with:
@@ -190,7 +192,7 @@ jobs:
             $deliveryTargets += @("AppSource")
           }
           $namePrefix = 'DeliverTo'
-          Get-Item -Path (Join-Path $ENV:GITHUB_WORKSPACE ".github$([System.IO.Path]::DirectorySeparatorChar)$($namePrefix)*.ps1") | ForEach-Object {
+          Get-Item -Path (Join-Path $ENV:GITHUB_WORKSPACE ".github/$($namePrefix)*.ps1") | ForEach-Object {
             $deliveryTarget = [System.IO.Path]::GetFileNameWithoutExtension($_.Name.SubString($namePrefix.Length))
             $deliveryTargets += @($deliveryTarget)
           }
@@ -268,7 +270,7 @@ jobs:
           }
 
   CheckForUpdates:
-    runs-on: [ ubuntu-22.04 ]
+    runs-on: [ ubuntu-latest ]
     needs: [ Initialization ]
     if: github.event_name != 'workflow_run'
     steps:
@@ -276,14 +278,14 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@main
+        uses: freddydk/AL-Go-Actions/ReadSettings@ps7
         with:
           shell: pwsh
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           get: templateUrl
 
       - name: Check for updates to AL-Go system files
-        uses: freddydk/AL-Go-Actions/CheckForUpdates@main
+        uses: freddydk/AL-Go-Actions/CheckForUpdates@ps7
         with:
           shell: pwsh
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
@@ -293,11 +295,15 @@ jobs:
     needs: [ Initialization ]
     if: ${{ needs.Initialization.outputs.projectCount > 0 }}
     runs-on: ${{ fromJson(needs.Initialization.outputs.githubRunner) }}
+    defaults:
+      run:
+        shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
     strategy:
       matrix:
         project: ${{ fromJson(needs.Initialization.outputs.projects) }}
+        buildMode: ${{ fromJson(needs.Initialization.outputs.buildModes) }}
       fail-fast: false
-    name: Build ${{ matrix.project }}
+    name: Build ${{ matrix.project }} - ${{ matrix.buildMode }}
     outputs:
       AppsArtifactsName: ${{ steps.calculateArtifactNames.outputs.AppsArtifactsName }}
       TestAppsArtifactsName: ${{ steps.calculateArtifactNames.outputs.TestAppsArtifactsName }}
@@ -396,8 +402,8 @@ jobs:
           Set-StrictMode -version 2.0
           $location = (Get-Location).path
           $prfolder = '.PullRequestChanges'
-          Expand-Archive -Path ".$([System.IO.Path]::DirectorySeparatorChar)$prfolder.zip" -DestinationPath ".$([System.IO.Path]::DirectorySeparatorChar)$prfolder"
-          Remove-Item -Path ".$([System.IO.Path]::DirectorySeparatorChar)$prfolder.zip" -force
+          Expand-Archive -Path (Join-Path "." "$prfolder.zip") -DestinationPath (Join-Path "." $prfolder)
+          Remove-Item -Path (Join-Path "." "$prfolder.zip") -force
           Get-ChildItem -Path $prfolder -Recurse -File | ForEach-Object {
             $path = $_.FullName
             $deleteFile = $path.EndsWith('.REMOVE')
@@ -433,50 +439,35 @@ jobs:
           Remove-Item -Path $prfolder -recurse -force
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@main
+        uses: freddydk/AL-Go-Actions/ReadSettings@ps7
         with:
-          shell: pwsh
+          shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           project: ${{ matrix.project }}
 
       - name: Read secrets
-        uses: freddydk/AL-Go-Actions/ReadSecrets@main
+        uses: freddydk/AL-Go-Actions/ReadSecrets@ps7
         env:
           secrets: ${{ toJson(secrets) }}
         with:
-          shell: pwsh
+          shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           settingsJson: ${{ env.Settings }}
           secrets: 'licenseFileUrl,insiderSasToken,codeSignCertificateUrl,codeSignCertificatePassword,keyVaultCertificateUrl,keyVaultCertificatePassword,keyVaultClientId,storageContext,gitHubPackagesContext'
 
       - name: Run pipeline
         id: RunPipeline
-        uses: freddydk/AL-Go-Actions/RunPipeline@main
+        uses: freddydk/AL-Go-Actions/RunPipeline@ps7
+        env:
+          BuildMode: ${{ matrix.buildMode }}
         with:
-          shell: pwsh
+          shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           Project: ${{ matrix.project }}
           ProjectDependenciesJson: ${{ needs.Initialization.outputs.projectDependenciesJson }}
           settingsJson: ${{ env.Settings }}
           SecretsJson: ${{ env.RepoSecrets }}
-
-      - name: Upload thisbuild artifacts - apps
-        if: env.workflowDepth > 1
-        uses: actions/upload-artifact@v3
-        with:
-          name: 'thisbuild-${{ matrix.project }}-Apps'
-          path: '${{ matrix.project }}/.buildartifacts/Apps/'
-          if-no-files-found: ignore
-          retention-days: 1
-
-      - name: Upload thisbuild artifacts - test apps
-        if: env.workflowDepth > 1
-        uses: actions/upload-artifact@v3
-        with:
-          name: 'thisbuild-${{ matrix.project }}-TestApps'
-          path: '${{ matrix.project }}/.buildartifacts/TestApps/'
-          if-no-files-found: ignore
-          retention-days: 1
+          buildMode: ${{ matrix.buildMode }}
 
       - name: Calculate Artifact names
         id: calculateArtifactNames
@@ -486,26 +477,50 @@ jobs:
           Set-StrictMode -version 2.0
           $settings = '${{ env.Settings }}' | ConvertFrom-Json
           $project = '${{ matrix.project }}'
+          $buildMode = '${{ matrix.buildMode }}'
           if ("$ENV:GITHUB_EVENT_NAME" -eq 'workflow_run') {
-            $event = Get-Content $ENV:GITHUB_EVENT_PATH -Encoding UTF8 | ConvertFrom-Json
+            $eventStr = Get-Content $ENV:GITHUB_EVENT_PATH -Encoding UTF8
+            $eventStr | Out-Host
+            $event = $eventStr | ConvertFrom-Json
             $ref = "PR$($event.workflow_run.pull_requests[0].number)"
           }
           else {
             $ref = "$ENV:GITHUB_REF_NAME".Replace('/','_')
           }
           if ($project -eq ".") { $project = $settings.repoName }
+          if ($buildMode -eq 'Default') { $buildMode = '' }
           'Apps','Dependencies','TestApps','TestResults','BcptTestResults','BuildOutput','ContainerEventLog' | ForEach-Object {
             $name = "$($_)ArtifactsName"
-            $value = "$($project.Replace("$([System.IO.Path]::DirectorySeparatorChar)",'_'))-$($ref)-$_-$($settings.repoVersion).$($settings.appBuild).$($settings.appRevision)"
+            $value = "$($project.Replace('\','_').Replace('/','_'))-$($ref)-$buildMode$_-$($settings.repoVersion).$($settings.appBuild).$($settings.appRevision)"
             Add-Content -Path $env:GITHUB_OUTPUT -Value "$name=$value"
             Add-Content -Path $env:GITHUB_ENV -Value "$name=$value"
           }
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "BuildMode=$buildMode"
+          Add-Content -Path $env:GITHUB_ENV -Value "BuildMode=$buildMode"
+
+      - name: Upload thisbuild artifacts - apps
+        if: env.workflowDepth > 1
+        uses: actions/upload-artifact@v3
+        with:
+          name: 'thisbuild-${{ matrix.project }}-${{ env.BuildMode }}Apps'
+          path: '${{ matrix.project }}/.buildartifacts/Apps/'
+          if-no-files-found: ignore
+          retention-days: 1
+
+      - name: Upload thisbuild artifacts - test apps
+        if: env.workflowDepth > 1
+        uses: actions/upload-artifact@v3
+        with:
+          name: 'thisbuild-${{ matrix.project }}-${{ env.BuildMode }}TestApps'
+          path: '${{ matrix.project }}/.buildartifacts/TestApps/'
+          if-no-files-found: ignore
+          retention-days: 1
 
       - name: Publish artifacts - apps
         uses: actions/upload-artifact@v3
         if: github.ref_name == 'main' || startswith(github.ref_name, 'release/') || needs.Initialization.outputs.deliveryTargetCount > 0 || needs.Initialization.outputs.environmentCount > 0
         with:
-          name: ${{ env.appsArtifactsName }}
+          name: ${{ env.AppsArtifactsName }}
           path: '${{ matrix.project }}/.buildartifacts/Apps/'
           if-no-files-found: ignore
 
@@ -513,7 +528,7 @@ jobs:
         uses: actions/upload-artifact@v3
         if: github.ref_name == 'main' || startswith(github.ref_name, 'release/') || needs.Initialization.outputs.deliveryTargetCount > 0 || needs.Initialization.outputs.environmentCount > 0
         with:
-          name: ${{ env.dependenciesArtifactsName }}
+          name: ${{ env.DependenciesArtifactsName }}
           path: '${{ matrix.project }}/.buildartifacts/Dependencies/'
           if-no-files-found: ignore
 
@@ -521,7 +536,7 @@ jobs:
         uses: actions/upload-artifact@v3
         if: github.ref_name == 'main' || startswith(github.ref_name, 'release/') || needs.Initialization.outputs.deliveryTargetCount > 0 || needs.Initialization.outputs.environmentCount > 0
         with:
-          name: ${{ env.testAppsArtifactsName }}
+          name: ${{ env.TestAppsArtifactsName }}
           path: '${{ matrix.project }}/.buildartifacts/TestApps/'
           if-no-files-found: ignore
 
@@ -529,7 +544,7 @@ jobs:
         uses: actions/upload-artifact@v3
         if: (success() || failure()) && (hashFiles(format('{0}/BuildOutput.txt',matrix.project)) != '')
         with:
-          name: ${{ env.buildOutputArtifactsName }}
+          name: ${{ env.BuildOutputArtifactsName }}
           path: '${{ matrix.project }}/BuildOutput.txt'
           if-no-files-found: ignore
 
@@ -545,7 +560,7 @@ jobs:
         uses: actions/upload-artifact@v3
         if: (success() || failure()) && (hashFiles(format('{0}/TestResults.xml',matrix.project)) != '')
         with:
-          name: ${{ env.testResultsArtifactsName }}
+          name: ${{ env.TestResultsArtifactsName }}
           path: '${{ matrix.project }}/TestResults.xml'
           if-no-files-found: ignore
 
@@ -553,16 +568,16 @@ jobs:
         uses: actions/upload-artifact@v3
         if: (success() || failure()) && (hashFiles(format('{0}/bcptTestResults.json',matrix.project)) != '')
         with:
-          name: ${{ env.bcptTestResultsArtifactsName }}
+          name: ${{ env.BcptTestResultsArtifactsName }}
           path: '${{ matrix.project }}/bcptTestResults.json'
           if-no-files-found: ignore
 
       - name: Analyze Test Results
         id: analyzeTestResults
         if: success() || failure()
-        uses: freddydk/AL-Go-Actions/AnalyzeTests@main
+        uses: freddydk/AL-Go-Actions/AnalyzeTests@ps7
         with:
-          shell: pwsh
+          shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           Project: ${{ matrix.project }}
 
@@ -590,9 +605,9 @@ jobs:
 
       - name: Cleanup
         if: always()
-        uses: freddydk/AL-Go-Actions/PipelineCleanup@main
+        uses: freddydk/AL-Go-Actions/PipelineCleanup@ps7
         with:
-          shell: pwsh
+          shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           Project: ${{ matrix.project }}
 
@@ -622,12 +637,12 @@ jobs:
           Add-Content -Path $env:GITHUB_OUTPUT -Value "envName=$envName"
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@main
+        uses: freddydk/AL-Go-Actions/ReadSettings@ps7
         with:
           shell: pwsh
 
       - name: Read secrets
-        uses: freddydk/AL-Go-Actions/ReadSecrets@main
+        uses: freddydk/AL-Go-Actions/ReadSecrets@ps7
         env:
           secrets: ${{ toJson(secrets) }}
         with:
@@ -710,7 +725,7 @@ jobs:
           Write-Host "projects=$projects"
 
       - name: Deploy
-        uses: freddydk/AL-Go-Actions/Deploy@main
+        uses: freddydk/AL-Go-Actions/Deploy@ps7
         env:
           AuthContext: ${{ steps.authContext.outputs.authContext }}
         with:
@@ -727,7 +742,7 @@ jobs:
       matrix:
         deliveryTarget: ${{ fromJson(needs.Initialization.outputs.deliveryTargets) }}
       fail-fast: false
-    runs-on: [ ubuntu-22.04 ]
+    runs-on: [ ubuntu-latest ]
     name: Deliver to ${{ matrix.deliveryTarget }}
     steps:
       - name: Checkout
@@ -739,12 +754,12 @@ jobs:
           path: '.artifacts'
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@main
+        uses: freddydk/AL-Go-Actions/ReadSettings@ps7
         with:
           shell: pwsh
 
       - name: Read secrets
-        uses: freddydk/AL-Go-Actions/ReadSecrets@main
+        uses: freddydk/AL-Go-Actions/ReadSecrets@ps7
         env:
           secrets: ${{ toJson(secrets) }}
         with:
@@ -763,7 +778,7 @@ jobs:
           Write-Host "deliveryContext=$deliveryContext"
 
       - name: Deliver
-        uses: freddydk/AL-Go-Actions/Deliver@main
+        uses: freddydk/AL-Go-Actions/Deliver@ps7
         env:
           deliveryContext: ${{ steps.deliveryContext.outputs.deliveryContext }}
         with:
@@ -775,7 +790,7 @@ jobs:
 
   UpdatePRcheck:
     if: always() && github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
-    runs-on: [ ubuntu-22.04 ]
+    runs-on: [ ubuntu-latest ]
     needs: [ Initialization, Build ]
     steps:
       - name: Update CI/CD Workflow Check Run
@@ -792,7 +807,7 @@ jobs:
 
   PostProcess:
     if: (!cancelled()) && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
-    runs-on: [ ubuntu-22.04 ]
+    runs-on: [ ubuntu-latest ]
     needs: [ Initialization, Build, Deploy, Deliver ]
     steps:
       - name: Checkout
@@ -800,7 +815,7 @@ jobs:
 
       - name: Finalize the workflow
         id: PostProcess
-        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
+        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@ps7
         with:
           shell: pwsh
           eventId: "DO0091"

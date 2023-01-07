@@ -1,45 +1,45 @@
 {
-    "type":  "PTE",
-    "templateUrl":  "https://github.com/freddydk/AL-Go-PTE@main",
-    "CurrentSchedule":  "0 2 * * 1,2,3,4,5",
-    "NextMinorSchedule":  "0 2 * * 6",
-    "NextMajorSchedule":  "0 2 * * 0",
-    "UpdateGitHubGoSystemFilesSchedule":  "0 0 * * *",
-    "updateDependencies":  true,
-    "sandboxContainersAreMultitenantByDefault":  false,
-    "cacheImageName":  "",
-    "DoNotRunBCPTTests":  true,
-    "imageName":  "my",
-    "useProjectDependencies":  true,
-    "runs-on":  "ubuntu-22.04",
-    "githubRunner": "bc-build",
-    "githubRunnerShell":  "powershell",
-    "DeployToQA":  {
-                       "Branches":  [
-                                        "UAT",
-                                        "main"
-                                    ],
-                       "EnvironmentName":  "QA",
-                       "Projects":  "*"
-                   },
-    "DeliverToTeams":  {
-                           "Branches":  [
-                                            "UAT",
-                                            "main"
-                                        ]
-                       },
-    "defaultNewContainerParameters":  {
-                                          "dns":  "hostDNS"
-                                      },
-    "ConditionalSettings":  [
-                                {
-                                    "branches":  [
-                                                     "feature/*"
-                                                 ],
-                                    "settings":  {
-                                                     "doNotPublishApps":  true,
-                                                     "doNotSignApps":  true
-                                                 }
-                                }
-                            ]
+  "type": "PTE",
+  "templateUrl": "https://github.com/freddydk/AL-Go-PTE@ps7",
+  "CurrentSchedule": "0 2 * * 1,2,3,4,5",
+  "NextMinorSchedule": "0 2 * * 6",
+  "NextMajorSchedule": "0 2 * * 0",
+  "useProjectDependencies": true,
+  "runs-on": "ubuntu-latest",
+  "shell": "pwsh",
+  "githubRunner": "bc-build",
+  "githubRunnerShell": "powershell",
+  "UpdateGitHubGoSystemFilesSchedule": "0 0 * * *",
+  "updateDependencies": true,
+  "sandboxContainersAreMultitenantByDefault": false,
+  "cacheImageName": "",
+  "DoNotRunBCPTTests": true,
+  "DeployToQA": {
+    "Branches": [
+      "UAT",
+      "main"
+    ],
+    "EnvironmentName": "QA",
+    "Projects": "*"
+  },
+  "DeliverToTeams": {
+    "Branches": [
+      "UAT",
+      "main"
+    ]
+  },
+  "defaultNewContainerParameters": {
+    "dns": "hostDNS"
+  },
+  "ConditionalSettings": [
+    {
+      "branches": [
+        "feature/*"
+      ],
+      "settings": {
+        "doNotPublishApps": true,
+        "doNotSignApps": true
+      }
+    }
+  ]
 }
