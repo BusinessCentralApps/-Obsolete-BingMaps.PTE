@@ -1,0 +1,22 @@
+name: Test
+
+on:
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: VARS
+        run: |
+          Write-host 'VAR1: ${{ vars.VAR1 }}'
+          Write-host 'VAR2: ${{ vars.VAR2 }}'
+          Write-host 'VAR3: ${{ vars.VAR3 }}'
+
+      - name: ENV
+        run: |
+          dir env:
