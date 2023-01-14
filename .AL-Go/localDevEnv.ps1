@@ -21,10 +21,10 @@ $webClient.CachePolicy = New-Object System.Net.Cache.RequestCachePolicy -argumen
 $webClient.Encoding = [System.Text.Encoding]::UTF8
 Write-Host "Downloading GitHub Helper module"
 $GitHubHelperPath = "$([System.IO.Path]::GetTempFileName()).psm1"
-$webClient.DownloadFile('https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v2.3/Github-Helper.psm1', $GitHubHelperPath)
+$webClient.DownloadFile('https://raw.githubusercontent.com/freddydk/AL-Go-Actions/issue215/Github-Helper.psm1', $GitHubHelperPath)
 Write-Host "Downloading AL-Go Helper script"
 $ALGoHelperPath = "$([System.IO.Path]::GetTempFileName()).ps1"
-$webClient.DownloadFile('https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v2.3/AL-Go-Helper.ps1', $ALGoHelperPath)
+$webClient.DownloadFile('https://raw.githubusercontent.com/freddydk/AL-Go-Actions/issue215/AL-Go-Helper.ps1', $ALGoHelperPath)
 
 Import-Module $GitHubHelperPath
 . $ALGoHelperPath -local
@@ -73,7 +73,8 @@ if (-not $containerName) {
     $containerName = Enter-Value `
         -title "Container name" `
         -question "Please enter the name of the container to create" `
-        -default "bcserver"
+        -default "bcserver" `
+        -trimQuotesAndSpaces
 }
 
 if (-not $auth) {
@@ -113,7 +114,8 @@ if (-not $licenseFileUrl) {
         -description $description `
         -question "Local path or a secure download URL to license file " `
         -default $default `
-        -doNotConvertToLower
+        -doNotConvertToLower `
+        -trimQuotesAndSpaces
 
     if ($licenseFileUrl -eq "none") {
         $licenseFileUrl = ""
