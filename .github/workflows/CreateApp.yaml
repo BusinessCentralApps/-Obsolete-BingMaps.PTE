@@ -42,20 +42,20 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@issue215
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
         with:
           shell: pwsh
           eventId: "DO0092"
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@issue215
+        uses: freddydk/AL-Go-Actions/ReadSettings@main
         with:
           shell: pwsh
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           get: type
 
       - name: Creating a new app
-        uses: freddydk/AL-Go-Actions/CreateApp@issue215
+        uses: freddydk/AL-Go-Actions/CreateApp@main
         with:
           shell: pwsh
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
@@ -69,7 +69,7 @@ jobs:
 
       - name: Finalize the workflow
         if: always()
-        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@issue215
+        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
         with:
           shell: pwsh
           eventId: "DO0092"
