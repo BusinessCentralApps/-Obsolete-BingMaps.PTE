@@ -29,11 +29,8 @@ $webClient.DownloadFile('https://raw.githubusercontent.com/freddydk/AL-Go-Action
 Import-Module $GitHubHelperPath
 . $ALGoHelperPath -local
 
-Push-Location
 $baseFolder = GetBaseFolder -folder $PSScriptRoot
-Set-Location $baseFolder
-$project = (Resolve-Path -Path (Join-Path $PSScriptRoot ".." -Resolve) -Relative).Substring(2)
-Pop-Location
+$project = GetProject -folder $baseFolder -ALGoFolder $PSScriptRoot
 
 Clear-Host
 Write-Host
