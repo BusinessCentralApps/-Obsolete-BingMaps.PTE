@@ -28,6 +28,7 @@ page 74124 "BingMaps Customer"
                 field(city; Rec.City)
                 {
                     ApplicationArea = All;
+                    dddd
                 }
                 field(country; Rec."Country/Region Code")
                 {
