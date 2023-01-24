@@ -16,6 +16,8 @@ codeunit 70131 "BingMaps Test"
         BingMapsSetup.DeleteAll();
     end;
 
+
+
     [Test]
     [HandlerFunctions('RoleCenterBingMapsNotificationHandler')]
     procedure RoleCenterNotification()
