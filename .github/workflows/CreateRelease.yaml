@@ -32,9 +32,13 @@ on:
         required: false
         default: ''
       directCommit:
+        type: choice
         description: Direct COMMIT (Y/N)
         required: false
         default: 'N'
+        options:
+        - Y
+        - N
 
 permissions:
   contents: write
