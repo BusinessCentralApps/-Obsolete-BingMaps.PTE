@@ -9,6 +9,9 @@ codeunit 70131 "BingMaps Test"
         ShowAllHyperlinkOK: Boolean;
         RoleCenterNotificationOK: Boolean;
 
+
+
+
     trigger OnRun()
     var
         BingMapsSetup: Record "BingMaps Settings";
