@@ -16,13 +16,13 @@ on:
         required: true
         default: ''
       prerelease:
+        type: boolean
         description: Prerelease (Y/N)
         required: false
         default: 'N'
       draft:
+        type: boolean
         description: Draft (Y/N)
-        required: false
-        default: 'N'
       createReleaseBranch:
         description: Create Release Branch (Y/N)
         required: false
