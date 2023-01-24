@@ -15,22 +15,19 @@ on:
         description: Tag of this release (needs to be semantic version string https://semver.org, ex. 1.0.0)
         required: true
         default: ''
-      prerelease:
-        type: boolean
-        description: Prerelease (Y/N)
-        required: false
-        default: 'N'
-      draft:
-        type: boolean
-        description: Draft (Y/N)
-      createReleaseBranch:
-        description: Create Release Branch (Y/N)
-        required: false
-        default: 'N'
       updateVersionNumber:
         description: New Version Number in main branch. Use Major.Minor for absolute change, use +Major.Minor for incremental change.
         required: false
         default: ''
+      prerelease:
+        type: boolean
+        description: Prerelease (Y/N)
+      draft:
+        type: boolean
+        description: Draft (Y/N)
+      createReleaseBranch:
+        type: boolean
+        description: Create Release Branch (Y/N)
       directCommit:
         type: boolean
         description: Direct COMMIT
