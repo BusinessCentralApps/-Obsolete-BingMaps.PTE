@@ -21,13 +21,13 @@ on:
         default: ''
       prerelease:
         type: boolean
-        description: Prerelease (Y/N)
+        description: Prerelease
       draft:
         type: boolean
-        description: Draft (Y/N)
+        description: Draft
       createReleaseBranch:
         type: boolean
-        description: Create Release Branch (Y/N)
+        description: Create Release Branch
       directCommit:
         type: boolean
         description: Direct COMMIT
