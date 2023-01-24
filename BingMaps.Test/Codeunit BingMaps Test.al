@@ -27,6 +27,8 @@ codeunit 70131 "BingMaps Test"
         roleCenter.Close();
     end;
 
+
+
     [Test]
     procedure ServiceConnection();
     var
