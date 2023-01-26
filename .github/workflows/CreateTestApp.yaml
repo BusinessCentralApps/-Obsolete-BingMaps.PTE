@@ -35,6 +35,10 @@ defaults:
   run:
     shell: pwsh
 
+env:
+  ALGoOrgSettings: ${{ vars.ALGoOrgSettings }}
+  ALGoRepoSettings: ${{ vars.ALGoRepoSettings }}
+
 jobs:
   CreateTestApp:
     runs-on: [ ubuntu-latest ]
@@ -44,13 +48,13 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@issue360
+        uses: microsoft/AL-Go-Actions/WorkflowInitialize@preview
         with:
           shell: pwsh
           eventId: "DO0095"
 
       - name: Creating a new test app
-        uses: freddydk/AL-Go-Actions/CreateApp@issue360
+        uses: microsoft/AL-Go-Actions/CreateApp@preview
         with:
           shell: pwsh
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
@@ -64,7 +68,7 @@ jobs:
 
       - name: Finalize the workflow
         if: always()
-        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@issue360
+        uses: microsoft/AL-Go-Actions/WorkflowPostProcess@preview
         with:
           shell: pwsh
           eventId: "DO0095"

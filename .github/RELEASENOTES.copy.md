@@ -9,6 +9,7 @@ Note that when using the preview version of AL-Go for GitHub, you need to Update
 - Issue [#362](https://github.com/microsoft/AL-Go/issues/362) Support for EnableTaskScheduler
 - Issue [#360](https://github.com/microsoft/AL-Go/issues/360) Creating a release and deploying from a release branch
 - Issue [#371](https://github.com/microsoft/AL-Go/issues/371) 'No previous release found' for builds on release branches
+- Issue [#376](https://github.com/microsoft/AL-Go/issues/376) CICD jobs that are triggered by the pull request trigger run directly to an error if title contains quotes
 
 ### Release Branches
 **NOTE:** Release Branches are now only named after major.minor if the patch value is 0 in the release tag (which must be semver compatible)
@@ -22,10 +23,19 @@ This version contains a number of bug fixes to release branches, to ensure that 
 - Release was created on the right SHA, but the release branch was created on the wrong SHA
 
 Recommended branching strategy:
+
 ![Branching Strategy](Scenarios/images/branchingstrategy.png)
 
 ### New Settings
 New Project setting: EnableTaskScheduler in container executing tests and when setting up local development environment
+
+### Support for GitHub variables: ALGoOrgSettings and ALGoRepoSettings
+Recently, GitHub added support for variables, which you can define on your organization or your repository.
+AL-Go now supports that you can define a GitHub variable called ALGoOrgSettings, which will work for all repositories (with access to the variable)
+Org Settings will be applied before Repo settings and local repository settings files will override values in the org settings
+You can also define a variable called ALGoRepoSettings on the repository, which will be applied after reading the Repo Settings file in the repo
+Example for usage could be setup of branching strategies, versioning or an appDependencyProbingPaths to repositories which all repositories share.
+appDependencyProbingPaths from settings variables are merged together with appDependencyProbingPaths defined in repositories
 
 ### Refactoring and tests
 ReadSettings has been refactored to allow organization wide settings to be added as well. CI Tests have been added to cover ReadSettings.
