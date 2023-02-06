@@ -11,7 +11,6 @@
   "githubRunnerShell": "powershell",
   "UpdateGitHubGoSystemFilesSchedule": "0 0 * * *",
   "updateDependencies": true,
-  "sandboxContainersAreMultitenantByDefault": false,
   "cacheImageName": "",
   "DoNotRunBCPTTests": true,
   "assignPremiumPlan": true,
