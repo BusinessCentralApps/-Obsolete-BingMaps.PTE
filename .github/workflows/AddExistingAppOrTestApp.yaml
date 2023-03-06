@@ -36,13 +36,13 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
+        uses: microsoft/AL-Go-Actions/WorkflowInitialize@preview
         with:
           shell: pwsh
           eventId: "DO0090"
 
       - name: Add existing app
-        uses: freddydk/AL-Go-Actions/AddExistingApp@main
+        uses: microsoft/AL-Go-Actions/AddExistingApp@preview
         with:
           shell: pwsh
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
@@ -52,7 +52,7 @@ jobs:
 
       - name: Finalize the workflow
         if: always()
-        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
+        uses: microsoft/AL-Go-Actions/WorkflowPostProcess@preview
         with:
           shell: pwsh
           eventId: "DO0090"
