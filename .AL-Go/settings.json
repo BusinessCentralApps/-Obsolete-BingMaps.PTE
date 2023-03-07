@@ -2,6 +2,7 @@
   "country": "us",
   "VersioningStrategy": 16,
   "applicationDependency": "20.1.0.0",
+  "artifact": "//20.1.39764.40432/us",
   "appFolders": [
     "BingMaps"
   ],
