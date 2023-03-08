@@ -457,7 +457,6 @@ jobs:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           project: ${{ matrix.project }}
-          checkArtifactSetting: 'Y'
 
       - name: Read secrets
         uses: freddydk/AL-Go-Actions/ReadSecrets@perf
@@ -470,11 +469,11 @@ jobs:
           secrets: 'licenseFileUrl,insiderSasToken,codeSignCertificateUrl,codeSignCertificatePassword,keyVaultCertificateUrl,keyVaultCertificatePassword,keyVaultClientId,storageContext,gitHubPackagesContext'
 
       - name: Cache Business Central Artifacts
-        if: env.artifactCacheKey
+        if: env.artifact && !contains(env.artifact,'INSIDERSASTOKEN')
         uses: actions/cache@v3
         with:
           path: .artifactcache
-          key: ${{ env.artifactCacheKey }}
+          key: ${{ env.artifact }}
 
       - name: Run pipeline
         id: RunPipeline
