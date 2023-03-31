@@ -100,6 +100,16 @@ jobs:
           settingsJson: ${{ env.Settings }}
           secrets: 'licenseFileUrl,insiderSasToken,codeSignCertificateUrl,codeSignCertificatePassword,keyVaultCertificateUrl,keyVaultCertificatePassword,keyVaultClientId,gitHubPackagesContext'
 
+      - name: Determine ArtifactUrl
+        uses: freddydk/AL-Go-Actions/DetermineArtifactUrl@compilerfolder
+        id: determineArtifactUrl
+        with:
+          shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
+          parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
+          project: ${{ matrix.project }}
+          settingsJson: ${{ env.Settings }}
+          secretsJson: ${{ env.RepoSecrets }}
+
       - name: Run pipeline
         uses: freddydk/AL-Go-Actions/RunPipeline@compilerfolder
         env:
