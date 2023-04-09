@@ -226,7 +226,7 @@ jobs:
           secretsJson: ${{ env.RepoSecrets }}
 
       - name: Cache Business Central Artifacts
-        if: steps.determineArtifactUrl.outputs.ArtifactUrl && !contains(env.artifact,'INSIDERSASTOKEN')
+        if: env.useCompilerFolder == 'True' && steps.determineArtifactUrl.outputs.ArtifactUrl && !contains(env.artifact,'INSIDERSASTOKEN')
         uses: actions/cache@v3
         with:
           path: .artifactcache
