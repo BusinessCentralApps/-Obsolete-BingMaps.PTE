@@ -36,21 +36,21 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@compilerfolder
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@releasenotes
         with:
           shell: pwsh
           eventId: "DO0101"
 
       - name: Read settings
         id: ReadSettings
-        uses: freddydk/AL-Go-Actions/ReadSettings@compilerfolder
+        uses: freddydk/AL-Go-Actions/ReadSettings@releasenotes
         with:
           shell: pwsh
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           
       - name: Determine Projects To Build
         id: determineProjectsToBuild
-        uses: freddydk/AL-Go-Actions/DetermineProjectsToBuild@compilerfolder
+        uses: freddydk/AL-Go-Actions/DetermineProjectsToBuild@releasenotes
         with:
           shell: pwsh
           maxBuildDepth: ${{ env.workflowDepth }}
@@ -84,14 +84,14 @@ jobs:
           path: '${{ github.workspace }}\.dependencies'
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@compilerfolder
+        uses: freddydk/AL-Go-Actions/ReadSettings@releasenotes
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           project: ${{ matrix.project }}
 
       - name: Read secrets
-        uses: freddydk/AL-Go-Actions/ReadSecrets@compilerfolder
+        uses: freddydk/AL-Go-Actions/ReadSecrets@releasenotes
         env:
           secrets: ${{ toJson(secrets) }}
         with:
@@ -101,7 +101,7 @@ jobs:
           secrets: 'licenseFileUrl,insiderSasToken,codeSignCertificateUrl,codeSignCertificatePassword,keyVaultCertificateUrl,keyVaultCertificatePassword,keyVaultClientId,gitHubPackagesContext'
 
       - name: Determine ArtifactUrl
-        uses: freddydk/AL-Go-Actions/DetermineArtifactUrl@compilerfolder
+        uses: freddydk/AL-Go-Actions/DetermineArtifactUrl@releasenotes
         id: determineArtifactUrl
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
@@ -110,7 +110,7 @@ jobs:
           secretsJson: ${{ env.RepoSecrets }}
 
       - name: Run pipeline
-        uses: freddydk/AL-Go-Actions/RunPipeline@compilerfolder
+        uses: freddydk/AL-Go-Actions/RunPipeline@releasenotes
         env:
           BuildMode: ${{ matrix.buildMode }}
         with:
@@ -124,7 +124,7 @@ jobs:
 
       - name: Calculate Artifact names
         id: calculateArtifactsNames
-        uses: freddydk/AL-Go-Actions/CalculateArtifactNames@compilerfolder
+        uses: freddydk/AL-Go-Actions/CalculateArtifactNames@releasenotes
         if: success() || failure()
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
@@ -187,7 +187,7 @@ jobs:
       - name: Analyze Test Results
         id: analyzeTestResults
         if: success() || failure()
-        uses: freddydk/AL-Go-Actions/AnalyzeTests@compilerfolder
+        uses: freddydk/AL-Go-Actions/AnalyzeTests@releasenotes
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
@@ -195,7 +195,7 @@ jobs:
 
       - name: Cleanup
         if: always()
-        uses: freddydk/AL-Go-Actions/PipelineCleanup@compilerfolder
+        uses: freddydk/AL-Go-Actions/PipelineCleanup@releasenotes
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
@@ -211,7 +211,7 @@ jobs:
 
       - name: Finalize the workflow
         id: PostProcess
-        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@compilerfolder
+        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@releasenotes
         with:
           shell: pwsh
           eventId: "DO0101"
