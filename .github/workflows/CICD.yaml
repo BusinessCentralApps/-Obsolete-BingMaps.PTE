@@ -7,11 +7,7 @@ on:
       - '**.md'
       - '.github/workflows/*.yaml'
       - '!.github/workflows/CICD.yaml'
-    branches:
-      - 'main'
-      - 'release/*'
-      - 'releases/*'
-      - 'feature/*'
+    branches: [ 'main', 'release/*', 'feature/*' ]
 
 defaults:
   run:
