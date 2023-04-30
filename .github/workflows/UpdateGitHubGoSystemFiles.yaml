@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       templateUrl:
-        description: Template Repository URL (current is https://github.com/freddydk/AL-Go-PTE@releasenotes)
+        description: Template Repository URL (current is https://github.com/freddydk/AL-Go-PTE@issue497)
         required: false
         default: ''
       directCommit:
@@ -34,20 +34,20 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@releasenotes
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@issue497
         with:
           shell: powershell
           eventId: "DO0098"
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@releasenotes
+        uses: freddydk/AL-Go-Actions/ReadSettings@issue497
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           get: keyVaultName,ghTokenWorkflowSecretName,templateUrl
 
       - name: Read secrets
-        uses: freddydk/AL-Go-Actions/ReadSecrets@releasenotes
+        uses: freddydk/AL-Go-Actions/ReadSecrets@issue497
         env:
           secrets: ${{ toJson(secrets) }}
         with:
@@ -84,7 +84,7 @@ jobs:
           Add-Content -Path $env:GITHUB_ENV -Value "DirectCommit=$directCommit"
 
       - name: Update AL-Go system files
-        uses: freddydk/AL-Go-Actions/CheckForUpdates@releasenotes
+        uses: freddydk/AL-Go-Actions/CheckForUpdates@issue497
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
@@ -95,7 +95,7 @@ jobs:
 
       - name: Finalize the workflow
         if: always()
-        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@releasenotes
+        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@issue497
         with:
           shell: powershell
           eventId: "DO0098"
