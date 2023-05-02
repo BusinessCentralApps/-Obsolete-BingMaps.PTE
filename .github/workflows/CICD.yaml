@@ -46,14 +46,14 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@linux
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@publish
         with:
           shell: pwsh
           eventId: "DO0091"
 
       - name: Read settings
         id: ReadSettings
-        uses: freddydk/AL-Go-Actions/ReadSettings@linux
+        uses: freddydk/AL-Go-Actions/ReadSettings@publish
         with:
           shell: pwsh
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
@@ -61,7 +61,7 @@ jobs:
           
       - name: Determine Projects To Build
         id: determineProjectsToBuild
-        uses: freddydk/AL-Go-Actions/DetermineProjectsToBuild@linux
+        uses: freddydk/AL-Go-Actions/DetermineProjectsToBuild@publish
         with:
           shell: pwsh
           maxBuildDepth: ${{ env.workflowDepth }}
@@ -80,7 +80,7 @@ jobs:
           Add-Content -Path $env:GITHUB_OUTPUT -Value "Secrets=$($deliveryTargetSecrets -join ',')"
 
       - name: Read secrets
-        uses: freddydk/AL-Go-Actions/ReadSecrets@linux
+        uses: freddydk/AL-Go-Actions/ReadSecrets@publish
         env:
           secrets: ${{ toJson(secrets) }}
         with:
@@ -155,14 +155,14 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@linux
+        uses: freddydk/AL-Go-Actions/ReadSettings@publish
         with:
           shell: pwsh
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           get: templateUrl
 
       - name: Check for updates to AL-Go system files
-        uses: freddydk/AL-Go-Actions/CheckForUpdates@linux
+        uses: freddydk/AL-Go-Actions/CheckForUpdates@publish
         with:
           shell: pwsh
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
@@ -199,14 +199,14 @@ jobs:
           path: '.dependencies'
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@linux
+        uses: freddydk/AL-Go-Actions/ReadSettings@publish
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           project: ${{ matrix.project }}
 
       - name: Read secrets
-        uses: freddydk/AL-Go-Actions/ReadSecrets@linux
+        uses: freddydk/AL-Go-Actions/ReadSecrets@publish
         env:
           secrets: ${{ toJson(secrets) }}
         with:
@@ -216,7 +216,7 @@ jobs:
           secrets: 'licenseFileUrl,insiderSasToken,codeSignCertificateUrl,codeSignCertificatePassword,keyVaultCertificateUrl,keyVaultCertificatePassword,keyVaultClientId,storageContext,gitHubPackagesContext'
 
       - name: Determine ArtifactUrl
-        uses: freddydk/AL-Go-Actions/DetermineArtifactUrl@linux
+        uses: freddydk/AL-Go-Actions/DetermineArtifactUrl@publish
         id: determineArtifactUrl
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
@@ -233,7 +233,7 @@ jobs:
 
       - name: Run pipeline
         id: RunPipeline
-        uses: freddydk/AL-Go-Actions/RunPipeline@linux
+        uses: freddydk/AL-Go-Actions/RunPipeline@publish
         env:
           BuildMode: ${{ matrix.buildMode }}
         with:
@@ -247,7 +247,7 @@ jobs:
 
       - name: Calculate Artifact names
         id: calculateArtifactsNames
-        uses: freddydk/AL-Go-Actions/CalculateArtifactNames@linux
+        uses: freddydk/AL-Go-Actions/CalculateArtifactNames@publish
         if: success() || failure()
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
@@ -333,7 +333,7 @@ jobs:
       - name: Analyze Test Results
         id: analyzeTestResults
         if: success() || failure()
-        uses: freddydk/AL-Go-Actions/AnalyzeTests@linux
+        uses: freddydk/AL-Go-Actions/AnalyzeTests@publish
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
@@ -341,7 +341,7 @@ jobs:
 
       - name: Cleanup
         if: always()
-        uses: freddydk/AL-Go-Actions/PipelineCleanup@linux
+        uses: freddydk/AL-Go-Actions/PipelineCleanup@publish
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
@@ -373,12 +373,12 @@ jobs:
           Add-Content -Path $env:GITHUB_OUTPUT -Value "envName=$envName"
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@linux
+        uses: freddydk/AL-Go-Actions/ReadSettings@publish
         with:
           shell: pwsh
 
       - name: Read secrets
-        uses: freddydk/AL-Go-Actions/ReadSecrets@linux
+        uses: freddydk/AL-Go-Actions/ReadSecrets@publish
         env:
           secrets: ${{ toJson(secrets) }}
         with:
@@ -461,7 +461,7 @@ jobs:
           Write-Host "projects=$projects"
 
       - name: Deploy
-        uses: freddydk/AL-Go-Actions/Deploy@linux
+        uses: freddydk/AL-Go-Actions/Deploy@publish
         env:
           AuthContext: ${{ steps.authContext.outputs.authContext }}
         with:
@@ -490,12 +490,12 @@ jobs:
           path: '.artifacts'
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@linux
+        uses: freddydk/AL-Go-Actions/ReadSettings@publish
         with:
           shell: pwsh
 
       - name: Read secrets
-        uses: freddydk/AL-Go-Actions/ReadSecrets@linux
+        uses: freddydk/AL-Go-Actions/ReadSecrets@publish
         env:
           secrets: ${{ toJson(secrets) }}
         with:
@@ -514,7 +514,7 @@ jobs:
           Write-Host "deliveryContext=$deliveryContext"
 
       - name: Deliver
-        uses: freddydk/AL-Go-Actions/Deliver@linux
+        uses: freddydk/AL-Go-Actions/Deliver@publish
         env:
           deliveryContext: ${{ steps.deliveryContext.outputs.deliveryContext }}
         with:
@@ -534,7 +534,7 @@ jobs:
 
       - name: Finalize the workflow
         id: PostProcess
-        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@linux
+        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@publish
         with:
           shell: pwsh
           eventId: "DO0091"
