@@ -34,7 +34,7 @@ jobs:
           lfs: true
           ref: refs/pull/${{ github.event.number }}/merge
 
-      - uses: freddydk/AL-Go-Actions/VerifyPRChanges@issue497
+      - uses: freddydk/AL-Go-Actions/VerifyPRChanges@publish
         with:
           baseSHA: ${{ github.event.pull_request.base.sha }}
           headSHA: ${{ github.event.pull_request.head.sha }}
@@ -61,14 +61,14 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@issue497
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@publish
         with:
           shell: powershell
           eventId: "DO0104"
 
       - name: Read settings
         id: ReadSettings
-        uses: freddydk/AL-Go-Actions/ReadSettings@issue497
+        uses: freddydk/AL-Go-Actions/ReadSettings@publish
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
@@ -76,7 +76,7 @@ jobs:
           
       - name: Determine Projects To Build
         id: determineProjectsToBuild
-        uses: freddydk/AL-Go-Actions/DetermineProjectsToBuild@issue497
+        uses: freddydk/AL-Go-Actions/DetermineProjectsToBuild@publish
         with:
           shell: powershell
           maxBuildDepth: ${{ env.workflowDepth }}
@@ -113,14 +113,14 @@ jobs:
           path: '.dependencies'
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@issue497
+        uses: freddydk/AL-Go-Actions/ReadSettings@publish
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           project: ${{ matrix.project }}
 
       - name: Read secrets
-        uses: freddydk/AL-Go-Actions/ReadSecrets@issue497
+        uses: freddydk/AL-Go-Actions/ReadSecrets@publish
         env:
           secrets: ${{ toJson(secrets) }}
         with:
@@ -130,7 +130,7 @@ jobs:
           secrets: 'licenseFileUrl,insiderSasToken,keyVaultCertificateUrl,keyVaultCertificatePassword,keyVaultClientId,gitHubPackagesContext'
 
       - name: Determine ArtifactUrl
-        uses: freddydk/AL-Go-Actions/DetermineArtifactUrl@issue497
+        uses: freddydk/AL-Go-Actions/DetermineArtifactUrl@publish
         id: determineArtifactUrl
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
@@ -147,7 +147,7 @@ jobs:
 
       - name: Run pipeline
         id: RunPipeline
-        uses: freddydk/AL-Go-Actions/RunPipeline@issue497
+        uses: freddydk/AL-Go-Actions/RunPipeline@publish
         env:
           BuildMode: ${{ matrix.buildMode }}
         with:
@@ -161,7 +161,7 @@ jobs:
 
       - name: Calculate Artifact names
         id: calculateArtifactsNames
-        uses: freddydk/AL-Go-Actions/CalculateArtifactNames@issue497
+        uses: freddydk/AL-Go-Actions/CalculateArtifactNames@publish
         if: success() || failure()
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
@@ -223,7 +223,7 @@ jobs:
       - name: Analyze Test Results
         id: analyzeTestResults
         if: success() || failure()
-        uses: freddydk/AL-Go-Actions/AnalyzeTests@issue497
+        uses: freddydk/AL-Go-Actions/AnalyzeTests@publish
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
@@ -231,7 +231,7 @@ jobs:
 
       - name: Cleanup
         if: always()
-        uses: freddydk/AL-Go-Actions/PipelineCleanup@issue497
+        uses: freddydk/AL-Go-Actions/PipelineCleanup@publish
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
@@ -250,7 +250,7 @@ jobs:
 
       - name: Finalize the workflow
         id: PostProcess
-        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@issue497
+        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@publish
         with:
           shell: powershell
           eventId: "DO0104"
