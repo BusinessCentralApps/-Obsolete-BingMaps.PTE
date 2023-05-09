@@ -10,7 +10,6 @@
   "githubRunner": "windows-latest",
   "githubRunnerShell": "pwsh",
   "doNotSignApps": true,
-  "vsixFile": "https://bcartifacts.blob.core.windows.net/prerequisites/al-12.0.0-marketplace.vsix",
   "UpdateGitHubGoSystemFilesSchedule": "0 0 * * *",
   "updateDependencies": true,
   "cacheImageName": "",
