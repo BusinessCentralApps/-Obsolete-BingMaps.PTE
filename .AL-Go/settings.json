@@ -3,7 +3,8 @@
   "VersioningStrategy": 16,
   "applicationDependency": "20.1.0.0",
   "appFolders": [
-    "BingMaps"
+    "BingMaps",
+    "empty"
   ],
   "testFolders": [
     "BingMaps.Test"
