@@ -17,12 +17,14 @@ on:
         default: ''
       prerelease:
         description: Prerelease (Y/N)
-        required: false
+        required: true
+        default: 'N'
         type: choice
-        options: ['Yes', 'No']
+        options: ['Y', 'N']
       draft:
         description: Draft (Y/N)
-        required: false
+        required: true
+        default: 'No'
         type: choice
         options: ['Yes', 'No']
       createReleaseBranch:
