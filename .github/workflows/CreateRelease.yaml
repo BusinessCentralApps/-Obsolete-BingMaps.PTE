@@ -18,11 +18,13 @@ on:
       prerelease:
         description: Prerelease (Y/N)
         required: false
-        type: boolean
+        type: choice
+        options: ['Yes', 'No']
       draft:
         description: Draft (Y/N)
         required: false
-        default: 'N'
+        type: choice
+        options: ['Yes', 'No']
       createReleaseBranch:
         description: Create Release Branch (Y/N)
         required: false
