@@ -18,7 +18,7 @@ on:
       prerelease:
         description: Prerelease (Y/N)
         required: false
-        default: 'N'
+        type: boolean
       draft:
         description: Draft (Y/N)
         required: false
@@ -34,7 +34,7 @@ on:
       directCommit:
         description: Direct COMMIT (Y/N)
         required: false
-        default: 'N'
+        type: boolean
 
 permissions:
   contents: write
