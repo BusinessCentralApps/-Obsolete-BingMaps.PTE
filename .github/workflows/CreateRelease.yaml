@@ -17,16 +17,12 @@ on:
         default: ''
       prerelease:
         description: Prerelease (Y/N)
-        required: true
+        required: false
         default: 'N'
-        type: choice
-        options: ['Y', 'N']
       draft:
         description: Draft (Y/N)
-        required: true
-        default: 'No'
-        type: choice
-        options: ['Yes', 'No']
+        required: false
+        default: 'N'
       createReleaseBranch:
         description: Create Release Branch (Y/N)
         required: false
@@ -38,7 +34,7 @@ on:
       directCommit:
         description: Direct COMMIT (Y/N)
         required: false
-        type: boolean
+        default: 'N'
 
 permissions:
   contents: write
