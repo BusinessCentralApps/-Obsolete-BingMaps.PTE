@@ -43,15 +43,20 @@ jobs:
         id: init
         run: |
           $ErrorActionPreference = "STOP"
+          git status
           $scriptFile = 'AL-Go-Actions/WorkflowInitialize/WorkflowInitialize.ps1'
           . $scriptFile -eventId "DO0098"
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@linux
-        with:
-          shell: powershell
-          parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
-          get: keyVaultName,ghTokenWorkflowSecretName,templateUrl
+        env:
+          _parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
+          _get: 'keyVaultName,ghTokenWorkflowSecretName,templateUrl'
+        run: |
+          $ErrorActionPreference = "STOP"
+          git status
+          $scriptFile = 'AL-Go-Actions//ReadSettings//ReadSettings.ps1'
+          . $scriptFile -parentTelemetryScopeJson $env:_parentTelemetryScopeJson -get $env:_get
+
 
       - name: Read secrets
         uses: freddydk/AL-Go-Actions/ReadSecrets@linux
