@@ -32,13 +32,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Download Actions
+        run: |
+          $ErrorActionPreference = "STOP"
+          git clone https://github.com/freddydk/AL-Go-Actions.git
+          Set-Location -Path AL-Go-Actions
+          git checkout linux
+
       - name: Initialize the workflow
         id: init
         run: |
           $ErrorActionPreference = "STOP"
-          $scriptUrl = 'https://raw.githubusercontent.com/freddydk/AL-Go-Actions/linux/WorkflowInitialize/WorkflowInitialize.ps1'
-          $scriptFile = "$([System.IO.Path]::GetTempFileName()).ps1"
-          Invoke-WebRequest -useBasicParsing -Uri $scriptUrl -OutFile $scriptFile
+          $scriptFile = 'AL-Go-Actions/WorkflowInitialize/WorkflowInitialize.ps1'
           . $scriptFile -eventId "DO0098"
 
       - name: Read settings
