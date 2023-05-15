@@ -43,9 +43,9 @@ jobs:
         id: init
         run: |
           $ErrorActionPreference = "STOP"
-          git status
-          $scriptFile = 'AL-Go-Actions/WorkflowInitialize/WorkflowInitialize.ps1'
-          . $scriptFile -eventId "DO0098"
+          Set-Location -Path AL-Go-Actions
+          git checkout linux
+          . 'WorkflowInitialize/WorkflowInitialize.ps1' -eventId "DO0098"
 
       - name: Read settings
         env:
@@ -53,20 +53,21 @@ jobs:
           _get: 'keyVaultName,ghTokenWorkflowSecretName,templateUrl'
         run: |
           $ErrorActionPreference = "STOP"
-          git status
-          $scriptFile = 'AL-Go-Actions//ReadSettings//ReadSettings.ps1'
-          . $scriptFile -parentTelemetryScopeJson $env:_parentTelemetryScopeJson -get $env:_get
-
+          Set-Location -Path AL-Go-Actions
+          git checkout linux
+          . 'ReadSettings/ReadSettings.ps1' -parentTelemetryScopeJson $env:_parentTelemetryScopeJson -get $env:_get
 
       - name: Read secrets
-        uses: freddydk/AL-Go-Actions/ReadSecrets@linux
         env:
           secrets: ${{ toJson(secrets) }}
-        with:
-          shell: powershell
-          parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
-          settingsJson: ${{ env.Settings }}
-          secrets: 'ghTokenWorkflow=${{ env.GHTOKENWORKFLOWSECRETNAME }}'
+          _parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
+          _settingsJson: ${{ env.Settings }}
+          _secrets: 'ghTokenWorkflow=${{ env.GHTOKENWORKFLOWSECRETNAME }}'
+        run: |
+          $ErrorActionPreference = "STOP"
+          Set-Location -Path AL-Go-Actions
+          git checkout linux
+          . 'ReadSecrets/ReadSecrets.ps1' -parentTelemetryScopeJson $env:_parentTelemetryScopeJson -settingsJson $env:_settingsJson -secrets $env:_secrets
 
       - name: Override templateUrl
         env:
