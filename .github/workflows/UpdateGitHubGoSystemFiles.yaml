@@ -36,9 +36,10 @@ jobs:
         id: init
         run: |
           $ErrorActionPreference = "STOP"
+          $scriptUrl = 'https://raw.githubusercontent.com/freddydk/AL-Go-Actions/linux/WorkflowInitialize/WorkflowInitialize.ps1'
           $scriptFile = "$([System.IO.Path]::GetTempFileName()).ps1"
-          Invoke-WebRequest -useBasicParsing -Uri 'https://raw.githubusercontent.com/freddydk/AL-Go-Actions/linux/WorkflowInitialize/WorkflowInitialize.ps1' -OutFile $scriptFile
-          . $scriptFile -args "DO0098"
+          Invoke-WebRequest -useBasicParsing -Uri $scriptUrl -OutFile $scriptFile
+          . $scriptFile -eventId "DO0098"
 
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@linux
