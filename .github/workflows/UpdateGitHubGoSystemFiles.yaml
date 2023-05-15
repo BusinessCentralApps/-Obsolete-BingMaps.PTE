@@ -34,10 +34,9 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@linux
-        with:
-          shell: powershell
-          eventId: "DO0098"
+        run: |
+          $script = 'https://raw.githubusercontent.com/freddydk/AL-Go-Actions/linux/WorkflowInitialize/WorkflowInitialize.ps1'
+          invoke-expression ((new-object net.webclient).DownloadString($script)) -args "DO0098"
 
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@linux
