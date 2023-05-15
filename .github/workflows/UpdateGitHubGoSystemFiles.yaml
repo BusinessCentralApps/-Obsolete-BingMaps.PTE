@@ -35,8 +35,10 @@ jobs:
       - name: Initialize the workflow
         id: init
         run: |
-          $script = 'https://raw.githubusercontent.com/freddydk/AL-Go-Actions/linux/WorkflowInitialize/WorkflowInitialize.ps1'
-          invoke-expression ((new-object net.webclient).DownloadString($script)) -args "DO0098"
+          $ErrorActionPreference = "STOP"
+          $scriptFile = "$([System.IO.Path]::GetTempFileName()).ps1"
+          Invoke-WebRequest -useBasicParsing -Uri 'https://raw.githubusercontent.com/freddydk/AL-Go-Actions/linux/WorkflowInitialize/WorkflowInitialize.ps1' -OutFile $scriptFile
+          . $scriptFile -args "DO0098"
 
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@linux
