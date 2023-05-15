@@ -11,8 +11,6 @@ on:
         description: Direct COMMIT (Y/N)
         required: false
         default: 'N'
-  schedule:
-    - cron: '0 0 * * *'
 
 permissions:
   contents: read
@@ -26,48 +24,42 @@ env:
   ALGoRepoSettings: ${{ vars.ALGoRepoSettings }}
 
 jobs:
-  UpdateALGoSystemFiles:
+  UpdateALGoSystemFiles1:
+    uses: freddydk/AL-Go-Actions/.github/workflows/UpdateALGoSystemFiles.yaml@linux
+    with:
+      templateUrl: ${{ github.event.inputs.templateUrl }}
+      directCommit: ${{ github.event.inputs.directCommit }}
+
+  UpdateALGoSystemFiles2:
+    if: failure()
     runs-on: [ windows-latest ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Download Actions
-        run: |
-          $ErrorActionPreference = "STOP"
-          git clone https://github.com/freddydk/AL-Go-Actions.git
-          Set-Location -Path AL-Go-Actions
-          git checkout linux
-
       - name: Initialize the workflow
         id: init
-        run: |
-          $ErrorActionPreference = "STOP"
-          Set-Location -Path AL-Go-Actions
-          git checkout linux
-          . 'WorkflowInitialize/WorkflowInitialize.ps1' -eventId "DO0098"
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@linux
+        with:
+          shell: powershell
+          eventId: "DO0098"
 
       - name: Read settings
-        env:
-          _parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
-          _get: 'keyVaultName,ghTokenWorkflowSecretName,templateUrl'
-        run: |
-          $ErrorActionPreference = "STOP"
-          Set-Location -Path AL-Go-Actions
-          git checkout linux
-          . 'ReadSettings/ReadSettings.ps1' -parentTelemetryScopeJson $env:_parentTelemetryScopeJson -get $env:_get
+        uses: freddydk/AL-Go-Actions/ReadSettings@linux
+        with:
+          shell: powershell
+          parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
+          get: keyVaultName,ghTokenWorkflowSecretName,templateUrl
 
       - name: Read secrets
+        uses: freddydk/AL-Go-Actions/ReadSecrets@linux
         env:
           secrets: ${{ toJson(secrets) }}
-          _parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
-          _settingsJson: ${{ env.Settings }}
-          _secrets: 'ghTokenWorkflow=${{ env.GHTOKENWORKFLOWSECRETNAME }}'
-        run: |
-          $ErrorActionPreference = "STOP"
-          Set-Location -Path AL-Go-Actions
-          git checkout linux
-          . 'ReadSecrets/ReadSecrets.ps1' -parentTelemetryScopeJson $env:_parentTelemetryScopeJson -settingsJson $env:_settingsJson -secrets $env:_secrets
+        with:
+          shell: powershell
+          parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
+          settingsJson: ${{ env.Settings }}
+          secrets: 'ghTokenWorkflow=${{ env.GHTOKENWORKFLOWSECRETNAME }}'
 
       - name: Override templateUrl
         env:
