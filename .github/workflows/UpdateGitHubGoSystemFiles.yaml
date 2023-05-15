@@ -26,12 +26,13 @@ env:
 jobs:
   UpdateALGoSystemFiles1:
     uses: freddydk/AL-Go-Actions/.github/workflows/UpdateALGoSystemFiles.yaml@linux
+    secrets: inherit
     with:
       templateUrl: ${{ github.event.inputs.templateUrl }}
       directCommit: ${{ github.event.inputs.directCommit }}
 
   UpdateALGoSystemFiles2:
-    if: failure()
+    if: ${{ failure() }}
     runs-on: [ windows-latest ]
     steps:
       - name: Checkout
