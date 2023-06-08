@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       templateUrl:
-        description: Template Repository URL (current is https://github.com/freddydk/AL-Go-PTE@linux)
+        description: Template Repository URL (current is https://github.com/freddydk/AL-Go-PTE@cachekey)
         required: false
         default: ''
       directCommit:
@@ -24,15 +24,7 @@ env:
   ALGoRepoSettings: ${{ vars.ALGoRepoSettings }}
 
 jobs:
-  UpdateALGoSystemFiles1:
-    uses: freddydk/AL-Go-Actions/.github/workflows/UpdateALGoSystemFiles.yaml@linux
-    with:
-      templateUrl: ${{ github.event.inputs.templateUrl }}
-      directCommit: ${{ github.event.inputs.directCommit }}
-    secrets: inherit
-
-  UpdateALGoSystemFiles2:
-    if: ${{ failure() }}
+  UpdateALGoSystemFiles:
     runs-on: [ windows-latest ]
     steps:
       - name: Checkout
@@ -40,20 +32,20 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@linux
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@cachekey
         with:
           shell: powershell
           eventId: "DO0098"
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@linux
+        uses: freddydk/AL-Go-Actions/ReadSettings@cachekey
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           get: keyVaultName,ghTokenWorkflowSecretName,templateUrl
 
       - name: Read secrets
-        uses: freddydk/AL-Go-Actions/ReadSecrets@linux
+        uses: freddydk/AL-Go-Actions/ReadSecrets@cachekey
         env:
           secrets: ${{ toJson(secrets) }}
         with:
@@ -90,7 +82,7 @@ jobs:
           Add-Content -Path $env:GITHUB_ENV -Value "DirectCommit=$directCommit"
 
       - name: Update AL-Go system files
-        uses: freddydk/AL-Go-Actions/CheckForUpdates@linux
+        uses: freddydk/AL-Go-Actions/CheckForUpdates@cachekey
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
@@ -101,7 +93,7 @@ jobs:
 
       - name: Finalize the workflow
         if: always()
-        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@linux
+        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@cachekey
         with:
           shell: powershell
           eventId: "DO0098"
