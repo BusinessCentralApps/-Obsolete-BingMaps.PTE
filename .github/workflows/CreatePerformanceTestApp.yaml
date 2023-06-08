@@ -1,5 +1,7 @@
 name: 'Create a new performance test app'
 
+run-name: "Create a new performance test app in [${{ github.ref_name }}]"
+
 on:
   workflow_dispatch:
     inputs:
@@ -37,7 +39,7 @@ permissions:
 
 defaults:
   run:
-    shell: pwsh
+    shell: powershell
 
 env:
   ALGoOrgSettings: ${{ vars.ALGoOrgSettings }}
@@ -45,22 +47,22 @@ env:
 
 jobs:
   CreatePerformanceTestApp:
-    runs-on: [ ubuntu-latest ]
+    runs-on: [ windows-latest ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@linux
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@cachekey
         with:
-          shell: pwsh
+          shell: powershell
           eventId: "DO0102"
 
       - name: Creating a new test app
-        uses: freddydk/AL-Go-Actions/CreateApp@linux
+        uses: freddydk/AL-Go-Actions/CreateApp@cachekey
         with:
-          shell: pwsh
+          shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           project: ${{ github.event.inputs.project }}
           type: 'Performance Test App'
@@ -73,8 +75,8 @@ jobs:
 
       - name: Finalize the workflow
         if: always()
-        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@linux
+        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@cachekey
         with:
-          shell: pwsh
+          shell: powershell
           eventId: "DO0102"
           telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}

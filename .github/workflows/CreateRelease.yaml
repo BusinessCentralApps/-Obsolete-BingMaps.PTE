@@ -45,7 +45,7 @@ concurrency: release
 
 defaults:
   run:
-    shell: pwsh
+    shell: powershell
 
 env:
   ALGoOrgSettings: ${{ vars.ALGoOrgSettings }}
@@ -53,7 +53,7 @@ env:
 
 jobs:
   CreateRelease:
-    runs-on: [ ubuntu-latest ]
+    runs-on: [ windows-latest ]
     outputs:
       telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
       artifacts: ${{ steps.analyzeartifacts.outputs.artifacts }}
@@ -66,29 +66,29 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@linux
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@cachekey
         with:
-          shell: pwsh
+          shell: powershell
           eventId: "DO0094"
 
       - name: Read settings
         id: ReadSettings
-        uses: freddydk/AL-Go-Actions/ReadSettings@linux
+        uses: freddydk/AL-Go-Actions/ReadSettings@cachekey
         with:
-          shell: pwsh
+          shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           get: templateUrl,repoName
 
       - name: Determine Projects
         id: determineProjects
-        uses: freddydk/AL-Go-Actions/DetermineProjectsToBuild@linux
+        uses: freddydk/AL-Go-Actions/DetermineProjectsToBuild@cachekey
         with:
-          shell: pwsh
+          shell: powershell
 
       - name: Check for updates to AL-Go system files
-        uses: freddydk/AL-Go-Actions/CheckForUpdates@linux
+        uses: freddydk/AL-Go-Actions/CheckForUpdates@cachekey
         with:
-          shell: pwsh
+          shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           templateUrl: ${{ env.templateUrl }}
 
@@ -110,7 +110,7 @@ jobs:
           }
           do {
             $repoArtifacts = Invoke-WebRequest -UseBasicParsing -Headers $headers -Uri "$($ENV:GITHUB_API_URL)/repos/$($ENV:GITHUB_REPOSITORY)/actions/artifacts?per_page=100&page=$page" | ConvertFrom-Json
-            $allArtifacts += $repoArtifacts.Artifacts
+            $allArtifacts += $repoArtifacts.Artifacts | Where-Object { !$_.expired }
             $page++
           }
           while ($repoArtifacts.Artifacts.Count -gt 0)
@@ -171,9 +171,9 @@ jobs:
 
       - name: Prepare release notes
         id: createreleasenotes
-        uses: freddydk/AL-Go-Actions/CreateReleaseNotes@linux
+        uses: freddydk/AL-Go-Actions/CreateReleaseNotes@cachekey
         with:
-          shell: pwsh
+          shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           tag_name: ${{ github.event.inputs.tag }}
 
@@ -203,7 +203,7 @@ jobs:
             core.setOutput('releaseId', releaseId);
 
   UploadArtifacts:
-    runs-on: [ ubuntu-latest ]
+    runs-on: [ windows-latest ]
     needs: [ CreateRelease ]
     strategy:
       matrix: ${{ fromJson(needs.CreateRelease.outputs.artifacts) }}
@@ -213,17 +213,17 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@linux
+        uses: freddydk/AL-Go-Actions/ReadSettings@cachekey
         with:
-          shell: pwsh
+          shell: powershell
           parentTelemetryScopeJson: ${{ needs.CreateRelease.outputs.telemetryScopeJson }}
 
       - name: Read secrets
-        uses: freddydk/AL-Go-Actions/ReadSecrets@linux
+        uses: freddydk/AL-Go-Actions/ReadSecrets@cachekey
         env:
           secrets: ${{ toJson(secrets) }}
         with:
-          shell: pwsh
+          shell: powershell
           parentTelemetryScopeJson: ${{ needs.CreateRelease.outputs.telemetryScopeJson }}
           settingsJson: ${{ env.Settings }}
           secrets: 'nuGetContext,storageContext'
@@ -271,12 +271,12 @@ jobs:
           Add-Content -Path $env:GITHUB_OUTPUT -Value "nuGetContext=$nuGetContext"
 
       - name: Deliver to NuGet
-        uses: freddydk/AL-Go-Actions/Deliver@linux
+        uses: freddydk/AL-Go-Actions/Deliver@cachekey
         if: ${{ steps.nuGetContext.outputs.nuGetContext }}
         env:
           deliveryContext: ${{ steps.nuGetContext.outputs.nuGetContext }}
         with:
-          shell: pwsh
+          shell: powershell
           type: 'Release'
           projects: ${{ matrix.project }}
           deliveryTarget: 'NuGet'
@@ -296,12 +296,12 @@ jobs:
           Add-Content -Path $env:GITHUB_OUTPUT -Value "storageContext=$storageContext"
 
       - name: Deliver to Storage
-        uses: freddydk/AL-Go-Actions/Deliver@linux
+        uses: freddydk/AL-Go-Actions/Deliver@cachekey
         if: ${{ steps.storageContext.outputs.storageContext }}
         env:
           deliveryContext: ${{ steps.storageContext.outputs.storageContext }}
         with:
-          shell: pwsh
+          shell: powershell
           type: 'Release'
           projects: ${{ matrix.project }}
           deliveryTarget: 'Storage'
@@ -310,7 +310,7 @@ jobs:
 
   CreateReleaseBranch:
     if: ${{ github.event.inputs.createReleaseBranch=='Y' }}
-    runs-on: [ ubuntu-latest ]
+    runs-on: [ windows-latest ]
     needs: [ CreateRelease, UploadArtifacts ]
     steps:
       - name: Checkout
@@ -330,20 +330,20 @@ jobs:
 
   UpdateVersionNumber:
     if: ${{ github.event.inputs.updateVersionNumber!='' }}
-    runs-on: [ ubuntu-latest ]
+    runs-on: [ windows-latest ]
     needs: [ CreateRelease, UploadArtifacts ]
     steps:
       - name: Update Version Number
-        uses: freddydk/AL-Go-Actions/IncrementVersionNumber@linux
+        uses: freddydk/AL-Go-Actions/IncrementVersionNumber@cachekey
         with:
-          shell: pwsh
+          shell: powershell
           parentTelemetryScopeJson: ${{ needs.CreateRelease.outputs.telemetryScopeJson }}
           versionNumber: ${{ github.event.inputs.updateVersionNumber }}
           directCommit: ${{ github.event.inputs.directCommit }}
 
   PostProcess:
     if: always()
-    runs-on: [ ubuntu-latest ]
+    runs-on: [ windows-latest ]
     needs: [ CreateRelease, UploadArtifacts, CreateReleaseBranch, UpdateVersionNumber ]
     steps:
       - name: Checkout
@@ -351,8 +351,8 @@ jobs:
 
       - name: Finalize the workflow
         id: PostProcess
-        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@linux
+        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@cachekey
         with:
-          shell: pwsh
+          shell: powershell
           eventId: "DO0094"
           telemetryScopeJson: ${{ needs.CreateRelease.outputs.telemetryScopeJson }}
