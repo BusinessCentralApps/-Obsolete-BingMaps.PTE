@@ -4,13 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       templateUrl:
-        description: Template Repository URL (current is https://github.com/freddydk/AL-Go@devprocess)
+        description: Template Repository URL (current is https://github.com/microsoft/AL-Go-PTE@main)
         required: false
         default: ''
-      useCustomUpdateCode:
-        description: Set this to Y to use custom update code in subsequent runs of the Update AL-Go System Files. By default AL-Go will use the update code from microsoft/AL-Go-Actions/UpdateALGoSystemFiles
-        required: false
-        default: 'N'
       directCommit:
         description: Direct COMMIT (Y/N)
         required: false
@@ -38,20 +34,20 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go/Actions/WorkflowInitialize@devprocess
+        uses: microsoft/AL-Go-Actions/WorkflowInitialize@main
         with:
           shell: powershell
           eventId: "DO0098"
 
       - name: Read settings
-        uses: freddydk/AL-Go/Actions/ReadSettings@devprocess
+        uses: microsoft/AL-Go-Actions/ReadSettings@main
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           get: keyVaultName,ghTokenWorkflowSecretName,templateUrl
 
       - name: Read secrets
-        uses: freddydk/AL-Go/Actions/ReadSecrets@devprocess
+        uses: microsoft/AL-Go-Actions/ReadSecrets@main
         env:
           secrets: ${{ toJson(secrets) }}
         with:
@@ -88,9 +84,7 @@ jobs:
           Add-Content -Path $env:GITHUB_ENV -Value "DirectCommit=$directCommit"
 
       - name: Update AL-Go system files
-        uses: freddydk/AL-Go/Actions/CheckForUpdates@devprocess
-        env:
-          useCustomUpdateCode: ${{ github.event.inputs.useCustomUpdateCode }}
+        uses: microsoft/AL-Go-Actions/CheckForUpdates@main
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
@@ -98,11 +92,10 @@ jobs:
           Update: Y
           templateUrl: ${{ env.templateUrl }}
           directCommit: ${{ env.directCommit }}
-          useCustomUpdateCode: ${{ env.useCustomUpdateCode }}
 
       - name: Finalize the workflow
         if: always()
-        uses: freddydk/AL-Go/Actions/WorkflowPostProcess@devprocess
+        uses: microsoft/AL-Go-Actions/WorkflowPostProcess@main
         with:
           shell: powershell
           eventId: "DO0098"
