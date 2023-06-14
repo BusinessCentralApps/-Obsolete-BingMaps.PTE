@@ -7,10 +7,10 @@ on:
         description: Template Repository URL (current is https://github.com/freddydk/AL-Go@devprocess)
         required: false
         default: ''
-      useOwnUpdateCode:
-        description: Set this input to Y in order to make subsequent runs of Update AL-Go System Files use the new update code (rarely used)
+      useMSUpdateCode:
+        description: Set this to N to use private update code. By default subsequent updates will use the Microsoft Update Code from microsoft/AL-Go-Actions/UpdateALGoSystemFiles
         required: false
-        default: 'N'
+        default: 'Y'
       directCommit:
         description: Direct COMMIT (Y/N)
         required: false
@@ -90,7 +90,7 @@ jobs:
       - name: Update AL-Go system files
         uses: freddydk/AL-Go/Actions/CheckForUpdates@devprocess
         env:
-          useOwnUpdateCode: ${{ github.event.inputs.useOwnUpdateCode }}
+          useMSUpdateCode: ${{ github.event.inputs.useMSUpdateCode }}
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
@@ -98,7 +98,7 @@ jobs:
           Update: Y
           templateUrl: ${{ env.templateUrl }}
           directCommit: ${{ env.directCommit }}
-          useOwnUpdateCode: ${{ env.useOwnUpdateCode }}
+          useMSUpdateCode: ${{ env.useMSUpdateCode }}
 
       - name: Finalize the workflow
         if: always()
