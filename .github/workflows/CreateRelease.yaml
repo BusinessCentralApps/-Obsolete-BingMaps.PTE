@@ -66,14 +66,14 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@cachekey
+        uses: freddydk/AL-Go/Actions/WorkflowInitialize@devprocess
         with:
           shell: powershell
           eventId: "DO0094"
 
       - name: Read settings
         id: ReadSettings
-        uses: freddydk/AL-Go-Actions/ReadSettings@cachekey
+        uses: freddydk/AL-Go/Actions/ReadSettings@devprocess
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
@@ -81,12 +81,12 @@ jobs:
 
       - name: Determine Projects
         id: determineProjects
-        uses: freddydk/AL-Go-Actions/DetermineProjectsToBuild@cachekey
+        uses: freddydk/AL-Go/Actions/DetermineProjectsToBuild@devprocess
         with:
           shell: powershell
 
       - name: Check for updates to AL-Go system files
-        uses: freddydk/AL-Go-Actions/CheckForUpdates@cachekey
+        uses: freddydk/AL-Go/Actions/CheckForUpdates@devprocess
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
@@ -171,7 +171,7 @@ jobs:
 
       - name: Prepare release notes
         id: createreleasenotes
-        uses: freddydk/AL-Go-Actions/CreateReleaseNotes@cachekey
+        uses: freddydk/AL-Go/Actions/CreateReleaseNotes@devprocess
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
@@ -213,13 +213,13 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@cachekey
+        uses: freddydk/AL-Go/Actions/ReadSettings@devprocess
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ needs.CreateRelease.outputs.telemetryScopeJson }}
 
       - name: Read secrets
-        uses: freddydk/AL-Go-Actions/ReadSecrets@cachekey
+        uses: freddydk/AL-Go/Actions/ReadSecrets@devprocess
         env:
           secrets: ${{ toJson(secrets) }}
         with:
@@ -271,7 +271,7 @@ jobs:
           Add-Content -Path $env:GITHUB_OUTPUT -Value "nuGetContext=$nuGetContext"
 
       - name: Deliver to NuGet
-        uses: freddydk/AL-Go-Actions/Deliver@cachekey
+        uses: freddydk/AL-Go/Actions/Deliver@devprocess
         if: ${{ steps.nuGetContext.outputs.nuGetContext }}
         env:
           deliveryContext: ${{ steps.nuGetContext.outputs.nuGetContext }}
@@ -296,7 +296,7 @@ jobs:
           Add-Content -Path $env:GITHUB_OUTPUT -Value "storageContext=$storageContext"
 
       - name: Deliver to Storage
-        uses: freddydk/AL-Go-Actions/Deliver@cachekey
+        uses: freddydk/AL-Go/Actions/Deliver@devprocess
         if: ${{ steps.storageContext.outputs.storageContext }}
         env:
           deliveryContext: ${{ steps.storageContext.outputs.storageContext }}
@@ -334,7 +334,7 @@ jobs:
     needs: [ CreateRelease, UploadArtifacts ]
     steps:
       - name: Update Version Number
-        uses: freddydk/AL-Go-Actions/IncrementVersionNumber@cachekey
+        uses: freddydk/AL-Go/Actions/IncrementVersionNumber@devprocess
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ needs.CreateRelease.outputs.telemetryScopeJson }}
@@ -351,7 +351,7 @@ jobs:
 
       - name: Finalize the workflow
         id: PostProcess
-        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@cachekey
+        uses: freddydk/AL-Go/Actions/WorkflowPostProcess@devprocess
         with:
           shell: powershell
           eventId: "DO0094"
