@@ -5,7 +5,11 @@ on:
     paths-ignore:
       - '**.md'
     branches: [ 'main' ]
-
+  pull_request:
+    paths-ignore:
+      - '**.md'
+    branches: [ 'main' ]
+  
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
   cancel-in-progress: true
