@@ -14,6 +14,9 @@
     },
     {
       "path": "empty"
+    },
+    {
+      "path": "new app2"
     }
   ],
   "settings": {}
