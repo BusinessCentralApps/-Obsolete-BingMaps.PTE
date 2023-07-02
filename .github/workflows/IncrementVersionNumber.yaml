@@ -65,11 +65,23 @@ jobs:
           settingsJson: ${{ env.Settings }}
           secrets: 'ghTokenWorkflow=${{ env.GHTOKENWORKFLOWSECRETNAME }}'
 
+      - name: CalculateToken
+        id: CalculateToken
+        env:
+          useGhTokenWorkflow: ${{ github.event.inputs.useGhTokenWorkflow }}
+        run: |
+          if ($env:useGhTokenWorkflow -eq 'true') {
+            $ghToken = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($env:GHTOKENWORKFLOW))
+          } else {
+            $ghToken = $env:GITHUB_TOKEN
+          }
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "ghToken=$ghToken"
+
       - name: Increment Version Number
         uses: freddydk/AL-Go/Actions/IncrementVersionNumber@issue555
         with:
           shell: powershell
-          token: ${{ github.event.inputs.useGhTokenWorkflow == 'true' && env.GhTokenWorkflow || env.GITHUB_TOKEN }}
+          token: ${{ steps.CalculateToken.outputs.ghToken }}
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           project: ${{ github.event.inputs.project }}
           versionNumber: ${{ github.event.inputs.versionNumber }}
