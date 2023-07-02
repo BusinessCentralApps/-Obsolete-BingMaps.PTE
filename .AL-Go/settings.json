@@ -10,7 +10,6 @@
   "testFolders": [
     "BingMaps.Test"
   ],
-  "bcptTestFolders": [
-  ],
-  "RepoVersion": "4.4"
+  "bcptTestFolders": [],
+  "RepoVersion": "4.5"
 }
