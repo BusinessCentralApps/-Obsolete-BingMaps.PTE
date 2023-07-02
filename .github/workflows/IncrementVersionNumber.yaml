@@ -16,7 +16,10 @@ on:
         description: Direct COMMIT (Y/N)
         required: false
         default: 'N'
-
+      useGhTokenWorkflow:
+        description: Use GhTokenWorkflow
+        type: boolean
+  
 permissions:
   contents: write
   pull-requests: write
@@ -43,10 +46,30 @@ jobs:
           shell: powershell
           eventId: "DO0096"
 
+      - name: Read settings
+        uses: freddydk/AL-Go/Actions/ReadSettings@issue555
+        if: github.event.inputs.useGhTokenWorkflow == 'true'
+        with:
+          shell: powershell
+          parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
+          get: ghTokenWorkflowSecretName
+
+      - name: Read secrets
+        uses: freddydk/AL-Go/Actions/ReadSecrets@issue555
+        if: github.event.inputs.useGhTokenWorkflow == 'true'
+        env:
+          secrets: ${{ toJson(secrets) }}
+        with:
+          shell: powershell
+          parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
+          settingsJson: ${{ env.Settings }}
+          secrets: 'ghTokenWorkflow=${{ env.GHTOKENWORKFLOWSECRETNAME }}'
+
       - name: Increment Version Number
         uses: freddydk/AL-Go/Actions/IncrementVersionNumber@issue555
         with:
           shell: powershell
+          token: ${{ github.event.inputs.useGhTokenWorkflow == 'true' && env.GhTokenWorkflow || env.GITHUB_TOKEN }}
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           project: ${{ github.event.inputs.project }}
           versionNumber: ${{ github.event.inputs.versionNumber }}
