@@ -5,12 +5,12 @@
   "artifact": "https://bcartifacts.azureedge.net/sandbox/20.1.39764.40432/us",
   "appFolders": [
     "BingMaps",
-    "empty"
+    "empty",
+    "Test1"
   ],
   "testFolders": [
     "BingMaps.Test"
   ],
-  "bcptTestFolders": [
-  ],
+  "bcptTestFolders": [],
   "RepoVersion": "4.4"
 }
