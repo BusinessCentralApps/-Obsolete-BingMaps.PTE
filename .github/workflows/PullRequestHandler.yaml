@@ -5,11 +5,7 @@ on:
     paths-ignore:
       - '**.md'
     branches: [ 'main' ]
-  pull_request:
-    paths-ignore:
-      - '**.md'
-    branches: [ 'main' ]
-  
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
   cancel-in-progress: true
@@ -38,7 +34,7 @@ jobs:
           lfs: true
           ref: refs/pull/${{ github.event.number }}/merge
 
-      - uses: freddydk/AL-Go/Actions/VerifyPRChanges@issue558
+      - uses: freddydk/AL-Go/Actions/VerifyPRChanges@issue555
         with:
           baseSHA: ${{ github.event.pull_request.base.sha }}
           headSHA: ${{ github.event.pull_request.head.sha }}
@@ -66,14 +62,14 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go/Actions/WorkflowInitialize@issue558
+        uses: freddydk/AL-Go/Actions/WorkflowInitialize@issue555
         with:
           shell: powershell
           eventId: "DO0104"
 
       - name: Read settings
         id: ReadSettings
-        uses: freddydk/AL-Go/Actions/ReadSettings@issue558
+        uses: freddydk/AL-Go/Actions/ReadSettings@issue555
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
@@ -86,7 +82,7 @@ jobs:
           
       - name: Determine Projects To Build
         id: determineProjectsToBuild
-        uses: freddydk/AL-Go/Actions/DetermineProjectsToBuild@issue558
+        uses: freddydk/AL-Go/Actions/DetermineProjectsToBuild@issue555
         with:
           shell: powershell
           maxBuildDepth: ${{ env.workflowDepth }}
@@ -125,7 +121,7 @@ jobs:
 
       - name: Finalize the workflow
         id: PostProcess
-        uses: freddydk/AL-Go/Actions/WorkflowPostProcess@issue558
+        uses: freddydk/AL-Go/Actions/WorkflowPostProcess@issue555
         with:
           shell: powershell
           eventId: "DO0104"
