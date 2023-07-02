@@ -6,7 +6,9 @@
   "appFolders": [
     "BingMaps",
     "empty",
-    "Test4"
+    "Test4",
+    "Default App Name",
+    "Default Base App Name"
   ],
   "testFolders": [
     "BingMaps.Test"

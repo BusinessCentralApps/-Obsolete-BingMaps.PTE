@@ -1,0 +1,45 @@
+﻿{
+    "id":  "00000000-0000-0000-0000-000000000001",
+    "name":  "Default App Name",
+    "publisher":  "Default Publisher",
+    "version":  "2.0.13019.0",
+    "brief":  "",
+    "description":  "",
+    "platform":  "17.0.0.0",
+    "application":  "17.0.0.0",
+    "runtime":  "6.0",
+    "logo":  "",
+    "url":  "",
+    "EULA":  "",
+    "privacyStatement":  "",
+    "help":  "",
+    "target":  "Extension",
+    "screenshots":  [
+
+                    ],
+    "dependencies":  [
+                         {
+                             "id":  "00000000-0000-0000-0000-000000000003",
+                             "publisher":  "Default Publisher",
+                             "name":  "Default Base App Name",
+                             "version":  "2.0.0.0"
+                         }
+                     ],
+    "idRanges":  [
+                     {
+                         "from":  50100,
+                         "to":  50149
+                     }
+                 ],
+    "features":  [
+
+                 ],
+    "showMyCode":  true,
+    "applicationInsightsKey":  "00000000-0000-0000-0000-000000000000",
+    "internalsVisibleTo":  [
+
+                           ],
+    "keyVaultUrls":  [
+
+                     ]
+}
