@@ -17,9 +17,9 @@ on:
         required: false
         default: 'N'
       useGhTokenWorkflow:
-        description: Use GhTokenWorkflow
+        description: Use GhTokenWorkflow for Pull Request/COMMIT
         type: boolean
-  
+
 permissions:
   contents: write
   pull-requests: write
@@ -47,7 +47,7 @@ jobs:
           eventId: "DO0096"
 
       - name: Read settings
-        uses: freddydk/AL-Go/Actions/ReadSettings@issue555
+        uses: freddydk/AL-Go/Actions/ReadSettings@main
         if: github.event.inputs.useGhTokenWorkflow == 'true'
         with:
           shell: powershell
@@ -55,7 +55,7 @@ jobs:
           get: keyVaultName,ghTokenWorkflowSecretName
 
       - name: Read secrets
-        uses: freddydk/AL-Go/Actions/ReadSecrets@issue555
+        uses: freddydk/AL-Go/Actions/ReadSecrets@main
         if: github.event.inputs.useGhTokenWorkflow == 'true'
         env:
           secrets: ${{ toJson(secrets) }}
