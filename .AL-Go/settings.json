@@ -9,7 +9,11 @@
   "testFolders": [
     "BingMaps.Test"
   ],
-  "bcptTestFolders": [],
+  "bcptTestFolders": [
+    "BingMaps.PerformanceTest"
+  ],
   "RepoVersion": "4.4",
-  "InstallApps": [ ".installApps/test.app" ]
+  "InstallApps": [
+    ".installApps/test.app"
+  ]
 }

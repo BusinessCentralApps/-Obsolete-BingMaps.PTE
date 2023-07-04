@@ -1,0 +1,36 @@
+{
+  "id": "fd6f0bc6-8e7c-4a39-9397-ee412e1c965d",
+  "name": "BingMaps.PerformanceTest",
+  "publisher": "Freddy",
+  "version": "1.0.0.0",
+  "brief": "Performance Toolkit Samples (US)",
+  "description": "This extension provides tests that simulate business processes, such as creating sales orders, for the Business Central Performance Toolkit. Developers can use these to test for performance regressions during development.",
+  "platform": "20.0.0.0",
+  "application": "20.1.0.0",
+  "runtime": "9.1",
+  "logo": "",
+  "url": "",
+  "EULA": "",
+  "privacyStatement": "",
+  "help": "",
+  "target": "Cloud",
+  "screenshots": [],
+  "dependencies": [
+    {
+      "id": "75f1590f-55c5-4501-ae63-bada5534e852",
+      "publisher": "Microsoft",
+      "name": "Performance Toolkit",
+      "version": "20.1.0.0"
+    }
+  ],
+  "idRanges": [
+    {
+      "from": 50000,
+      "to": 99999
+    }
+  ],
+  "features": [],
+  "resourceExposurePolicy": {},
+  "internalsVisibleTo": [],
+  "keyVaultUrls": []
+}
