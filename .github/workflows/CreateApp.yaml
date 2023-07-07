@@ -26,9 +26,6 @@ on:
         description: Direct COMMIT (Y/N)
         required: false
         default: "N"
-      useGhTokenWorkflow:
-        description: Use GhTokenWorkflow for Pull Request/COMMIT
-        type: boolean
 
 permissions:
   contents: write
@@ -51,46 +48,22 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go/Actions/WorkflowInitialize@issue555
+        uses: freddydk/AL-Go/Actions/WorkflowInitialize@BuildBy
         with:
           shell: powershell
           eventId: "DO0092"
 
       - name: Read settings
-        uses: freddydk/AL-Go/Actions/ReadSettings@issue555
+        uses: freddydk/AL-Go/Actions/ReadSettings@BuildBy
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
-          get: type,keyVaultName,ghTokenWorkflowSecretName
-
-      - name: Read secrets
-        uses: freddydk/AL-Go/Actions/ReadSecrets@main
-        if: github.event.inputs.useGhTokenWorkflow == 'true'
-        env:
-          secrets: ${{ toJson(secrets) }}
-        with:
-          shell: powershell
-          parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
-          settingsJson: ${{ env.Settings }}
-          secrets: 'ghTokenWorkflow=${{ env.GHTOKENWORKFLOWSECRETNAME }}'
-
-      - name: CalculateToken
-        id: CalculateToken
-        env:
-          useGhTokenWorkflow: ${{ github.event.inputs.useGhTokenWorkflow }}
-        run: |
-          if ($env:useGhTokenWorkflow -eq 'true') {
-            $ghToken = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($env:GHTOKENWORKFLOW))
-          } else {
-            $ghToken = '${{ secrets.GITHUB_TOKEN }}'
-          }
-          Add-Content -Path $env:GITHUB_OUTPUT -Value "ghToken=$ghToken"
+          get: type
 
       - name: Creating a new app
-        uses: freddydk/AL-Go/Actions/CreateApp@issue555
+        uses: freddydk/AL-Go/Actions/CreateApp@BuildBy
         with:
           shell: powershell
-          token: ${{ steps.CalculateToken.outputs.ghToken }}
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           project: ${{ github.event.inputs.project }}
           type: ${{ env.type }}
@@ -102,7 +75,7 @@ jobs:
 
       - name: Finalize the workflow
         if: always()
-        uses: freddydk/AL-Go/Actions/WorkflowPostProcess@issue555
+        uses: freddydk/AL-Go/Actions/WorkflowPostProcess@BuildBy
         with:
           shell: powershell
           eventId: "DO0092"
